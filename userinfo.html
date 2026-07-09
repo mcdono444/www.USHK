@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding-bottom: 70px; }
+        .container { max-width: 430px; margin: 0 auto; background: #f5f5f5; }
+        .header { background: #22C55E; padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .back-btn { color: white; font-size: 20px; text-decoration: none; margin-right: 15px; }
+        .title { color: white; font-size: 18px; font-weight: bold; flex: 1; text-align: center; }
+        .content { padding: 20px; }
+        .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .card-title { font-size: 16px; font-weight: bold; color: #1a2a3a; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #22C55E; padding-bottom: 10px; }
+        .card-title i { color: #22C55E; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .info-label { color: #666; font-size: 13px; }
+        .info-value { color: #333; font-size: 13px; font-weight: 500; }
+        .btn { width: 100%; padding: 12px; border-radius: 30px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 15px; border: none; transition: 0.3s; }
+        .btn-primary { background: #22C55E; color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="title">Información Personal</div>
+    </div>
+    <div class="content">
+        <div class="card">
+            <div class="card-title"><i class="fas fa-user-circle"></i> Datos de la Cuenta</div>
+            <div class="info-row"><span class="info-label">📱 Número de teléfono</span><span class="info-value" id="userPhone">---</span></div>
+            <div class="info-row"><span class="info-label">🆔 ID de usuario</span><span class="info-value" id="userId">---</span></div>
+            <div class="info-row"><span class="info-label">📅 Fecha de registro</span><span class="info-value" id="joinDate">---</span></div>
+            <div class="info-row"><span class="info-label">👑 Nivel VIP</span><span class="info-value" id="vipLevel">---</span></div>
+        </div>
+        <div class="card">
+            <div class="card-title"><i class="fas fa-lock"></i> Seguridad</div>
+            <div class="info-row"><span class="info-label">🔐 Contraseña</span><span class="info-value">••••••••</span></div>
+            <button class="btn btn-primary" onclick="window.openChangePassword()"><i class="fas fa-key"></i> Cambiar Contraseña</button>
+        </div>
+        <div class="card">
+            <div class="card-title"><i class="fas fa-bank"></i> Datos Bancarios</div>
+            <div class="info-row"><span class="info-label">🏦 Cuenta bancaria</span><span class="info-value" id="bankStatus">No agregada</span></div>
+            <button class="btn btn-primary" onclick="location.href='banks.html'"><i class="fas fa-credit-card"></i> Gestionar Cuentas Bancarias</button>
+        </div>
+        <div class="card">
+            <button class="btn btn-danger" onclick="window.logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    async function loadData() {
+        try {
+            if (!userId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const userDocRef = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDocRef);
+
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.data();
+                $('#userPhone').text(userData.phone || '---');
+                $('#userId').text(userId);
+
+                const createdAt = userData.createdAt ? new Date(userData.createdAt.toDate ? userData.createdAt.toDate() : userData.createdAt) : new Date();
+                $('#joinDate').text(createdAt.toLocaleDateString('es-MZ'));
+
+                // Obtener nivel VIP
+                const vipLevel = userData.vipLevel || 0;
+                let vipText = 'VIP0 (Gratuito)';
+                if (vipLevel === 1) vipText = 'VIP1';
+                else if (vipLevel === 2) vipText = 'VIP2';
+                else if (vipLevel === 3) vipText = 'VIP3';
+                else if (vipLevel > 3) vipText = `VIP${vipLevel}`;
+                
+                $('#vipLevel').text(vipText);
+
+                // Obtener estado de cuenta bancaria
+                const banksRef = collection(db, 'bankAccounts');
+                const q = query(banksRef, where('userId', '==', userId));
+                const banksSnapshot = await getDocs(q);
+
+                if (!banksSnapshot.empty) {
+                    const firstBank = banksSnapshot.docs[0].data();
+                    const bankName = firstBank.bank || firstBank.bankName || 'Banco';
+                    const account = firstBank.account || firstBank.accountNumber || 'N/A';
+                    const lastFour = account.slice(-4);
+                    $('#bankStatus').text(`${bankName} (****${lastFour})`);
+                } else {
+                    $('#bankStatus').text('No agregada');
+                }
+            }
+        } catch(e) {
+            console.error('Error loading data:', e);
+        }
+    }
+
+    window.openChangePassword = function() {
+        const newPass = prompt('Ingrese la nueva contraseña (mínimo 6 caracteres):');
+        if (newPass && newPass.length >= 6) {
+            window.changePassword(newPass);
+        } else if (newPass) {
+            alert('La contraseña debe tener al menos 6 caracteres');
+        }
+    }
+
+    window.changePassword = async function(newPassword) {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Usuario no autenticado');
+                return;
+            }
+
+            await updatePassword(user, newPassword);
+            alert('✅ Contraseña cambiada exitosamente');
+        } catch(error) {
+            console.error('Error changing password:', error);
+            alert('❌ Error: ' + error.message);
+        }
+    }
+
+    window.logout = async function() {
+        try {
+            await auth.signOut();
+            localStorage.clear();
+            window.location.href = 'login.html';
+        } catch(error) {
+            console.error('Error logging out:', error);
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    }
+
+    // Verificar autenticación
+    onAuthStateChanged(auth, (user) => {
+        if (!user || !token || !userId) {
+            window.location.href = 'login.html';
+        } else {
+            loadData();
+        }
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; min-height: 100vh; }
+        
+        .header-section { background: #22C55E; padding: 12px 16px 0; position: sticky; top: 0; z-index: 100; }
+        .top-nav { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; }
+        .back-btn { color: white; font-size: 20px; cursor: pointer; text-decoration: none; margin-right: 12px; }
+        .page-title { color: white; font-size: 16px; font-weight: bold; flex: 1; text-align: center; margin-right: 30px; }
+        
+        .tabs-nav { display: flex; justify-content: center; gap: 30px; padding-bottom: 12px; }
+        .tab-item { color: white; font-size: 14px; font-weight: 500; cursor: pointer; padding-bottom: 4px; }
+        .tab-item.active { color: #1a8f3d; font-weight: 600; border-bottom: 2px solid #22C55E; }
+        
+        .content-section { padding: 16px; min-height: calc(100vh - 120px); }
+        
+        .messages-list { display: flex; flex-direction: column; gap: 12px; }
+        .message-card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 12px; }
+        .message-content { color: #333; font-size: 14px; line-height: 1.6; word-break: break-word; }
+        .message-content.collapsed { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .message-toggle { margin-top: 10px; font-size: 12px; color: #22C55E; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+        .message-toggle i { font-size: 10px; transition: transform 0.3s; }
+        .message-card.expanded .message-toggle i { transform: rotate(180deg); }
+        .message-date { color: #999; font-size: 11px; margin-top: 10px; display: flex; align-items: center; gap: 5px; }
+        
+        .empty-state { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; }
+        .empty-icon { font-size: 48px; color: #ccc; margin-bottom: 15px; }
+        .empty-text { color: #999; font-size: 14px; }
+        
+        .hidden { display: none; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+    </style>
+</head>
+<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Disponibilizar globalmente
+  window.firebaseModules = { auth, db, doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, orderBy };
+</script>
+
+<script>if(!localStorage.getItem('currentUser')){window.location.href='login.html';}</script>
+<div class="app-container">
+    <div class="header-section">
+        <div class="top-nav">
+            <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="page-title">Notificaciones</div>
+        </div>
+        <div class="tabs-nav">
+            <div class="tab-item active" data-tab="unread">📩 No leídos</div>
+            <div class="tab-item" data-tab="read">📖 Leídos</div>
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <div id="messagesListUnread" class="messages-list">
+            <div class="empty-state"><div class="empty-icon"><i class="fas fa-envelope-open"></i></div><div class="empty-text">No hay notificaciones no leídas</div></div>
+        </div>
+        <div id="messagesListRead" class="messages-list hidden">
+            <div class="empty-state"><div class="empty-icon"><i class="fas fa-envelope"></i></div><div class="empty-text">No hay notificaciones leídas</div></div>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-file-alt"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+
+<script>
+    var currentTab = 'unread';
+    var messages = [];
+    const userId = localStorage.getItem('userId');
+    
+    // Esperar Firebase estar pronto
+    function getFirebase() {
+        return new Promise((resolve) => {
+            const checkInterval = setInterval(() => {
+                if (window.firebaseModules) {
+                    clearInterval(checkInterval);
+                    resolve(window.firebaseModules);
+                }
+            }, 100);
+        });
+    }
+    
+    function showMessage(msg, type) {
+        var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+        $('body').append(div);
+        setTimeout(function() { div.fadeOut(300, function() { $(this).remove(); }); }, 2500);
+    }
+    
+    async function loadMessages() {
+        try {
+            const { db, collection, query, where, getDocs, orderBy } = await getFirebase();
+            
+            // Consultar notificaciones del usuario ordenadas por fecha descendente
+            const notificationsRef = collection(db, 'notifications');
+            const q = query(
+                notificationsRef, 
+                where('userId', '==', userId),
+                orderBy('date', 'desc')
+            );
+            
+            const querySnapshot = await getDocs(q);
+            messages = [];
+            
+            querySnapshot.forEach((doc) => {
+                messages.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            renderMessages();
+        } catch(e) {
+            console.error('Error loading messages:', e);
+        }
+    }
+    
+    async function markAsRead(msgId) {
+        try {
+            const { db, doc, updateDoc } = await getFirebase();
+            
+            // Actualizar estado del mensaje a read en Firestore
+            const notificationRef = doc(db, 'notifications', msgId);
+            await updateDoc(notificationRef, {
+                status: 'read'
+            });
+            
+            // Actualizar en el array local
+            for (var i = 0; i < messages.length; i++) {
+                if (messages[i].id === msgId) {
+                    messages[i].status = 'read';
+                    break;
+                }
+            }
+            
+            renderMessages();
+        } catch(e) {
+            console.error('Error marking as read:', e);
+            showMessage('Error al marcar como leído', 'error');
+        }
+    }
+    
+    function renderMessages() {
+        var unreadList = messages.filter(function(m) { return m.status !== 'read'; });
+        var readList = messages.filter(function(m) { return m.status === 'read'; });
+        
+        renderList('Unread', unreadList);
+        renderList('Read', readList);
+    }
+    
+    function renderList(tab, list) {
+        var container = $('#messagesList' + tab);
+        var isUnread = (tab === 'Unread');
+        
+        if (list.length === 0) {
+            var emptyText = isUnread ? 'No hay notificaciones no leídas' : 'No hay notificaciones leídas';
+            container.html('<div class="empty-state"><div class="empty-icon"><i class="fas fa-envelope-open"></i></div><div class="empty-text">' + emptyText + '</div></div>');
+            return;
+        }
+        
+        var html = '';
+        for (var i = 0; i < list.length; i++) {
+            var msg = list[i];
+            html += '<div class="message-card" data-id="' + msg.id + '">';
+            html += '<div class="message-content collapsed">' + msg.content + '</div>';
+            html += '<div class="message-toggle" onclick="toggleMessage(this)"><i class="fas fa-chevron-down"></i><span>Expandir</span></div>';
+            html += '<div class="message-date"><i class="fas fa-clock"></i> ' + new Date(msg.date).toLocaleString('es-MZ') + '</div>';
+            if (isUnread) {
+                html += '<div style="margin-top: 10px;"><button class="mark-read-btn" onclick="markAsRead(\'' + msg.id + '\')" style="background:#22C55E; color:white; border:none; padding:5px 12px; border-radius:20px; font-size:11px; cursor:pointer;"><i class="fas fa-check"></i> Marcar como leído</button></div>';
+            }
+            html += '</div>';
+        }
+        container.html(html);
+    }
+    
+    function toggleMessage(el) {
+        var card = $(el).closest('.message-card');
+        var content = card.find('.message-content');
+        var icon = $(el).find('i');
+        var text = $(el).find('span');
+        
+        if (content.hasClass('collapsed')) {
+            content.removeClass('collapsed');
+            icon.css('transform', 'rotate(180deg)');
+            text.text('Contraer');
+        } else {
+            content.addClass('collapsed');
+            icon.css('transform', 'rotate(0deg)');
+            text.text('Expandir');
+        }
+    }
+    
+    $('.tab-item').on('click', function() {
+        var tab = $(this).data('tab');
+        if (tab === currentTab) return;
+        currentTab = tab;
+        $('.tab-item').removeClass('active');
+        $(this).addClass('active');
+        $('#messagesListUnread, #messagesListRead').addClass('hidden');
+        $('#messagesList' + (tab === 'unread' ? 'Unread' : 'Read')).removeClass('hidden');
+    });
+    
+    // Inicializar con datos de ejemplo si es primera vez
+    async function initializeSampleNotifications() {
+        try {
+            const { db, collection, query, where, getDocs, setDoc, doc } = await getFirebase();
+            
+            // Verificar si el usuario ya tiene notificaciones
+            const notificationsRef = collection(db, 'notifications');
+            const q = query(notificationsRef, where('userId', '==', userId));
+            const querySnapshot = await getDocs(q);
+            
+            if (querySnapshot.empty) {
+                // Crear notificaciones de ejemplo
+                const sampleNotifications = [
+                    {
+                        userId: userId,
+                        content: '¡Bienvenido a la plataforma USHK! Te deseamos una experiencia agradable.',
+                        status: 'unread',
+                        date: new Date().toISOString()
+                    },
+                    {
+                        userId: userId,
+                        content: 'Tu cuenta ha sido activada exitosamente. Ahora puedes comenzar a invertir.',
+                        status: 'unread',
+                        date: new Date(Date.now() - 86400000).toISOString()
+                    },
+                    {
+                        userId: userId,
+                        content: 'Oferta especial: Obtén un bono del 10% al depositar tus primeros 1000 MZN durante los próximos 7 días.',
+                        status: 'read',
+                        date: new Date(Date.now() - 172800000).toISOString()
+                    }
+                ];
+                
+                for (let i = 0; i < sampleNotifications.length; i++) {
+                    const docRef = doc(collection(db, 'notifications'));
+                    await setDoc(docRef, sampleNotifications[i]);
+                }
+            }
+        } catch(e) {
+            console.error('Error initializing notifications:', e);
+        }
+    }
+    
+    // Función de inicialización
+    async function init() {
+        if (!userId) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        await initializeSampleNotifications();
+        await loadMessages();
+        
+        // Recargar mensajes cada 30 segundos
+        setInterval(loadMessages, 30000);
+    }
+    
+    // Iniciar cuando esté listo
+    init();
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

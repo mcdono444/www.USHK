@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; min-height: 50vh; }
+        .header-section { background: linear-gradient(135deg, #1a5d2a 0%, #0d3e1a 50%); padding: 20px 20px 20px; border-radius: 0 0 30px 30px; }
+        .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .back-btn { color: white; font-size: 20px; cursor: pointer; text-decoration: none; }
+        .history-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+        .logo-center { text-align: center; }
+        .logo-circle { width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+        .logo-circle i { font-size: 35px; color: #22C55E; }
+        .main-title { text-align: center; color: white; font-size: 18px; font-weight: bold; }
+        .main-content { padding: 0 15px; margin-top: -20px; }
+        .balance-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .balance-amount { font-size: 32px; font-weight: bold; color: #22C55E; }
+        .balance-label { font-size: 13px; color: #666; margin-top: 5px; }
+        .form-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .section-title { font-size: 18px; font-weight: bold; color: #1a1a1a; margin-bottom: 15px; text-align: center; }
+        
+        .payment-methods { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .method-card { flex: 1; min-width: 50px; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .method-card.active { border-color: #22C55E; background: #f0fdf4; }
+        .method-card i { font-size: 30px; margin-bottom: 8px; display: block; }
+        .method-card .method-name { font-size: 12px; font-weight: bold; }
+        .method-card .method-desc { font-size: 10px; color: #666; margin-top: 4px; }
+        
+        .bank-list { margin-top: 15px; display: none; }
+        .bank-list.show { display: block; }
+        .bank-option { background: #f8f9fa; border-radius: 12px; padding: 12px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+        .bank-option.active { background: #f0fdf4; border: 1px solid #22C55E; }
+        .bank-option i { font-size: 24px; width: 40px; text-align: center; }
+        .bank-info { flex: 1; }
+        .bank-name { font-size: 14px; font-weight: bold; }
+        .bank-code { font-size: 10px; color: #666; }
+        
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; color: #333; }
+        .input-group input, .input-group select { width: 50%; padding: 14px; border: 2px solid #e5e5e5; border-radius: 12px; font-size: 14px; }
+        
+        .fee-box { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-radius: 16px; padding: 15px; margin: 20px 0; display: none; }
+        .fee-row { display: flex; justify-content: space-between; padding: 8px 0; }
+        .net-value { font-size: 20px; color: #22C55E; }
+        .info-box { background: #fef9e6; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; }
+        .btn-withdraw { width: 50%; background: linear-gradient(135deg, #22C55E, #16a34a); color: white; border: none; padding: 16px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: all 0.3s; }
+        .btn-withdraw:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 50%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 500; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 5001; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 50%; height: 50%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; color: white; }
+        .loading-overlay.active { display: flex; }
+        .spinner { width: 50px; height: 50px; border: 4px solid white; border-top-color: #22C55E; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-section">
+        <div class="header-top">
+            <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <a href="withdraw-history.html" class="history-btn"><i class="fas fa-history"></i> Historial</a>
+        </div>
+        <div class="logo-center">
+            <div class="logo-circle"><i class="fas fa-futbol"></i></div>
+            <div class="main-title">Retirar Fondos</div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="balance-card">
+            <div class="balance-amount" id="userBalance">0 MZN</div>
+            <div id="investorWarning" class="warning-box" style="display: none; background: #fee2e2; border: 1px solid #ef4444; border-radius: 12px; padding: 12px; margin-bottom: 15px; margin-top: 15px;">
+                <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>
+                <strong style="color: #b91c1c;">⚠️ No puedes retirar aún</strong>
+                <p style="color: #b91c1c; font-size: 12px; margin-top: 5px;">Debes comprar un producto VIP primero para poder retirar tus ganancias. Invierte desde 250 MZN y comienza a ganar.</p>
+                <a href="vip.html" style="display: inline-block; margin-top: 8px; background: #22C55E; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px;">🛒 Comprar VIP ahora</a>
+            </div>
+            <div class="balance-label">Saldo disponible</div>
+        </div>
+        
+        <div class="form-card">
+            <div class="section-title"><i class="fas fa-hand-holding-usd"></i> Método de Retiro</div>
+            
+            <div class="payment-methods">
+                <div class="method-card" data-method="emola" onclick="window.selectMethod('emola')">
+                    <i class="fas fa-mobile-alt" style="color:#e74c3c;"></i>
+                    <div class="method-name">E-mola</div>
+                    <div class="method-desc">Transferencia móvil</div>
+                </div>
+                <div class="method-card" data-method="mpesa" onclick="window.selectMethod('mpesa')">
+                    <i class="fas fa-comment-dollar" style="color:#27ae60;"></i>
+                    <div class="method-name">M-Pesa</div>
+                    <div class="method-desc">Transferencia móvil Vodacom</div>
+                </div>
+                <div class="method-card" data-method="bank" onclick="window.selectMethod('bank')">
+                    <i class="fas fa-university" style="color:#3498db;"></i>
+                    <div class="method-name">Banco</div>
+                    <div class="method-desc">Cuenta bancaria</div>
+                </div>
+            </div>
+            
+            <div id="emolaFields" style="display:none;">
+                <div class="input-group">
+                    <label><i class="fas fa-mobile-alt"></i> Número de E-mola</label>
+                    <input type="tel" id="emolaNumber" placeholder="84 XXX XXXX">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-user"></i> Nombre completo</label>
+                    <input type="text" id="emolaName" placeholder="Nombre del titular">
+                </div>
+            </div>
+            
+            <div id="mpesaFields" style="display:none;">
+                <div class="input-group">
+                    <label><i class="fas fa-mobile-alt"></i> Número de M-Pesa</label>
+                    <input type="tel" id="mpesaNumber" placeholder="84 XXX XXXX">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-user"></i> Nombre completo</label>
+                    <input type="text" id="mpesaName" placeholder="Nombre del titular">
+                </div>
+            </div>
+            
+            <div id="bankFields" style="display:none;">
+                <div class="input-group">
+                    <label><i class="fas fa-university"></i> Banco</label>
+                    <select id="bankSelect">
+                        <option value="BCI">BCI - Banco Comercial de Investimento</option>
+                        <option value="Millennium BIM">Millennium BIM</option>
+                        <option value="Standard Bank">Standard Bank</option>
+                        <option value="Banco Unico">Banco Único</option>
+                        <option value="ABSA">ABSA</option>
+                        <option value="First National Bank">First National Bank</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-credit-card"></i> Número de cuenta</label>
+                    <input type="text" id="bankAccount" placeholder="Número de cuenta">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-user"></i> Nombre del titular</label>
+                    <input type="text" id="bankName" placeholder="Nombre del titular">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label><i class="fas fa-money-bill-wave"></i> Monto a retirar (mínimo 50 MZN)</label>
+                <input type="number" id="withdrawAmount" placeholder="Ingrese el monto" oninput="window.calculateFees()">
+            </div>
+            
+            <div class="fee-box" id="feeBox">
+                <div class="fee-row"><span>Comisión (13%):</span><span id="feeAmount" style="color:#e74c3c;">0 MZN</span></div>
+                <div class="fee-row"><span>Monto que recibirás:</span><span class="net-value" id="netAmount">0 MZN</span></div>
+            </div>
+            
+            <button class="btn-withdraw" id="withdrawBtn" onclick="window.processWithdraw()">
+                <i class="fas fa-arrow-down"></i> Solicitar Retiro
+            </button>
+            
+            <div class="info-box">
+                <p><i class="fas fa-info-circle"></i> Retiro mínimo: <strong>50 MZN</strong></p>
+                <p><i class="fas fa-percent"></i> Comisión de retiro: <strong>13%</strong></p>
+                <p><i class="fas fa-clock"></i> Tiempo de procesamiento: <strong>24-48 horas</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-file-alt"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div>Procesando solicitud de retiro...</div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+    let selectedMethod = null;
+    let userBalance = 0;
+    const MIN_WITHDRAW = 50;
+    const WITHDRAW_FEE = 13;
+
+    function showMessage(msg, type) {
+        var div = document.createElement('div');
+        div.className = 'toast ' + type;
+        div.innerHTML = msg;
+        document.body.appendChild(div);
+        setTimeout(function() { div.remove(); }, 3000);
+    }
+
+    window.selectMethod = function(method) {
+        selectedMethod = method;
+        document.querySelectorAll('.method-card').forEach(card => card.classList.remove('active'));
+        document.querySelector(`.method-card[data-method="${method}"]`).classList.add('active');
+        
+        document.getElementById('emolaFields').style.display = 'none';
+        document.getElementById('mpesaFields').style.display = 'none';
+        document.getElementById('bankFields').style.display = 'none';
+        
+        if (method === 'emola') document.getElementById('emolaFields').style.display = 'block';
+        else if (method === 'mpesa') document.getElementById('mpesaFields').style.display = 'block';
+        else if (method === 'bank') document.getElementById('bankFields').style.display = 'block';
+    }
+
+    async function loadUserBalance() {
+        try {
+            if (!userId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const userDocRef = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDocRef);
+            
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.data();
+                userBalance = userData.balance || 0;
+                document.getElementById('userBalance').innerHTML = userBalance.toFixed(2) + ' MZN';
+            }
+        } catch(e) { 
+            console.error('Error loading balance:', e); 
+        }
+    }
+
+    async function checkInvestorStatus() {
+        try {
+            if (!userId) return;
+
+            const userDocRef = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDocRef);
+            
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.data();
+                const hasVIP = (userData.vipLevel || 0) > 0;
+                
+                if (!hasVIP) {
+                    $('#investorWarning').show();
+                    $('#withdrawBtn').prop('disabled', true);
+                    $('#withdrawBtn').html('<i class="fas fa-lock"></i> Compra VIP para retirar');
+                } else {
+                    $('#investorWarning').hide();
+                    $('#withdrawBtn').prop('disabled', false);
+                    $('#withdrawBtn').html('<i class="fas fa-arrow-down"></i> Solicitar Retiro');
+                }
+            }
+        } catch(e) {
+            console.error('Error checking investor status:', e);
+        }
+    }
+
+    window.calculateFees = function() {
+        var amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+        var feeBox = document.getElementById('feeBox');
+        
+        if (amount < MIN_WITHDRAW) {
+            feeBox.style.display = 'none';
+            return;
+        }
+        
+        var fee = amount * (WITHDRAW_FEE / 100);
+        var net = amount - fee;
+        document.getElementById('feeAmount').innerHTML = '- ' + fee.toFixed(2) + ' MZN';
+        document.getElementById('netAmount').innerHTML = net.toFixed(2) + ' MZN';
+        feeBox.style.display = 'block';
+    }
+
+    window.processWithdraw = async function() {
+        var amount = parseFloat(document.getElementById('withdrawAmount').value);
+        
+        if (!selectedMethod) {
+            showMessage('Seleccione un método de retiro', 'error');
+            return;
+        }
+        
+        if (isNaN(amount) || amount < MIN_WITHDRAW) {
+            showMessage(`El retiro mínimo es ${MIN_WITHDRAW} MZN`, 'error');
+            return;
+        }
+        if (amount > userBalance) {
+            showMessage('¡Saldo insuficiente!', 'error');
+            return;
+        }
+        
+        let receiver = '';
+        let details = {};
+        
+        if (selectedMethod === 'emola') {
+            let number = document.getElementById('emolaNumber').value.trim();
+            let name = document.getElementById('emolaName').value.trim();
+            if (!number || !name) { showMessage('Complete los datos de E-mola', 'error'); return; }
+            receiver = `E-mola: ${number} - ${name}`;
+            details = { type: 'emola', number: number, name: name };
+        }
+        else if (selectedMethod === 'mpesa') {
+            let number = document.getElementById('mpesaNumber').value.trim();
+            let name = document.getElementById('mpesaName').value.trim();
+            if (!number || !name) { showMessage('Complete los datos de M-Pesa', 'error'); return; }
+            receiver = `M-Pesa: ${number} - ${name}`;
+            details = { type: 'mpesa', number: number, name: name };
+        }
+        else if (selectedMethod === 'bank') {
+            let bank = document.getElementById('bankSelect').value;
+            let account = document.getElementById('bankAccount').value.trim();
+            let name = document.getElementById('bankName').value.trim();
+            if (!bank || !account || !name) { showMessage('Complete los datos bancarios', 'error'); return; }
+            receiver = `${bank} - ${name} - Cuenta: ${account}`;
+            details = { type: 'bank', bank: bank, account: account, name: name };
+        }
+        
+        var loading = document.getElementById('loadingOverlay');
+        var btn = document.getElementById('withdrawBtn');
+        
+        loading.classList.add('active');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        
+        try {
+            if (!userId) {
+                showMessage('Usuario no válido', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-arrow-down"></i> Solicitar Retiro';
+                loading.classList.remove('active');
+                return;
+            }
+
+            // Actualizar saldo del usuario (restar monto)
+            const userDocRef = doc(db, 'users', userId);
+            await updateDoc(userDocRef, {
+                balance: increment(-amount),
+                updatedAt: new Date().toISOString()
+            });
+
+            // Crear registro de retiro
+            const withdrawalsRef = collection(db, 'withdrawals');
+            await addDoc(withdrawalsRef, {
+                userId: userId,
+                amount: amount,
+                fee: amount * (WITHDRAW_FEE / 100),
+                netAmount: amount - (amount * (WITHDRAW_FEE / 100)),
+                method: selectedMethod,
+                receiver: receiver,
+                details: details,
+                status: 'pending',
+                date: new Date().toISOString(),
+                createdAt: Timestamp.now()
+            });
+
+            // Registrar transacción
+            const transactionsRef = collection(db, 'transactions');
+            await addDoc(transactionsRef, {
+                userId: userId,
+                amount: -amount,
+                type: 'withdrawal',
+                details: `Retiro via ${selectedMethod}: ${receiver}`,
+                date: new Date().toISOString(),
+                status: 'pending',
+                createdAt: Timestamp.now()
+            });
+
+            showMessage('✅ Solicitud de retiro enviada exitosamente', 'success');
+            setTimeout(function() { window.location.href = 'withdraw-history.html'; }, 2000);
+
+        } catch(error) {
+            console.error('Error processing withdrawal:', error);
+            showMessage('Error: ' + error.message, 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-arrow-down"></i> Solicitar Retiro';
+        } finally {
+            loading.classList.remove('active');
+        }
+    }
+
+    // Verificar autenticación
+    onAuthStateChanged(auth, (user) => {
+        if (!user || !token || !userId) {
+            window.location.href = 'login.html';
+        } else {
+            loadUserBalance();
+            checkInvestorStatus();
+        }
+    });
+</script>
+</body>
+</html>

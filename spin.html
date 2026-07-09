@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { overflow-x: hidden; }
+        body { background: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: #f0f2f5;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .header-section { position: relative; width: 100%; background: linear-gradient(135deg, #1a5d2a 0%, #0d3e1a 100%); padding: 20px 20px 26px; border-radius: 0 0 30px 30px; }
+        .support-icon { position: absolute; top: 15px; left: 20px; width: 35px; height: 35px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .support-icon i { color: white; font-size: 18px; }
+        .top-right-actions { position: absolute; top: 18px; right: 20px; }
+        .language-text { color: white; font-size: 13px; cursor: pointer; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; text-decoration: none; }
+        .logo-center { text-align: center; margin-bottom: 10px; }
+        .logo-circle { width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+        .logo-circle i { font-size: 38px; color: #22C55E; }
+        .main-title { text-align: center; color: white; font-size: 20px; font-weight: bold; }
+        .header-sub-title { text-align: center; color: white; font-size: 14px; font-weight: 700; margin-top: 10px; }
+        .header-sub-desc { text-align: center; color: rgba(255,255,255,0.85); font-size: 11.5px; margin-top: 4px; padding: 0 12px; line-height: 1.4; }
+
+        .main-content { 
+            padding: 15px 15px 85px;
+            min-height: calc(100vh - 150px);
+        }
+
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 100%; 
+            max-width: 430px; 
+            background: #22C55E; 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 8px 0; 
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10000; font-size: 14px; font-weight: bold; max-width: 85%; text-align: center; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        .tc { text-align: center; }
+
+        /* --- Feed do Fundo de Riqueza --- */
+        .feed-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
+
+        .post-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: box-shadow 0.2s ease; }
+        .post-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .post-image-wrap { width: 100%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; min-height: 180px; position: relative; }
+        .post-image-wrap img { width: 100%; display: block; max-height: 420px; object-fit: cover; }
+        .post-expand-icon { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .post-body { padding: 12px 14px; }
+        .post-desc { font-size: 13px; color: #333; line-height: 1.5; word-break: break-word; }
+        .post-meta { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .post-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #22C55E, #15803d); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .post-avatar i { color: white; font-size: 12px; }
+        .post-author { font-size: 11px; color: #666; font-weight: 600; }
+        .post-time { font-size: 10px; color: #aaa; margin-right: auto; }
+
+        .feed-status { text-align: center; padding: 15px 0; font-size: 12px; color: #999; }
+        .feed-status i { margin-right: 6px; }
+        .feed-empty { background: white; border-radius: 16px; padding: 30px 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .feed-empty i { font-size: 34px; color: #22C55E; margin-bottom: 10px; display: block; }
+        .feed-empty-title { font-size: 14px; font-weight: bold; color: #333; }
+        .feed-empty-sub { font-size: 12px; color: #999; margin-top: 5px; }
+        .feed-empty.offline i { color: #ef4444; }
+
+        /* --- Modal de Foto Completa --- */
+        .photo-modal { 
+            display: none;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 2000; 
+            overflow-y: auto;
+            padding: 0;
+        }
+        .photo-modal.open { display: flex; flex-direction: column; }
+        .photo-modal-close { 
+            position: fixed; 
+            top: 15px; 
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.2); 
+            color: white; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 24px; 
+            cursor: pointer;
+            z-index: 2001;
+            padding: 0;
+            border: none;
+        }
+        .photo-modal-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .photo-modal-content { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            padding: 20px;
+        }
+        .photo-modal-image { 
+            max-width: 100%; 
+            max-height: 70vh; 
+            border-radius: 16px; 
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+        .photo-modal-info {
+            background: rgba(255,255,255,0.1);
+            padding: 16px;
+            border-radius: 12px;
+            max-width: 100%;
+            text-align: center;
+        }
+        .photo-modal-desc {
+            color: white;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .photo-modal-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+        .photo-modal-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22C55E, #15803d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .photo-modal-avatar i { color: white; font-size: 11px; }
+
+        /* --- Botão flutuante de publicar (FAB) --- */
+        .fab-publish { 
+            position: fixed; 
+            right: 20px; 
+            bottom: 85px; 
+            width: 56px; 
+            height: 56px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #22C55E, #15803d); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25); 
+            cursor: pointer; 
+            z-index: 999; 
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            border: none;
+            padding: 0;
+        }
+        .fab-publish i { color: white; font-size: 22px; }
+        .fab-publish.fab-hidden { 
+            transform: scale(0); 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+
+        /* --- Painel de publicação --- */
+        .pw-panel {
+            position: fixed;
+            right: 20px;
+            bottom: 85px;
+            width: min(320px, calc(100% - 40px));
+            max-height: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+            overflow: hidden;
+            z-index: 999;
+            transform-origin: bottom right;
+            transition: max-height 0.28s ease, opacity 0.2s ease;
+            opacity: 0;
+        }
+        .pw-panel.pw-open {
+            max-height: 80vh;
+            opacity: 1;
+            overflow-y: auto;
+        }
+        .pw-inner { padding: 16px; }
+        .pw-title { font-size: 15px; font-weight: bold; color: #1a1a1a; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .pw-close { color: #999; font-size: 18px; cursor: pointer; padding: 4px; background: none; border: none; }
+        
+        .pw-user-input { margin-bottom: 14px; }
+        .pw-label { font-size: 12px; color: #666; margin-bottom: 6px; display: block; font-weight: 600; }
+        .pw-user-name { width: 100%; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
+        
+        .pw-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+        .pw-tab { flex: 1; text-align: center; padding: 9px; border-radius: 12px; background: #f0f2f5; font-size: 12px; font-weight: 600; color: #666; cursor: pointer; border: 2px solid transparent; }
+        .pw-tab.active { background: #f0fdf4; color: #16a34a; border-color: #22C55E; }
+        .pw-field { margin-bottom: 12px; }
+        .pw-file-btn { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px; text-align: center; cursor: pointer; color: #666; font-size: 12px; background: none; }
+        .pw-file-btn i { font-size: 22px; color: #22C55E; display: block; margin-bottom: 6px; }
+        .pw-url-input, .pw-textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
+        .pw-textarea { resize: vertical; min-height: 65px; }
+        .pw-preview { margin-top: 10px; width: 100%; max-height: 180px; border-radius: 12px; object-fit: cover; display: none; }
+        .pw-hint { font-size: 10px; color: #999; margin-top: 5px; }
+        .pw-submit { width: 100%; background: #22C55E; color: white; border: none; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .pw-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-section">
+        <div class="support-icon" onclick="window.location.href='service.html'"><i class="fas fa-headset"></i></div>
+        <div class="top-right-actions"><a href="index.html" class="language-text"><i class="fas fa-arrow-left"></i> Início</a></div>
+        <div class="logo-center"><div class="logo-circle"><i class="fas fa-chart-line"></i></div></div>
+        <div class="main-title">Fundo de Riqueza</div>
+        <div class="header-sub-title">Galeria da Comunidade</div>
+        <div class="header-sub-desc">Saques publicado pelos usuários e aprovadas pela administração</div>
+    </div>
+
+    <div class="main-content">
+        <div class="feed-container" id="feedContainer"></div>
+        <div class="feed-status" id="feedStatus"><i class="fas fa-circle-notch fa-spin"></i> A carregar fotos...</div>
+    </div>
+
+    <!-- Botão que abre o painel: some quando o painel abre -->
+    <button class="fab-publish" id="fabPublish" onclick="openPublishModal()"><i class="fas fa-plus"></i></button>
+
+    <!-- Painel de publicar: aparece exatamente no lugar do botão acima -->
+    <div class="pw-panel" id="pwPanel"></div>
+
+    <!-- Modal de foto completa -->
+    <div class="photo-modal" id="photoModal">
+        <button class="photo-modal-close" onclick="closePhotoModal()"><i class="fas fa-times"></i></button>
+        <div class="photo-modal-content">
+            <img class="photo-modal-image" id="photoModalImage">
+            <div class="photo-modal-info">
+                <div class="photo-modal-desc" id="photoModalDesc"></div>
+                <div class="photo-modal-meta">
+                    <div class="photo-modal-avatar"><i class="fas fa-user"></i></div>
+                    <span id="photoModalAuthor"></span>
+                    <span id="photoModalTime" style="margin-left: auto;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bottom-nav">
+        <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Início</div></a>
+        <a class="nav-item active" href="funds.html"><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+        <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganhos</div></a>
+        <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tarefas</div></a>
+        <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Minha Conta</div></a>
+    </footer>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+        getFirestore, collection, query, where, orderBy, limit, startAfter,
+        getDocs, addDoc, onSnapshot, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+        authDomain: "proibidoreplica.firebaseapp.com",
+        projectId: "proibidoreplica",
+        storageBucket: "proibidoreplica.firebasestorage.app",
+        messagingSenderId: "794009646952",
+        appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    const POSTS_COLLECTION = 'wealth_posts';
+    const PAGE_SIZE = 8;
+    const MAX_IMAGE_CHARS = 700000;
+
+    function showMessage(msg, type) {
+        var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+        $('.app-container').append(div);
+        setTimeout(function () { div.fadeOut(300, function () { $(this).remove(); }); }, 2800);
+    }
+    window.showMessage = showMessage;
+
+    const feedContainer = document.getElementById('feedContainer');
+    const feedStatus = document.getElementById('feedStatus');
+    const photoModal = document.getElementById('photoModal');
+
+    let lastVisible = null;
+    let noMorePosts = false;
+    let isLoadingMore = false;
+    let renderedIds = new Set();
+
+    function timeAgo(ts) {
+        if (!ts || !ts.toDate) return '';
+        const diffMs = Date.now() - ts.toDate().getTime();
+        const min = Math.floor(diffMs / 60000);
+        if (min < 1) return 'agora mesmo';
+        if (min < 60) return min + ' min atrás';
+        const h = Math.floor(min / 60);
+        if (h < 24) return h + 'h atrás';
+        const d = Math.floor(h / 24);
+        return d + 'd atrás';
+    }
+
+    function escapeHtml(str) {
+        return $('<div>').text(str || '').html();
+    }
+
+    // Modal de foto completa
+    window.openPhotoModal = function(imageUrl, description, userName, createdAt) {
+        document.getElementById('photoModalImage').src = imageUrl;
+        document.getElementById('photoModalDesc').textContent = description;
+        document.getElementById('photoModalAuthor').textContent = escapeHtml(userName || 'Usuário');
+        document.getElementById('photoModalTime').textContent = timeAgo(createdAt);
+        photoModal.classList.add('open');
+    };
+
+    window.closePhotoModal = function() {
+        photoModal.classList.remove('open');
+    };
+
+    function renderPost(id, data, prepend) {
+        if (renderedIds.has(id)) return;
+        renderedIds.add(id);
+
+        const card = $('<div class="post-card"></div>');
+        const imgWrap = $('<div class="post-image-wrap"></div>');
+        
+        const img = $('<img loading="lazy">').attr('src', data.imageUrl);
+        img.on('error', function () {
+            $(this).closest('.post-image-wrap').html('<i class="fas fa-image" style="font-size:34px;color:#cbd5e1;"></i>');
+        });
+        
+        const expandIcon = $('<div class="post-expand-icon"><i class="fas fa-expand"></i></div>');
+        
+        imgWrap.append(img).append(expandIcon);
+
+        const body = $('<div class="post-body"></div>');
+        body.append('<div class="post-desc">' + escapeHtml(data.description) + '</div>');
+
+        const meta = $('<div class="post-meta"></div>');
+        meta.append('<div class="post-avatar"><i class="fas fa-user"></i></div>');
+        meta.append('<div class="post-author">' + escapeHtml(data.userName || 'Usuário') + '</div>');
+        meta.append('<div class="post-time">' + timeAgo(data.createdAt) + '</div>');
+        body.append(meta);
+
+        card.append(imgWrap).append(body);
+
+        // Clique para abrir modal
+        card.on('click', function() {
+            openPhotoModal(data.imageUrl, data.description, data.userName, data.createdAt);
+        });
+
+        if (prepend) {
+            $(feedContainer).prepend(card);
+        } else {
+            $(feedContainer).append(card);
+        }
+    }
+
+    function showEmptyState() {
+        feedStatus.innerHTML = '';
+        $(feedContainer).html(
+            '<div class="feed-empty"><i class="fas fa-images"></i>' +
+            '<div class="feed-empty-title">Sem mídias no momento</div>' +
+            '<div class="feed-empty-sub">Quando houver fotos aprovadas, elas aparecerão aqui</div></div>'
+        );
+    }
+
+    function showOfflineState() {
+        feedStatus.innerHTML = '';
+        $(feedContainer).html(
+            '<div class="feed-empty offline"><i class="fas fa-wifi"></i>' +
+            '<div class="feed-empty-title">Sem conexão com o servidor</div>' +
+            '<div class="feed-empty-sub">A tentar reconectar automaticamente...</div></div>'
+        );
+    }
+
+    async function loadMorePosts() {
+        if (isLoadingMore || noMorePosts) return;
+        isLoadingMore = true;
+        if (renderedIds.size === 0) {
+            $(feedStatus).html('<i class="fas fa-circle-notch fa-spin"></i> A carregar fotos...');
+        }
+
+        try {
+            let q;
+            if (lastVisible) {
+                q = query(collection(db, POSTS_COLLECTION), where('status', '==', 'approved'), orderBy('createdAt', 'desc'), startAfter(lastVisible), limit(PAGE_SIZE));
+            } else {
+                q = query(collection(db, POSTS_COLLECTION), where('status', '==', 'approved'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
+            }
+
+            const snapshot = await getDocs(q);
+
+            if (snapshot.empty) {
+                noMorePosts = true;
+                if (renderedIds.size === 0) {
+                    showEmptyState();
+                } else {
+                    $(feedStatus).html('<i class="fas fa-check-circle"></i> Você viu todas as fotos');
+                }
+                return;
+            }
+
+            snapshot.forEach(docSnap => renderPost(docSnap.id, docSnap.data(), false));
+            lastVisible = snapshot.docs[snapshot.docs.length - 1];
+
+            if (snapshot.docs.length < PAGE_SIZE) {
+                noMorePosts = true;
+                $(feedStatus).html('<i class="fas fa-check-circle"></i> Você viu todas as fotos');
+            } else {
+                $(feedStatus).html('');
+            }
+        } catch (err) {
+            console.error('Erro ao carregar fotos:', err);
+            if (renderedIds.size === 0) {
+                showOfflineState();
+            } else {
+                $(feedStatus).html('<i class="fas fa-wifi" style="color:#ef4444;"></i> Sem conexão com o servidor');
+            }
+            setTimeout(() => { isLoadingMore = false; loadMorePosts(); }, 5000);
+            return;
+        } finally {
+            isLoadingMore = false;
+        }
+    }
+
+    window.addEventListener('scroll', function () {
+        if (isLoadingMore || noMorePosts) return;
+        const scrollBottom = window.innerHeight + window.scrollY;
+        if (scrollBottom >= document.body.offsetHeight - 400) {
+            loadMorePosts();
+        }
+    });
+
+    function listenForNewPosts() {
+        const q = query(collection(db, POSTS_COLLECTION), where('status', '==', 'approved'), orderBy('createdAt', 'desc'), limit(1));
+        let firstLoad = true;
+        onSnapshot(q, (snapshot) => {
+            if (firstLoad) { firstLoad = false; return; }
+            snapshot.docChanges().forEach(change => {
+                if (change.type === 'added' && !renderedIds.has(change.doc.id)) {
+                    renderPost(change.doc.id, change.doc.data(), true);
+                    showMessage('🎉 Nova foto na galeria!', 'success');
+                }
+            });
+        }, (err) => console.error('Erro no listener em tempo real:', err));
+    }
+
+    /* --- PUBLICAR --- */
+    let selectedMode = 'photo';
+    let selectedImageData = null;
+    let currentUserName = '';
+
+    const fabPublish = document.getElementById('fabPublish');
+    const pwPanel = document.getElementById('pwPanel');
+
+    window.openPublishModal = function () {
+        if (!token || !userId) {
+            showMessage('Faça login para publicar uma foto', 'error');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        selectedMode = 'photo';
+        selectedImageData = null;
+        currentUserName = (JSON.parse(localStorage.getItem('currentUser') || '{}').name) || '';
+
+        $(fabPublish).addClass('fab-hidden');
+
+        pwPanel.innerHTML =
+            '<div class="pw-inner">' +
+                '<div class="pw-title">Publicar foto <button class="pw-close" id="pwCloseBtn"><i class="fas fa-times"></i></button></div>' +
+                '<div class="pw-user-input">' +
+                    '<label class="pw-label">Seu nome</label>' +
+                    '<input type="text" class="pw-user-name" id="pwUserName" placeholder="Digite seu nome" maxlength="50">' +
+                '</div>' +
+                '<div class="pw-tabs">' +
+                    '<button class="pw-tab active" data-mode="photo"><i class="fas fa-camera"></i> Foto</button>' +
+                    '<button class="pw-tab" data-mode="url"><i class="fas fa-link"></i> URL</button>' +
+                '</div>' +
+                '<div class="pw-field" id="pwPhotoField">' +
+                    '<label class="pw-label">Escolha uma foto do dispositivo</label>' +
+                    '<button class="pw-file-btn" id="pwFileBtn"><i class="fas fa-cloud-upload-alt"></i>Toque para escolher uma foto</button>' +
+                    '<input type="file" accept="image/*" id="pwFileInput" style="display:none;">' +
+                    '<div class="pw-hint">Tamanho máximo: 500KB. Fotos maiores não serão enviadas.</div>' +
+                '</div>' +
+                '<div class="pw-field" id="pwUrlField" style="display:none;">' +
+                    '<label class="pw-label">Link da imagem</label>' +
+                    '<input type="text" class="pw-url-input" id="pwUrlInput" placeholder="https://exemplo.com/imagem.jpg">' +
+                '</div>' +
+                '<img class="pw-preview" id="pwPreview">' +
+                '<div class="pw-field">' +
+                    '<label class="pw-label">Descrição</label>' +
+                    '<textarea class="pw-textarea" id="pwDesc" maxlength="240" placeholder="Escreva uma descrição para a foto..."></textarea>' +
+                '</div>' +
+                '<button class="pw-submit" id="pwSubmitBtn">Enviar para publicação</button>' +
+            '</div>';
+
+        requestAnimationFrame(function () {
+            $(pwPanel).addClass('pw-open');
+        });
+
+        const panel = $(pwPanel);
+
+        // Preenche o nome do usuário
+        panel.find('#pwUserName').val(currentUserName);
+
+        panel.find('#pwCloseBtn').on('click', closePublishModal);
+
+        panel.find('.pw-tab').on('click', function () {
+            panel.find('.pw-tab').removeClass('active');
+            $(this).addClass('active');
+            selectedMode = $(this).data('mode');
+            selectedImageData = null;
+            panel.find('#pwPreview').hide().attr('src', '');
+            if (selectedMode === 'photo') {
+                panel.find('#pwPhotoField').show();
+                panel.find('#pwUrlField').hide();
+            } else {
+                panel.find('#pwPhotoField').hide();
+                panel.find('#pwUrlField').show();
+            }
+        });
+
+        panel.find('#pwFileBtn').on('click', function () { panel.find('#pwFileInput').trigger('click'); });
+
+        panel.find('#pwFileInput').on('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showMessage('Selecione um arquivo de imagem válido', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (evt) {
+                const base64 = evt.target.result;
+                if (base64.length > MAX_IMAGE_CHARS) {
+                    showMessage('Foto muito grande. Escolha uma imagem menor (máx. 500KB) — não foi salva.', 'error');
+                    selectedImageData = null;
+                    panel.find('#pwPreview').hide().attr('src', '');
+                    panel.find('#pwFileInput').val('');
+                    return;
+                }
+                selectedImageData = base64;
+                panel.find('#pwPreview').attr('src', base64).show();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        panel.find('#pwUrlInput').on('input', function () {
+            const url = $(this).val().trim();
+            selectedImageData = url || null;
+            if (url) {
+                panel.find('#pwPreview').attr('src', url).show();
+            } else {
+                panel.find('#pwPreview').hide().attr('src', '');
+            }
+        });
+
+        panel.find('#pwSubmitBtn').on('click', submitPost);
+    };
+
+    function closePublishModal() {
+        $(pwPanel).removeClass('pw-open');
+        $(fabPublish).removeClass('fab-hidden');
+        setTimeout(function () { pwPanel.innerHTML = ''; }, 280);
+    }
+    window.closePublishModal = closePublishModal;
+
+    async function submitPost() {
+        const panel = $(pwPanel);
+        const userName = panel.find('#pwUserName').val().trim();
+        const description = panel.find('#pwDesc').val().trim();
+
+        if (!userName) {
+            showMessage('Digite seu nome', 'error');
+            return;
+        }
+        if (!selectedImageData) {
+            showMessage(selectedMode === 'photo' ? 'Escolha uma foto primeiro' : 'Cole o link da imagem', 'error');
+            return;
+        }
+        if (selectedImageData.length > MAX_IMAGE_CHARS) {
+            showMessage('Foto muito grande. Não foi salva.', 'error');
+            return;
+        }
+        if (!description) {
+            showMessage('Escreva uma descrição para a foto', 'error');
+            return;
+        }
+
+        const btn = panel.find('#pwSubmitBtn');
+        btn.prop('disabled', true).text('A enviar...');
+
+        try {
+            await addDoc(collection(db, POSTS_COLLECTION), {
+                userId: userId,
+                userName: userName,
+                imageUrl: selectedImageData,
+                description: description,
+                status: 'pending',
+                createdAt: serverTimestamp()
+            });
+
+            showMessage('Foto enviada! Aguarde a aprovação da administração.', 'success');
+            closePublishModal();
+        } catch (err) {
+            console.error('Erro ao publicar:', err);
+            showMessage('Sem conexão com o servidor. Tente novamente.', 'error');
+            btn.prop('disabled', false).text('Enviar para publicação');
+        }
+    }
+
+    /* --- INIT --- */
+    onAuthStateChanged(auth, (user) => {
+        if (!user || !token || !userId) {
+            window.location.href = 'login.html';
+        } else {
+            loadMorePosts();
+            listenForNewPosts();
+        }
+    }, (err) => {
+        console.error('Erro de autenticação:', err);
+        showOfflineState();
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>
