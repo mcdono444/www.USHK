@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; min-height: 100vh; }
+        
+        .top-nav { background: #22C55E; padding: 12px 16px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .back-btn { color: white; font-size: 20px; cursor: pointer; text-decoration: none; margin-right: 12px; }
+        .page-title { color: white; font-size: 16px; font-weight: bold; flex: 1; text-align: center; margin-left: 30px; }
+        
+        .tabs-container { display: flex; background: white; margin-bottom: 10px; }
+        .tab-item { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; }
+        .tab-item.active { border-bottom-color: #22C55E; color: #22C55E; }
+        .tab-item:not(.active) { color: #666; }
+        
+        .content-section { padding: 16px; }
+        
+        .records-list { display: flex; flex-direction: column; gap: 12px; }
+        .record-card { background: white; border-radius: 12px; padding: 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .record-info { flex: 1; }
+        .record-time { color: #999; font-size: 11px; margin-bottom: 5px; }
+        .record-title { color: #333; font-size: 14px; font-weight: 500; }
+        .record-amount { font-size: 18px; font-weight: bold; }
+        .record-amount.income { color: #22C55E; }
+        .record-amount.expense { color: #EF4444; }
+        .record-status { font-size: 11px; margin-top: 4px; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+        .status-success { background: #dcfce7; color: #22C55E; }
+        .status-pending { background: #fef3c7; color: #f59e0b; }
+        .status-failed { background: #fee2e2; color: #EF4444; }
+        
+        .empty-state { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; }
+        .empty-icon { font-size: 48px; color: #ccc; margin-bottom: 15px; }
+        .empty-text { color: #999; font-size: 14px; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="top-nav">
+        <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="page-title">Historial de Transacciones</div>
+    </div>
+    
+    <div class="tabs-container">
+        <div class="tab-item active" data-tab="0">💰 Depósitos</div>
+        <div class="tab-item" data-tab="1">💸 Retiros</div>
+    </div>
+    
+    <div class="content-section">
+        <div id="recordsList0" class="records-list"></div>
+        <div id="recordsList1" class="records-list hidden"></div>
+        <div id="emptyState" class="empty-state hidden">
+            <div class="empty-icon"><i class="fas fa-receipt"></i></div>
+            <div class="empty-text">No hay transacciones</div>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-file-alt"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+        authDomain: "proibidoreplica.firebaseapp.com",
+        projectId: "proibidoreplica",
+        storageBucket: "proibidoreplica.firebasestorage.app",
+        messagingSenderId: "794009646952",
+        appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    let currentTab = 0;
+    let records = [];
+    let unsubscribes = [];
+
+    function getStatusClass(status) {
+        if (status === 'completed' || status === 'success' || status === 'approved') return 'status-success';
+        if (status === 'pending' || status === 'Análise') return 'status-pending';
+        return 'status-failed';
+    }
+
+    function getStatusText(status) {
+        if (status === 'completed' || status === 'success') return 'Completado';
+        if (status === 'approved') return 'Aprobado';
+        if (status === 'pending' || status === 'Análise') return 'En Análisis';
+        if (status === 'rejected') return 'Rechazado';
+        return 'Fallido';
+    }
+
+    function getTransactionTitle(t) {
+        if (t.details) return t.details;
+        if (t.paymentMethod) return 'Depósito - ' + t.paymentMethod;
+        switch(t.type) {
+            case 'deposit': return 'Depósito';
+            case 'withdrawal': return 'Retiro';
+            case 'purchase': return 'Compra de producto VIP';
+            case 'referral': return 'Comisión por referido';
+            case 'daily_income': return 'Ingreso diario';
+            case 'checkin': return 'Check-in diario';
+            case 'bonus': return 'Bono';
+            case 'admin_add': return 'Adición por administrador';
+            case 'admin_remove': return 'Deducción por administrador';
+            case 'lucky_spin': return 'Ruleta de la suerte';
+            default: return 'Transacción';
+        }
+    }
+
+    function parseDate(dateValue) {
+        if (!dateValue) return new Date();
+        
+        // Si es string ISO
+        if (typeof dateValue === 'string') {
+            return new Date(dateValue);
+        }
+        
+        // Si es Timestamp de Firebase con método toDate()
+        if (dateValue && typeof dateValue.toDate === 'function') {
+            return dateValue.toDate();
+        }
+        
+        // Si es objeto con segundos (Timestamp serializado)
+        if (dateValue && dateValue.seconds) {
+            return new Date(dateValue.seconds * 1000);
+        }
+        
+        // Si es Date normal
+        if (dateValue instanceof Date) {
+            return dateValue;
+        }
+        
+        return new Date();
+    }
+
+    function setupRealtimeListeners() {
+        // Limpiar listeners anteriores
+        unsubscribes.forEach(unsub => unsub());
+        unsubscribes = [];
+
+        if (!userId) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Listener para depósitos en tiempo real
+        try {
+            const depositsRef = collection(db, 'deposits');
+            const q1 = query(depositsRef, where('userId', '==', userId));
+            
+            const unsub1 = onSnapshot(q1, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    const data = change.doc.data();
+                    
+                    if (change.type === 'added' || change.type === 'modified') {
+                        const index = records.findIndex(r => r.id === change.doc.id && r.type === 'deposit');
+                        
+                        const newRecord = {
+                            id: change.doc.id,
+                            amount: data.amount || 0,
+                            type: 'deposit',
+                            paymentMethod: data.paymentMethod || '',
+                            details: 'Depósito - ' + (data.paymentMethod || 'Manual'),
+                            date: parseDate(data.dateISO || data.createdAt),
+                            status: data.status || 'pending',
+                            senderName: data.senderName || ''
+                        };
+                        
+                        if (index >= 0) {
+                            records[index] = newRecord;
+                        } else {
+                            records.push(newRecord);
+                        }
+                    } else if (change.type === 'removed') {
+                        records = records.filter(r => !(r.id === change.doc.id && r.type === 'deposit'));
+                    }
+                });
+                
+                renderRecords();
+            }, (error) => {
+                console.log('Error deposits:', error);
+            });
+            
+            unsubscribes.push(unsub1);
+        } catch (e) {
+            console.log('Deposits setup error:', e);
+        }
+
+        // Listener para retiros en tiempo real
+        try {
+            const withdrawalsRef = collection(db, 'withdrawals');
+            const q2 = query(withdrawalsRef, where('userId', '==', userId));
+            
+            const unsub2 = onSnapshot(q2, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    const data = change.doc.data();
+                    
+                    if (change.type === 'added' || change.type === 'modified') {
+                        const index = records.findIndex(r => r.id === change.doc.id && r.type === 'withdrawal');
+                        
+                        const newRecord = {
+                            id: change.doc.id,
+                            amount: -(data.amount || 0),
+                            type: 'withdrawal',
+                            details: 'Retiro',
+                            date: parseDate(data.dateISO || data.createdAt),
+                            status: data.status || 'pending'
+                        };
+                        
+                        if (index >= 0) {
+                            records[index] = newRecord;
+                        } else {
+                            records.push(newRecord);
+                        }
+                    } else if (change.type === 'removed') {
+                        records = records.filter(r => !(r.id === change.doc.id && r.type === 'withdrawal'));
+                    }
+                });
+                
+                renderRecords();
+            }, (error) => {
+                console.log('Error withdrawals:', error);
+            });
+            
+            unsubscribes.push(unsub2);
+        } catch (e) {
+            console.log('Withdrawals setup error:', e);
+        }
+
+        // Listener para transacciones en tiempo real
+        try {
+            const transactionsRef = collection(db, 'transactions');
+            const q3 = query(transactionsRef, where('userId', '==', userId));
+            
+            const unsub3 = onSnapshot(q3, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    const data = change.doc.data();
+                    
+                    if (change.type === 'added' || change.type === 'modified') {
+                        const index = records.findIndex(r => r.id === change.doc.id && r.type === data.type);
+                        
+                        const newRecord = {
+                            id: change.doc.id,
+                            amount: data.amount || 0,
+                            type: data.type || 'transaction',
+                            details: data.details || '',
+                            date: parseDate(data.dateISO || data.date || data.createdAt),
+                            status: data.status || 'completed'
+                        };
+                        
+                        if (index >= 0) {
+                            records[index] = newRecord;
+                        } else {
+                            records.push(newRecord);
+                        }
+                    } else if (change.type === 'removed') {
+                        records = records.filter(r => !(r.id === change.doc.id && r.type === data.type));
+                    }
+                });
+                
+                renderRecords();
+            }, (error) => {
+                console.log('Error transactions:', error);
+            });
+            
+            unsubscribes.push(unsub3);
+        } catch (e) {
+            console.log('Transactions setup error:', e);
+        }
+    }
+
+    function renderRecords() {
+        // Ordenar por fecha descendente
+        records.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB - dateA;
+        });
+
+        const depositList = records.filter(function(r) { 
+            return r.type === 'deposit' || 
+                   r.type === 'admin_add' || 
+                   r.type === 'bonus' || 
+                   r.type === 'referral' ||
+                   r.type === 'daily_income' ||
+                   r.type === 'checkin' ||
+                   (r.amount > 0 && r.type !== 'withdrawal');
+        });
+
+        const withdrawalList = records.filter(function(r) { 
+            return r.type === 'withdrawal' || 
+                   r.type === 'purchase' || 
+                   r.type === 'admin_remove' ||
+                   (r.amount < 0);
+        });
+
+        renderList(0, depositList);
+        renderList(1, withdrawalList);
+    }
+
+    function renderList(tab, list) {
+        var container = $('#recordsList' + tab);
+        var emptyState = $('#emptyState');
+
+        if (list.length === 0) {
+            container.empty();
+            if (tab === currentTab) {
+                emptyState.removeClass('hidden');
+            }
+            return;
+        }
+
+        emptyState.addClass('hidden');
+        var html = '';
+        for (var i = 0; i < list.length; i++) {
+            var r = list[i];
+            var amountClass = (tab === 0) ? 'income' : 'expense';
+            var sign = (tab === 0) ? '+' : '-';
+            var amount = Math.abs(r.amount || 0);
+            var status = r.status || 'completed';
+
+            var dateObj = parseDate(r.date);
+            var dateStr = dateObj.toLocaleString('es-MZ', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            html += '<div class="record-card">';
+            html += '<div class="record-info">';
+            html += '<div class="record-time">' + dateStr + '</div>';
+            html += '<div class="record-title">' + getTransactionTitle(r) + '</div>';
+            html += '</div>';
+            html += '<div>';
+            html += '<div class="record-amount ' + amountClass + '">' + sign + ' ' + amount.toFixed(2) + ' kz</div>';
+            html += '<div class="record-status ' + getStatusClass(status) + '">' + getStatusText(status) + '</div>';
+            html += '</div>';
+            html += '</div>';
+        }
+        container.html(html);
+    }
+
+    function showMessage(msg, type) {
+        var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+        $('body').append(div);
+        setTimeout(function() { div.fadeOut(300, function() { $(this).remove(); }); }, 2500);
+    }
+
+    $('.tab-item').on('click', function() {
+        var tab = $(this).data('tab');
+        if (tab == currentTab) return;
+        currentTab = tab;
+        $('.tab-item').removeClass('active');
+        $(this).addClass('active');
+        $('#recordsList0, #recordsList1').addClass('hidden');
+        $('#recordsList' + tab).removeClass('hidden');
+        $('#emptyState').addClass('hidden');
+        if (tab === 0 && $('#recordsList0').children().length === 0) { $('#emptyState').removeClass('hidden'); }
+        if (tab === 1 && $('#recordsList1').children().length === 0) { $('#emptyState').removeClass('hidden'); }
+    });
+
+    // Verificar autenticación
+    onAuthStateChanged(auth, (user) => {
+        if (!user || !token || !userId) {
+            window.location.href = 'login.html';
+        } else {
+            setupRealtimeListeners();
+        }
+    });
+
+    // Limpiar listeners al descargar
+    window.addEventListener('beforeunload', () => {
+        unsubscribes.forEach(unsub => unsub());
+    });
+</script>
+</body>
+</html>

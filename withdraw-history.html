@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; min-height: 100vh; }
+        .top-nav { background: #22C55E; padding: 12px 16px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .back-btn { color: white; font-size: 20px; cursor: pointer; text-decoration: none; margin-right: 12px; }
+        .page-title { color: white; font-size: 16px; font-weight: bold; flex: 1; text-align: center; margin-right: 30px; }
+        .content-section { padding: 20px 16px; }
+        .withdraw-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 3px solid; }
+        .withdraw-card.pending { border-left-color: #f59e0b; }
+        .withdraw-card.completed { border-left-color: #22C55E; }
+        .withdraw-card.rejected { border-left-color: #ef4444; }
+        .withdraw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .withdraw-amount { font-size: 18px; font-weight: bold; color: #22C55E; }
+        .withdraw-status { font-size: 12px; padding: 4px 10px; border-radius: 20px; }
+        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-completed { background: #dcfce7; color: #166534; }
+        .status-rejected { background: #fee2e2; color: #b91c1c; }
+        .withdraw-details { color: #666; font-size: 13px; margin-bottom: 8px; }
+        .withdraw-date { color: #999; font-size: 11px; margin-top: 8px; }
+        .withdraw-receiver { color: #666; font-size: 12px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+        .withdraw-order-number { background: #f0fdf4; color: #166534; font-size: 11px; padding: 4px 8px; border-radius: 6px; font-family: monospace; display: inline-block; margin-top: 6px; }
+        .empty-state { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; }
+        .empty-icon { font-size: 48px; color: #ccc; margin-bottom: 15px; }
+        .empty-text { color: #999; font-size: 14px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+    </style>
+
+
+
+
+
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Disponibilizar globalmente para o script abaixo
+  window.firebaseModules = { auth, db, collection, query, where, getDocs };
+
+  // Aguarda a confirmação de que o usuário está de fato autenticado no
+  // Firebase (não só presente no localStorage) antes de liberar a busca.
+  onAuthStateChanged(auth, (user) => {
+    const storedUserId = localStorage.getItem('userId');
+    if (!user || !storedUserId) {
+      window.location.href = 'login.html';
+      return;
+    }
+    window.firebaseAuthReady = true;
+    window.firebaseCurrentUserId = user.uid;
+  });
+</script>
+
+<div class="app-container">
+    <div class="top-nav">
+        <a href="retrait.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="page-title">📋 Historial de Retiros</div>
+    </div>
+    <div class="content-section">
+        <div id="withdrawalsList"></div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-file-alt"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+
+<script>
+const userId = localStorage.getItem('userId');
+
+if (!userId) window.location.href = 'login.html';
+
+// Esperar Firebase estar pronto (módulo inicializado) E o usuário autenticado
+function getFirebase() {
+    return new Promise((resolve) => {
+        const checkInterval = setInterval(() => {
+            if (window.firebaseModules && window.firebaseAuthReady) {
+                clearInterval(checkInterval);
+                resolve(window.firebaseModules);
+            }
+        }, 100);
+    });
+}
+
+function showMessage(msg, type) {
+    var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+    $('body').append(div);
+    setTimeout(() => div.fadeOut(300, () => div.remove()), 2500);
+}
+
+function getStatusClass(status) {
+    if (status === 'pending') return 'pending';
+    if (status === 'completed' || status === 'approved') return 'completed';
+    if (status === 'rejected') return 'rejected';
+    return 'pending';
+}
+
+function getStatusText(status) {
+    if (status === 'pending') return '⏳ Pendiente';
+    if (status === 'completed' || status === 'approved') return '✅ Completado';
+    if (status === 'rejected') return '❌ Rechazado';
+    return '⏳ Pendiente';
+}
+
+function getStatusBadgeClass(status) {
+    if (status === 'pending') return 'status-pending';
+    if (status === 'completed' || status === 'approved') return 'status-completed';
+    if (status === 'rejected') return 'status-rejected';
+    return 'status-pending';
+}
+
+async function loadWithdrawals() {
+    try {
+        $('#withdrawalsList').html('<div class="empty-state"><div class="empty-icon"><i class="fas fa-spinner fa-spin"></i></div><div class="empty-text">Cargando historial...</div></div>');
+        
+        const { db, collection, query, where, getDocs } = await getFirebase();
+        
+        // Consultar retiradas do usuário logado no Firestore (coleção correta: withdrawals).
+        // Usa o uid confirmado pelo Firebase Auth; cai para o localStorage só se necessário.
+        const effectiveUserId = window.firebaseCurrentUserId || userId;
+        const withdrawalsRef = collection(db, 'withdrawals');
+        const q = query(withdrawalsRef, where('userId', '==', effectiveUserId));
+        const querySnapshot = await getDocs(q);
+        
+        let withdrawals = [];
+        querySnapshot.forEach((doc) => {
+            withdrawals.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // Ordenar por data decrescente
+        withdrawals.sort((a, b) => {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+            return dateB - dateA;
+        });
+        
+        console.log('Withdrawals data:', withdrawals);
+        
+        if (withdrawals.length === 0) {
+            $('#withdrawalsList').html(`
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-history"></i></div>
+                    <div class="empty-text">No hay solicitudes de retiro</div>
+                </div>
+            `);
+            return;
+        }
+        
+        let html = '';
+        for (let w of withdrawals) {
+            const statusClass = getStatusClass(w.status);
+            const badgeClass = getStatusBadgeClass(w.status);
+            const statusText = getStatusText(w.status);
+            const feeAmount = w.fee || (w.amount * 0.14);
+            const netAmount = w.netAmount || (w.amount - feeAmount);
+            const orderNumber = w.orderNumber || w.id || '-';
+            
+            html += `
+                <div class="withdraw-card ${statusClass}">
+                    <div class="withdraw-header">
+                        <span class="withdraw-amount">${(w.amount || 0).toLocaleString()} kz</span>
+                        <span class="withdraw-status ${badgeClass}">${statusText}</span>
+                    </div>
+                    <div class="withdraw-details">
+                        <i class="fas fa-percent"></i> Comisión (14%): ${(feeAmount || 0).toLocaleString()} kz
+                    </div>
+                    <div class="withdraw-details">
+                        <i class="fas fa-money-bill-wave"></i> Monto neto: ${(netAmount || 0).toLocaleString()} kz
+                    </div>
+                    <div class="withdraw-receiver">
+                        <i class="fas fa-university"></i> ${w.receiver || 'Transferencia bancaria'}
+                    </div>
+                    <div class="withdraw-order-number">
+                        <i class="fas fa-hashtag"></i> N° operación: ${orderNumber}
+                    </div>
+                    <div class="withdraw-date">
+                        <i class="fas fa-calendar"></i> ${new Date(w.date).toLocaleString('es-MZ')}
+                    </div>
+                </div>
+            `;
+        }
+        $('#withdrawalsList').html(html);
+    } catch (error) {
+        console.error('Error loading withdrawals:', error);
+        $('#withdrawalsList').html(`
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="empty-text">Error al cargar los datos<br><small>${error.message}</small></div>
+            </div>
+        `);
+    }
+}
+
+loadWithdrawals();
+setInterval(loadWithdrawals, 30000);
+</script>
+</body>
+</html>

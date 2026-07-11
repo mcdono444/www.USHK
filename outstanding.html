@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; min-height: 100vh; }
+        
+        .header-section { background: linear-gradient(135deg, #1a5d2a 0%, #0d3e1a 100%); padding: 20px 16px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .back-btn { color: white; font-size: 20px; cursor: pointer; text-decoration: none; width: 30px; }
+        .header-title { color: white; font-size: 16px; font-weight: bold; flex: 1; text-align: center; margin: 0 30px; }
+        
+        .banner-section { padding: 16px; }
+        .banner-card { background: linear-gradient(135deg, #22C55E, #16a34a); border-radius: 16px; padding: 20px; text-align: center; }
+        .banner-title { color: white; font-size: 20px; font-weight: bold; }
+        .banner-subtitle { color: rgba(255,255,255,0.9); font-size: 12px; margin-top: 5px; }
+        
+        .staff-list { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+        .staff-card { background: white; border-radius: 16px; padding: 16px; display: flex; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #e5e5e5; transition: all 0.2s; }
+        .staff-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #22C55E; }
+        .staff-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #22C55E, #16a34a); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+        .staff-avatar i { font-size: 35px; color: white; }
+        .staff-info { flex: 1; }
+        .staff-name { font-size: 16px; font-weight: bold; color: #1f2937; margin-bottom: 5px; }
+        .staff-position { font-size: 11px; color: #22C55E; margin-bottom: 8px; }
+        .staff-bio { color: #6b7280; font-size: 12px; line-height: 1.5; }
+        .staff-badge { display: inline-block; background: #fef3c7; color: #d97706; padding: 3px 10px; border-radius: 20px; font-size: 10px; margin-top: 8px; }
+        
+        .football-banner { background: linear-gradient(135deg, #1a5d2a, #0d3e1a); border-radius: 16px; padding: 15px 20px; margin: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s; }
+        .football-banner:hover { transform: translateY(-2px); }
+        .football-banner-content { color: white; }
+        .football-banner-title { font-size: 14px; font-weight: bold; }
+        .football-banner-subtitle { font-size: 10px; opacity: 0.8; margin-top: 4px; }
+        .football-icon { font-size: 45px; color: #FFD700; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        
+        .loading-spinner { text-align: center; padding: 40px 20px; }
+        .loading-spinner i { font-size: 48px; color: #22C55E; animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Disponibilizar globalmente
+  window.firebaseModules = { auth, db, doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, orderBy };
+</script>
+
+<script>if(!localStorage.getItem('currentUser')){window.location.href='login.html';}</script>
+<div class="app-container">
+    <div class="header-section">
+        <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">🏆 Empleados Destacados</div>
+        <div style="width: 30px;"></div>
+    </div>
+    
+    <div class="banner-section">
+        <div class="banner-card">
+            <div class="banner-title">🌟 Empleados Destacados</div>
+            <div class="banner-subtitle">Los mejores empleados de la plataforma USHK</div>
+        </div>
+    </div>
+    
+    <div class="staff-list" id="staffList">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p style="color: #666; margin-top: 10px;">Cargando empleados...</p>
+        </div>
+    </div>
+    
+    <div class="football-banner" onclick="location.href='football.html'" style="background-image: url('https://i.postimg.cc/tTpkwx2v/10316785-futebol-modelo-design-futebol-banner-esporte-layout-design-verde-tema-vetor.jpg'); background-size: cover; background-position: center; position: relative;">
+        <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.3);"></div>
+        <div class="football-banner-content" style="position: relative; z-index: 1;">
+            <div class="football-banner-title">⚽ Pronósticos de Fútbol Mundial</div>
+            <div class="football-banner-subtitle">Únete y haz tus pronósticos</div>
+        </div>
+    </div>
+</div>
+
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-file-alt"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showMessage(msg, type) {
+        var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+        $('body').append(div);
+        setTimeout(function() { div.fadeOut(300, function() { $(this).remove(); }); }, 2500);
+    }
+    
+    // Esperar Firebase estar pronto
+    function getFirebase() {
+        return new Promise((resolve) => {
+            const checkInterval = setInterval(() => {
+                if (window.firebaseModules) {
+                    clearInterval(checkInterval);
+                    resolve(window.firebaseModules);
+                }
+            }, 100);
+        });
+    }
+    
+    // Cargar empleados desde Firestore
+    async function loadStaff() {
+        try {
+            const { db, collection, query, getDocs, orderBy } = await getFirebase();
+            
+            // Consultar empleados ordenados por ranking
+            const staffRef = collection(db, 'staff');
+            const q = query(staffRef, orderBy('ranking', 'asc'));
+            const querySnapshot = await getDocs(q);
+            
+            let staffList = [];
+            querySnapshot.forEach((doc) => {
+                staffList.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            renderStaff(staffList);
+        } catch(e) {
+            console.error('Error loading staff:', e);
+            showMessage('Error al cargar empleados', 'error');
+            renderStaff([]);
+        }
+    }
+    
+    // Renderizar empleados en la página
+    function renderStaff(staffList) {
+        const container = $('#staffList');
+        
+        if (staffList.length === 0) {
+            // Usar datos de ejemplo si no hay datos en Firestore
+            staffList = getDefaultStaff();
+        }
+        
+        let html = '';
+        for (let staff of staffList) {
+            const badgeIcon = getIconForBadge(staff.badgeType || 'trophy');
+            html += `
+                <div class="staff-card">
+                    <div class="staff-avatar"><i class="fas ${staff.avatarIcon || 'fa-user'}"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">${staff.name}</div>
+                        <div class="staff-position">${staff.position}</div>
+                        <div class="staff-bio">${staff.bio}</div>
+                        <div class="staff-badge"><i class="fas ${badgeIcon}"></i> ${staff.badge}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        container.html(html);
+    }
+    
+    // Obtener icono según el tipo de insignia
+    function getIconForBadge(badgeType) {
+        const icons = {
+            'trophy': 'fa-trophy',
+            'chart': 'fa-chart-line',
+            'handshake': 'fa-handshake',
+            'heart': 'fa-heart',
+            'code': 'fa-code'
+        };
+        return icons[badgeType] || 'fa-trophy';
+    }
+    
+    // Datos de empleados por defecto
+    function getDefaultStaff() {
+        return [
+            {
+                name: 'Ahmed Mansouri',
+                position: 'Director General - Gerente VIP',
+                bio: 'Destacado en liderazgo de equipo y cumplimiento de objetivos corporativos. Ganador del premio al Mejor Empleado 2026.',
+                badge: 'Mejor Empleado 2026',
+                badgeType: 'trophy',
+                avatarIcon: 'fa-user-tie',
+                ranking: 1
+            },
+            {
+                name: 'Sara Naqibi',
+                position: 'Supervisora de Marketing',
+                bio: 'Contribuyó a aumentar las ventas en un 150% en un año. Ganadora del premio a la Innovación.',
+                badge: 'Modelo de Excelencia',
+                badgeType: 'chart',
+                avatarIcon: 'fa-user-graduate',
+                ranking: 2
+            },
+            {
+                name: 'Mohamed Abdullah',
+                position: 'Gerente de Desarrollo de Negocios',
+                bio: 'Estableció alianzas estratégicas con grandes empresas y contribuyó a la expansión de la plataforma.',
+                badge: 'Mejor Alianza',
+                badgeType: 'handshake',
+                avatarIcon: 'fa-user',
+                ranking: 3
+            },
+            {
+                name: 'Fátima Zahra',
+                position: 'Directora de Servicio al Cliente',
+                bio: 'Obtuvo la calificación más alta en satisfacción del cliente y lideró al equipo de soporte a cifras récord.',
+                badge: 'Premio al Servicio al Cliente',
+                badgeType: 'heart',
+                avatarIcon: 'fa-user-tie',
+                ranking: 4
+            },
+            {
+                name: 'Omar Khalid',
+                position: 'Desarrollador Técnico',
+                bio: 'Desarrolló la plataforma USHK y mejoró el rendimiento del sistema en un 80%.',
+                badge: 'Premio a la Innovación Técnica',
+                badgeType: 'code',
+                avatarIcon: 'fa-user',
+                ranking: 5
+            },
+            {
+                name: 'Carlos Mendoza',
+                position: 'Gerente de Ventas Mozambique',
+                bio: 'Líder en ventas para la región de Angola, expandió la base de usuarios en un 200% en 6 meses.',
+                badge: 'Top Ventas Mozambique',
+                badgeType: 'chart',
+                avatarIcon: 'fa-user',
+                ranking: 6
+            }
+        ];
+    }
+    
+    // Inicializar datos de ejemplo en Firestore si es primera vez
+    async function initializeDefaultStaff() {
+        try {
+            const { db, collection, query, getDocs, setDoc, doc } = await getFirebase();
+            
+            // Verificar si ya existen empleados
+            const staffRef = collection(db, 'staff');
+            const q = query(staffRef);
+            const querySnapshot = await getDocs(q);
+            
+            if (querySnapshot.empty) {
+                // Crear empleados de ejemplo
+                const defaultStaff = getDefaultStaff();
+                
+                for (let staff of defaultStaff) {
+                    const docRef = doc(collection(db, 'staff'));
+                    await setDoc(docRef, staff);
+                }
+            }
+        } catch(e) {
+            console.error('Error initializing staff:', e);
+        }
+    }
+    
+    // Inicializar
+    async function init() {
+        await initializeDefaultStaff();
+        await loadStaff();
+        // Recargar cada 60 segundos
+        setInterval(loadStaff, 60000);
+    }
+    
+    init();
+</script>
+</body>
+</html>

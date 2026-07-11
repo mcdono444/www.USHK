@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; min-height: 100vh; }
+        .header-bar { background: linear-gradient(135deg, #22C55E, #16A34A); padding: 15px; text-align: center; position: relative; }
+        .back-btn { position: absolute; left: 15px; top: 15px; color: white; font-size: 20px; text-decoration: none; }
+        .header-title { color: white; font-size: 18px; font-weight: bold; }
+        .header-subtitle { color: rgba(255,255,255,0.9); font-size: 12px; margin-top: 5px; }
+        .stats-grid { display: flex; gap: 12px; padding: 15px; background: white; margin: -20px 15px 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .stat-card { flex: 1; text-align: center; }
+        .stat-value { font-size: 22px; font-weight: bold; color: #22C55E; }
+        .stat-label { font-size: 11px; color: #666; margin-top: 5px; }
+        .invite-section { background: white; margin: 0 15px 15px; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .invite-title { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .invite-title i { color: #22C55E; }
+        .code-box { background: #f8f9fa; border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #e5e5e5; }
+        .code-label { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .code-value { font-size: 24px; font-weight: bold; color: #22C55E; direction: ltr; font-family: monospace; letter-spacing: 2px; background: white; padding: 12px; border-radius: 10px; text-align: center; border: 1px dashed #22C55E; word-break: break-all; overflow-wrap: break-word; }
+        .copy-btn { background: #22C55E; color: white; border: none; padding: 10px 20px; border-radius: 30px; margin-top: 12px; cursor: pointer; width: 100%; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+        .copy-btn:active { transform: scale(0.97); }
+        .copy-btn:hover { background: #16A34A; }
+        .invite-link-box { background: #f0fdf4; border-radius: 12px; padding: 12px; margin-top: 10px; }
+        .invite-link-label { font-size: 11px; color: #666; margin-bottom: 5px; }
+        .invite-link { font-size: 11px; color: #22C55E; word-break: break-all; overflow-wrap: break-word; font-family: monospace; background: white; padding: 8px; border-radius: 6px; border: 1px solid #22C55E; line-height: 1.4; }
+        .commission-section { background: white; margin: 0 15px 15px; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .commission-title { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-left: 3px solid #22C55E; padding-left: 10px; }
+        .commission-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .commission-level { font-size: 14px; color: #333; }
+        .commission-level span { font-size: 11px; color: #999; }
+        .commission-rate { font-size: 18px; font-weight: bold; color: #22C55E; }
+        .total-commission { background: linear-gradient(135deg, #22C55E, #16A34A); border-radius: 12px; padding: 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .total-commission-label { color: white; font-size: 14px; }
+        .total-commission-value { color: #FFD700; font-size: 24px; font-weight: bold; }
+        .team-section { background: white; margin: 0 15px 15px; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .team-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #eee; }
+        .team-tab { flex: 1; padding: 10px; text-align: center; font-size: 14px; font-weight: 500; cursor: pointer; color: #666; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .team-tab.active { color: #22C55E; border-bottom-color: #22C55E; }
+        .team-list { max-height: 400px; overflow-y: auto; }
+        .team-member { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; animation: slideIn 0.3s ease-out; }
+        .member-info { flex: 1; }
+        .member-phone { font-size: 14px; font-weight: 500; color: #333; }
+        .member-date { font-size: 10px; color: #999; margin-top: 3px; }
+        .member-status { display: flex; align-items: center; gap: 8px; }
+        .member-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; white-space: nowrap; }
+        .badge-active { background: #dcfce7; color: #166534; }
+        .badge-inactive { background: #fee2e2; color: #b91c1c; }
+        .badge-vip { background: #fef3c7; color: #d97706; }
+        .empty-team { text-align: center; padding: 40px 20px; color: #999; }
+        .empty-team i { font-size: 48px; margin-bottom: 15px; color: #ccc; }
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; animation: slideDown 0.3s ease-out; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        .loading { text-align: center; padding: 20px; color: #999; }
+        .loading i { animation: spin 1s linear infinite; }
+        .debug-info { background: #f0f0f0; padding: 10px; border-radius: 8px; font-size: 10px; color: #666; margin-top: 10px; font-family: monospace; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    </style>
+</head>
+<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, query, where, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+    authDomain: "proibidoreplica.firebaseapp.com",
+    projectId: "proibidoreplica",
+    storageBucket: "proibidoreplica.firebasestorage.app",
+    messagingSenderId: "794009646952",
+    appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.firebaseModules = { auth, db, doc, getDoc, collection, query, where, getDocs, onSnapshot };
+</script>
+
+<div class="app-container">
+    <div class="header-bar">
+        <a class='back-btn' href='/'><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">👥 Mi Equipo y Ganancias</div>
+        <div class="header-subtitle">Invita a tus amigos y gana comisión</div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-value" id="totalInvited">0</div><div class="stat-label">Total de invitados</div></div>
+        <div class="stat-card"><div class="stat-value" id="activeInvestors">0</div><div class="stat-label">Inversores activos</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalCommission">0</div><div class="stat-label">Comisión total</div></div>
+    </div>
+
+    <div class="invite-section">
+        <div class="invite-title"><i class="fas fa-gift"></i> Tu código de invitación</div>
+        <div class="code-box">
+            <div class="code-label">🎁 Código de invitación</div>
+            <div class="code-value" id="inviteCode">Cargando...</div>
+            <button class="copy-btn" id="copyCodeBtn"><i class="fas fa-copy"></i> Copiar código</button>
+        </div>
+        <div class="invite-link-box">
+            <div class="invite-link-label">🔗 Enlace de invitación directo</div>
+            <div class="invite-link" id="inviteLink">Cargando...</div>
+            <button class="copy-btn" id="copyLinkBtn" style="margin-top:10px; background:#16A34A;"><i class="fas fa-link"></i> Copiar enlace</button>
+        </div>
+        <div style="font-size: 12px; color: #666; text-align: center; margin-top: 12px;">
+            <i class="fas fa-info-circle"></i> Cada persona que se registre con tu código se une a tu equipo
+        </div>
+    </div>
+
+    <div class="commission-section">
+        <div class="commission-title"><i class="fas fa-chart-line"></i> Sistema de comisiones</div>
+        <div class="commission-item">
+            <div class="commission-level">Nivel 1 <span>(Invitados directos)</span></div>
+            <div class="commission-rate">25%</div>
+        </div>
+        <div class="commission-item">
+            <div class="commission-level">Nivel 2 <span>(Invitados de tus invitados)</span></div>
+            <div class="commission-rate">2%</div>
+        </div>
+        <div class="commission-item">
+            <div class="commission-level">Nivel 3 <span>(Invitados del nivel 2)</span></div>
+            <div class="commission-rate">1%</div>
+        </div>
+        <div class="total-commission">
+            <span class="total-commission-label">💰 Comisión total pendiente</span>
+            <span class="total-commission-value" id="totalCommissionAmount">0 kz</span>
+        </div>
+        <div style="font-size: 11px; color: #999; margin-top: 12px; text-align: center;">
+            <i class="fas fa-chart-simple"></i> Cuando los miembros de tu equipo compran productos VIP, ganas comisión inmediata
+        </div>
+    </div>
+
+    <div class="team-section">
+        <div class="team-tabs">
+            <div class="team-tab active" data-level="1">Nivel 1 <span id="tab1Count" style="font-size: 11px;">(0)</span></div>
+            <div class="team-tab" data-level="2">Nivel 2 <span id="tab2Count" style="font-size: 11px;">(0)</span></div>
+            <div class="team-tab" data-level="3">Nivel 3 <span id="tab3Count" style="font-size: 11px;">(0)</span></div>
+        </div>
+        <div class="team-list" id="teamList">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando equipo...</div>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class='nav-item' href='/'><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class='nav-item' href='/funds'><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class='nav-item' href='/income'><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class='nav-item' href='/mytask'><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class='nav-item' href='/profile'><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+const userId = localStorage.getItem('userId');
+
+if (!userId) {
+    window.location.href = 'login.html';
+}
+
+let currentLevel = 1;
+let teamData = { 
+    level1: [], 
+    level2: [], 
+    level3: [], 
+    level1Active: 0, 
+    level2Active: 0, 
+    level3Active: 0 
+};
+
+function getFirebase() {
+    return new Promise((resolve) => {
+        const check = setInterval(() => {
+            if (window.firebaseModules) {
+                clearInterval(check);
+                resolve(window.firebaseModules);
+            }
+        }, 100);
+    });
+}
+
+function showMessage(msg, type) {
+    var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+    $('body').append(div);
+    setTimeout(function() { div.fadeOut(300, function() { $(this).remove(); }); }, 3000);
+}
+
+// ✅ OBTER CONVIDADOS DA COLEÇÃO /referrals/{userId}/invited
+async function getMyInvited(db, userId) {
+    try {
+        console.log('🔍 Buscando en /referrals/' + userId + '/invited');
+        const invitedRef = collection(db, 'referrals', userId, 'invited');
+        const snaps = await getDocs(invitedRef);
+        
+        const invited = snaps.docs.map(d => ({ 
+            id: d.id, 
+            ...d.data() 
+        }));
+        
+        console.log('✅ Documentos encontrados:', invited.length);
+        invited.forEach((inv, idx) => {
+            console.log(`  [${idx}]`, inv);
+        });
+        
+        return invited;
+    } catch (err) {
+        console.error('❌ Erro ao buscar convidados:', err);
+        return [];
+    }
+}
+
+// ✅ ENRIQUECER DADOS DO CONVIDADO
+async function enrichInvited(db, invited) {
+    const out = Object.assign({}, invited);
+    
+    try {
+        const invitedUserId = invited.invitedUserId || invited.id;
+        
+        if (invitedUserId) {
+            const userDocRef = doc(db, 'users', invitedUserId);
+            const userSnap = await getDoc(userDocRef);
+            
+            if (userSnap.exists()) {
+                const d = userSnap.data();
+                out.phone = d.phone || invited.invitedPhone || d.email || invited.invitedEmail || null;
+                out.email = d.email || invited.invitedEmail || null;
+                out.createdAt = d.createdAt || invited.invitedAt || null;
+                out.vipLevel = d.vipLevel || 0;
+                out.hasPurchased = d.hasPurchased || false;
+                out.balance = d.balance || 0;
+                console.log('✅ Datos enriquecidos para:', invitedUserId);
+            } else {
+                out.phone = invited.invitedPhone || invited.invitedEmail || null;
+                out.email = invited.invitedEmail || null;
+                out.createdAt = invited.invitedAt || null;
+                console.log('⚠️ Usuario no encontrado:', invitedUserId);
+            }
+        }
+    } catch (e) {
+        console.warn('⚠️ Error al enriquecer:', e);
+        out.phone = invited.invitedPhone || invited.invitedEmail || null;
+        out.email = invited.invitedEmail || null;
+        out.createdAt = invited.invitedAt || null;
+    }
+    
+    return out;
+}
+
+// ✅ CARREGAR DATOS DEL EQUIPO
+async function loadTeamData() {
+    try {
+        const { db, doc: firebaseDoc, getDoc, collection, getDocs } = await getFirebase();
+
+        console.log('\n📊 === INICIANDO CARGA DE EQUIPO ===');
+        console.log('User ID:', userId);
+
+        // OBTER DATOS DEL USUÁRIO ATUAL
+        const userRef = firebaseDoc(db, 'users', userId);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+            showMessage('Error: Usuario no encontrado', 'error');
+            console.error('❌ Usuario no encontrado');
+            return;
+        }
+
+        const userData = userSnap.data();
+        const inviteCode = userData.referralCode || userData.phone || userId.substring(0, 8);
+        const inviteLink = window.location.origin + '/register.html?ref=' + encodeURIComponent(inviteCode);
+
+        console.log('✅ Usuario encontrado');
+        console.log('  Código:', inviteCode);
+
+        $('#inviteCode').text(inviteCode);
+        $('#inviteLink').text(inviteLink);
+
+        // ✅ NIVEL 1: CONVIDADOS DIRETOS
+        console.log('\n📍 Cargando Nivel 1...');
+        const rawLevel1 = await getMyInvited(db, userId);
+        const level1Members = [];
+        let level1ActiveCount = 0;
+
+        for (const r of rawLevel1) {
+            const member = await enrichInvited(db, r);
+            member.userId = member.invitedUserId || member.id;
+            member.joinAt = member.createdAt || member.invitedAt || null;
+            
+            const isActive = member.hasPurchased === true || member.hasPurchased === 'true' || 
+                           (member.vipLevel && Number(member.vipLevel) > 0);
+            if (isActive) level1ActiveCount++;
+            
+            level1Members.push(member);
+        }
+
+        console.log('✅ Nivel 1 completado:', level1Members.length, 'miembros, activos:', level1ActiveCount);
+
+        // ✅ NIVEL 2
+        console.log('\n📍 Cargando Nivel 2...');
+        const level2Members = [];
+        let level2ActiveCount = 0;
+
+        for (const m1 of level1Members) {
+            if (!m1.userId) continue;
+            
+            const raw2 = await getMyInvited(db, m1.userId);
+            for (const r2 of raw2) {
+                const member2 = await enrichInvited(db, r2);
+                member2.userId = member2.invitedUserId || member2.id;
+                member2.parentId = m1.userId;
+                member2.joinAt = member2.createdAt || member2.invitedAt || null;
+                
+                const isActive = member2.hasPurchased === true || member2.hasPurchased === 'true' || 
+                               (member2.vipLevel && Number(member2.vipLevel) > 0);
+                if (isActive) level2ActiveCount++;
+                
+                level2Members.push(member2);
+            }
+        }
+
+        console.log('✅ Nivel 2 completado:', level2Members.length, 'miembros, activos:', level2ActiveCount);
+
+        // ✅ NIVEL 3
+        console.log('\n📍 Cargando Nivel 3...');
+        const level3Members = [];
+        let level3ActiveCount = 0;
+
+        for (const m2 of level2Members) {
+            if (!m2.userId) continue;
+            
+            const raw3 = await getMyInvited(db, m2.userId);
+            for (const r3 of raw3) {
+                const member3 = await enrichInvited(db, r3);
+                member3.userId = member3.invitedUserId || member3.id;
+                member3.parentId = m2.userId;
+                member3.joinAt = member3.createdAt || member3.invitedAt || null;
+                
+                const isActive = member3.hasPurchased === true || member3.hasPurchased === 'true' || 
+                               (member3.vipLevel && Number(member3.vipLevel) > 0);
+                if (isActive) level3ActiveCount++;
+                
+                level3Members.push(member3);
+            }
+        }
+
+        console.log('✅ Nivel 3 completado:', level3Members.length, 'miembros, activos:', level3ActiveCount);
+
+        teamData = {
+            level1: level1Members,
+            level1Active: level1ActiveCount,
+            level2: level2Members,
+            level2Active: level2ActiveCount,
+            level3: level3Members,
+            level3Active: level3ActiveCount
+        };
+
+        // ATUALIZAR TOTAIS
+        const totalMembers = level1Members.length + level2Members.length + level3Members.length;
+        const activeInvestors = level1ActiveCount + level2ActiveCount + level3ActiveCount;
+
+        console.log('\n📊 TOTALES:');
+        console.log('  Total miembros:', totalMembers);
+        console.log('  Activos:', activeInvestors);
+
+        $('#totalInvited').text(totalMembers);
+        $('#activeInvestors').text(activeInvestors);
+
+        // ATUALIZAR CONTADORES NAS ABAS
+        $('#tab1Count').text('(' + level1Members.length + ')');
+        $('#tab2Count').text('(' + level2Members.length + ')');
+        $('#tab3Count').text('(' + level3Members.length + ')');
+
+        // ✅ CALCULAR COMISSÕES
+        console.log('\n💰 Buscando comisiones...');
+        let totalCommission = 0;
+        try {
+            const balancesRef = collection(db, 'balances');
+            const q = query(balancesRef, where('userId', '==', userId), where('type', '==', 'referral_bonus'));
+            const snaps = await getDocs(q);
+            
+            console.log('  Registros encontrados:', snaps.size);
+            snaps.forEach(s => {
+                const t = s.data();
+                totalCommission += Number(t.amount || 0);
+            });
+            
+            console.log('✅ Comisión total:', totalCommission);
+        } catch (e) {
+            console.warn('⚠️ Error al buscar comisiones:', e);
+        }
+
+        $('#totalCommission').text(totalCommission.toFixed(0));
+        $('#totalCommissionAmount').text(totalCommission.toFixed(2) + ' kz');
+
+        console.log('\n✅ === CARGA COMPLETA ===\n');
+        renderTeamList();
+        
+    } catch (error) {
+        console.error('❌ ERROR GENERAL:', error);
+        showMessage('Error: No se pudieron cargar los datos', 'error');
+        $('#teamList').html(`
+            <div class="empty-team">
+                <i class="fas fa-wifi"></i>
+                <p>Error de conexión</p>
+                <p style="font-size: 12px;">Por favor, intente novamente</p>
+                <div class="debug-info">Error: ${error.message}</div>
+            </div>
+        `);
+    }
+}
+
+function renderTeamList() {
+    let members = [];
+    let levelName = '';
+
+    if (currentLevel === 1) {
+        members = teamData.level1 || [];
+        levelName = 'Nivel 1';
+    } else if (currentLevel === 2) {
+        members = teamData.level2 || [];
+        levelName = 'Nivel 2';
+    } else {
+        members = teamData.level3 || [];
+        levelName = 'Nivel 3';
+    }
+
+    if (members.length === 0) {
+        $('#teamList').html(`
+            <div class="empty-team">
+                <i class="fas fa-users"></i>
+                <p>No hay miembros en ${levelName}</p>
+                <p style="font-size: 12px;">Invita a tus amigos para construir tu equipo</p>
+            </div>
+        `);
+        return;
+    }
+
+    let html = '';
+    
+    members.forEach((member, index) => {
+        const isActive = member.hasPurchased === true || member.hasPurchased === 'true' || 
+                        (member.vipLevel && Number(member.vipLevel) > 0);
+        const statusClass = isActive && member.vipLevel && Number(member.vipLevel) > 0 ? 'badge-vip' : 
+                           isActive ? 'badge-active' : 'badge-inactive';
+        const statusText = isActive && member.vipLevel && Number(member.vipLevel) > 0 ? `VIP${member.vipLevel} ✓` : 
+                          isActive ? '✓ Activo' : '✗ Inactivo';
+
+        let joinDate = 'Fecha no disponible';
+        if (member.joinAt) {
+            try {
+                const d = new Date(member.joinAt);
+                if (!isNaN(d.getTime())) {
+                    joinDate = d.toLocaleDateString('es-MZ') + ' ' + d.toLocaleTimeString('es-MZ', { hour: '2-digit', minute: '2-digit' });
+                }
+            } catch (e) {
+                joinDate = String(member.joinAt).substring(0, 10);
+            }
+        }
+
+        const displayPhone = member.phone || member.email || member.invitedPhone || member.invitedEmail || 'Sin contacto';
+        const displayEmail = member.email || member.invitedEmail || '';
+
+        html += `
+            <div class="team-member" style="animation-delay: ${index * 0.05}s;">
+                <div class="member-info">
+                    <div class="member-phone">📱 ${displayPhone}</div>
+                    <div class="member-date">
+                        <i class="fas fa-calendar-alt"></i> ${joinDate}
+                        ${displayEmail ? `<br><i class="fas fa-envelope"></i> ${displayEmail}` : ''}
+                    </div>
+                </div>
+                <div class="member-status">
+                    <div class="member-badge ${statusClass}">${statusText}</div>
+                </div>
+            </div>
+        `;
+    });
+    
+    $('#teamList').html(html);
+}
+
+function copyInviteCode() {
+    const code = $('#inviteCode').text();
+    if (code && code !== 'Cargando...') {
+        navigator.clipboard.writeText(code).then(function() {
+            showMessage('✅ ¡Código copiado!', 'success');
+        }).catch(function() {
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showMessage('✅ ¡Código copiado!', 'success');
+        });
+    }
+}
+
+function copyInviteLink() {
+    const link = $('#inviteLink').text();
+    if (link && link !== 'Cargando...') {
+        navigator.clipboard.writeText(link).then(function() {
+            showMessage('✅ ¡Enlace copiado!', 'success');
+        }).catch(function() {
+            const textarea = document.createElement('textarea');
+            textarea.value = link;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showMessage('✅ ¡Enlace copiado!', 'success');
+        });
+    }
+}
+
+$(document).ready(function() {
+    // BOTÕES COPY
+    $('#copyCodeBtn').on('click', copyInviteCode);
+    $('#copyLinkBtn').on('click', copyInviteLink);
+
+    // TABS
+    $('.team-tab').on('click', function() {
+        $('.team-tab').removeClass('active');
+        $(this).addClass('active');
+        currentLevel = parseInt($(this).data('level'));
+        renderTeamList();
+    });
+
+    // CARREGAR DADOS INICIAIS
+    console.log('🚀 Inicializando página de equipo...');
+    loadTeamData();
+
+    // ATUALIZAR A CADA 2 MINUTOS
+    setInterval(loadTeamData, 120000);
+
+    console.log('✅ Página lista para usar');
+});
+</script>
+</body>
+</html>

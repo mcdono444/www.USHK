@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USHK Mozambique - Mis Tarjetas Virtuales</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#f0f2f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding-bottom:70px}
+        .container{max-width:430px;margin:0 auto;background:#f0f2f5}
+        
+        .header{background:linear-gradient(135deg,#1a5d2a,#0d3e1a);padding:20px;text-align:center;color:white;border-radius:0 0 25px 25px}
+        .header h2{font-size:20px}
+        .header p{font-size:12px;opacity:0.9;margin-top:5px}
+        
+        .content{padding:20px}
+        
+        /* SECCIÓN DE TARJETAS DISPONIBLES */
+        .available-cards{margin-bottom:30px}
+        .section-title{font-size:16px;font-weight:bold;color:#1a5d2a;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+        .section-title i{color:#22C55E}
+        
+        .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+        
+        .card-option{border-radius:12px;padding:15px;text-align:center;color:white;cursor:pointer;transition:all 0.3s;border:2px solid transparent;font-weight:bold}
+        .card-option:hover{transform:translateY(-5px);box-shadow:0 8px 20px rgba(0,0,0,0.2)}
+        .card-option i{font-size:32px;display:block;margin-bottom:8px}
+        
+        .card-bronze{background:linear-gradient(135deg,#CD7F32,#A0642E);border-color:#8B5A2B}
+        .card-silver{background:linear-gradient(135deg,#C0C0C0,#A8A9AD);border-color:#808080}
+        .card-gold{background:linear-gradient(135deg,#FFD700,#FFA500);color:#333;border-color:#FF8C00}
+        .card-messi{background:linear-gradient(135deg,#FF6B9D,#C44569);border-color:#9B2C6B}
+        .card-ronaldo{background:linear-gradient(135deg,#000,#2d2d2d);border-color:#1a1a1a}
+        
+        /* SECCIÓN DE TARJETA AGREGADA */
+        .added-cards{margin-top:30px}
+        .virtual-card{background:white;border-radius:16px;padding:20px;margin-bottom:15px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+        
+        .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+        .card-chip{width:50px;height:35px;background:#FFD700;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#333}
+        .card-delete{background:#EF4444;color:white;border:none;padding:8px 12px;border-radius:20px;cursor:pointer;font-size:12px}
+        
+        .card-display{border-radius:12px;padding:20px;color:white;margin-bottom:15px;min-height:200px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+        .card-display::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:rgba(255,255,255,0.1);border-radius:50%;z-index:0}
+        
+        .card-logo{font-size:24px;font-weight:bold;margin-bottom:30px;position:relative;z-index:1}
+        .card-number-input{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:white;padding:12px;border-radius:8px;font-family:monospace;font-size:16px;margin-bottom:15px;position:relative;z-index:1}
+        .card-number-input::placeholder{color:rgba(255,255,255,0.6)}
+        
+        .card-info{display:flex;justify-content:space-between;margin-bottom:15px;position:relative;z-index:1}
+        .card-holder,
+        .card-expiry{font-size:12px}
+        .card-holder-label,
+        .card-expiry-label{font-size:10px;opacity:0.8;text-transform:uppercase}
+        .card-holder-input,
+        .card-expiry-input{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:white;padding:6px 8px;border-radius:4px;font-size:11px;margin-top:3px;width:100%}
+        .card-holder-input::placeholder,
+        .card-expiry-input::placeholder{color:rgba(255,255,255,0.6)}
+        
+        .card-footer{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1}
+        .card-cvv-input{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:white;padding:6px 8px;border-radius:4px;font-family:monospace;font-size:11px;width:60px}
+        .card-cvv-input::placeholder{color:rgba(255,255,255,0.6)}
+        
+        .btn-save-card{background:#22C55E;color:white;border:none;padding:12px 24px;border-radius:30px;cursor:pointer;font-weight:bold;margin-top:15px;width:100%}
+        .btn-save-card:hover{background:#16a34a}
+        
+        .empty{text-align:center;padding:40px 20px;background:white;border-radius:12px;color:#999}
+        .empty i{font-size:48px;margin-bottom:15px;display:block}
+        
+        .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#22C55E;display:flex;justify-content:space-around;padding:8px 0;z-index:1000}
+        .nav-item{text-decoration:none;color:white;text-align:center;flex:1;font-size:10px}
+        .nav-icon{font-size:20px;display:block}
+        
+        .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:50px;z-index:1001;font-weight:bold;font-size:14px}
+        .toast.success{background:#dcfce7;color:#166534}
+        .toast.error{background:#fee2e2;color:#b91c1c}
+        
+        .hidden{display:none}
+        
+        /* Estilos para tarjetas guardadas */
+        .saved-card{border-radius:12px;padding:15px;color:white;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+        .saved-card-info{flex:1}
+        .saved-card-type{font-weight:bold;font-size:14px;margin-bottom:5px}
+        .saved-card-number{font-family:monospace;font-size:12px;opacity:0.9}
+        .saved-card-holder{font-size:11px;opacity:0.8;margin-top:3px}
+        .saved-card-actions{display:flex;gap:8px}
+        .btn-delete{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:white;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:11px;transition:all 0.3s}
+        .btn-delete:hover{background:rgba(255,0,0,0.6)}
+    </style>
+</head>
+<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "COLOQUE_AQUI",
+    authDomain: "COLOQUE_AQUI",
+    projectId: "COLOQUE_AQUI",
+    storageBucket: "COLOQUE_AQUI",
+    messagingSenderId: "COLOQUE_AQUI",
+    appId: "COLOQUE_AQUI"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.firebaseApp = { auth, db, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc, arrayUnion, arrayRemove };
+</script>
+
+<div class="container">
+    <div class="header">
+        <h2><i class="fas fa-credit-card"></i> Mis Tarjetas Virtuales</h2>
+        <p>Selecciona una tarjeta y agrega tu número simulado</p>
+    </div>
+    
+    <div class="content">
+        <!-- TARJETAS DISPONIBLES -->
+        <div class="available-cards">
+            <div class="section-title">
+                <i class="fas fa-star"></i> Tarjetas Disponibles
+            </div>
+            <div class="cards-grid">
+                <div class="card-option card-bronze" onclick="selectCard('bronze','Bronze','#CD7F32')">
+                    <i class="fas fa-medal"></i>
+                    Bronze
+                </div>
+                <div class="card-option card-silver" onclick="selectCard('silver','Silver','#C0C0C0')">
+                    <i class="fas fa-crown"></i>
+                    Silver
+                </div>
+                <div class="card-option card-gold" onclick="selectCard('gold','Gold','#FFD700')">
+                    <i class="fas fa-coins"></i>
+                    Gold
+                </div>
+                <div class="card-option card-messi" onclick="selectCard('messi','Messi','#FF6B9D')">
+                    <i class="fas fa-futbol"></i>
+                    Messi
+                </div>
+                <div class="card-option card-ronaldo" onclick="selectCard('ronaldo','Ronaldo','#000')">
+                    <i class="fas fa-futbol"></i>
+                    Ronaldo
+                </div>
+                <div class="card-option" style="background:linear-gradient(135deg,#00D4FF,#0099FF)" onclick="selectCard('cristiano','Cristiano','#00D4FF')">
+                    <i class="fas fa-star"></i>
+                    Cristiano
+                </div>
+            </div>
+        </div>
+        
+        <!-- FORMULARIO DE TARJETA SELECCIONADA -->
+        <div id="cardForm" class="hidden">
+            <div class="section-title">
+                <i class="fas fa-plus"></i> <span id="formTitle">Nueva Tarjeta</span>
+            </div>
+            
+            <div id="cardPreview" class="card-display">
+                <div class="card-logo">USHK</div>
+                <input type="text" id="cardNumber" class="card-number-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                <div class="card-info">
+                    <div style="flex:1;margin-right:10px">
+                        <div class="card-holder-label">Titular</div>
+                        <input type="text" id="cardHolder" class="card-holder-input" placeholder="TU NOMBRE">
+                    </div>
+                    <div>
+                        <div class="card-expiry-label">Vence</div>
+                        <input type="text" id="cardExpiry" class="card-expiry-input" placeholder="MM/YY" maxlength="5">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div style="flex:1">
+                        <span style="font-size:10px;opacity:0.8;text-transform:uppercase">CVV</span><br>
+                        <input type="text" id="cardCVV" class="card-cvv-input" placeholder="***" maxlength="3">
+                    </div>
+                    <div style="margin-left:10px;text-align:right">
+                        <div style="font-size:10px;opacity:0.8">CHIP</div>
+                        <div class="card-chip">EMV</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn-save-card" onclick="saveCard()">
+                <i class="fas fa-save"></i> Guardar Tarjeta
+            </button>
+        </div>
+        
+        <!-- TARJETAS GUARDADAS -->
+        <div class="added-cards" id="savedCardsSection" style="display:none">
+            <div class="section-title">
+                <i class="fas fa-check-circle"></i> Mis Tarjetas Guardadas
+            </div>
+            <div id="savedCardsList"></div>
+        </div>
+        
+        <!-- ESTADO VACÍO -->
+        <div id="emptyState" class="empty">
+            <i class="fas fa-credit-card"></i>
+            <p>Selecciona una tarjeta para agregar</p>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div>Inicio</a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div>Cuenta</a>
+</footer>
+
+<script>
+    const userId = localStorage.getItem('userId');
+    let selectedCard = null;
+    let selectedCardColor = null;
+    let cards = [];
+    
+    if (!userId) {
+        window.location.href = 'login.html';
+    }
+    
+    function getFirebase() {
+        return new Promise((resolve) => {
+            const check = setInterval(() => {
+                if (window.firebaseApp) {
+                    clearInterval(check);
+                    resolve(window.firebaseApp);
+                }
+            }, 100);
+        });
+    }
+    
+    function showMessage(msg, type) {
+        const d = document.createElement('div');
+        d.className = 'toast ' + type;
+        d.innerHTML = msg;
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 3000);
+    }
+    
+    window.selectCard = function(type, name, color) {
+        selectedCard = type;
+        selectedCardColor = color;
+        document.getElementById('cardForm').classList.remove('hidden');
+        document.getElementById('emptyState').classList.add('hidden');
+        document.getElementById('formTitle').textContent = 'Nueva Tarjeta - ' + name;
+        
+        const preview = document.getElementById('cardPreview');
+        preview.style.background = 'linear-gradient(135deg,' + color + ',' + color + '99)';
+    }
+    
+    // Formatear número de tarjeta
+    document.addEventListener('input', (e) => {
+        if (e.target.id === 'cardNumber') {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^\d]/g, '');
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i += 4) {
+                if (i > 0) formattedValue += ' ';
+                formattedValue += value.substr(i, 4);
+            }
+            e.target.value = formattedValue;
+        }
+        
+        if (e.target.id === 'cardExpiry') {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substr(0, 2) + '/' + value.substr(2, 2);
+            }
+            e.target.value = value;
+        }
+    });
+    
+    window.saveCard = async function() {
+        try {
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardHolder = document.getElementById('cardHolder').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCVV = document.getElementById('cardCVV').value;
+            
+            if (!cardNumber || cardNumber.length < 16) {
+                showMessage('❌ Número de tarjeta inválido', 'error');
+                return;
+            }
+            if (!cardHolder) {
+                showMessage('❌ Nombre del titular requerido', 'error');
+                return;
+            }
+            if (!cardExpiry || cardExpiry.length < 5) {
+                showMessage('❌ Fecha de vencimiento inválida', 'error');
+                return;
+            }
+            if (!cardCVV || cardCVV.length < 3) {
+                showMessage('❌ CVV inválido', 'error');
+                return;
+            }
+            
+            const { db, doc, updateDoc, arrayUnion } = await getFirebase();
+            
+            const newCard = {
+                id: Date.now().toString(),
+                type: selectedCard,
+                name: selectedCard.charAt(0).toUpperCase() + selectedCard.slice(1),
+                number: cardNumber,
+                holder: cardHolder,
+                expiry: cardExpiry,
+                cvv: cardCVV,
+                color: selectedCardColor,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Guardar en Firestore
+            const userRef = doc(db, 'users', userId);
+            await updateDoc(userRef, {
+                virtualCards: arrayUnion(newCard)
+            });
+            
+            showMessage('✅ Tarjeta guardada correctamente', 'success');
+            
+            // Limpiar formulario
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('cardHolder').value = '';
+            document.getElementById('cardExpiry').value = '';
+            document.getElementById('cardCVV').value = '';
+            document.getElementById('cardForm').classList.add('hidden');
+            
+            await loadCards();
+            
+        } catch(error) {
+            console.error('Error:', error);
+            showMessage('❌ Error al guardar tarjeta: ' + error.message, 'error');
+        }
+    }
+    
+    window.deleteCard = async function(cardId) {
+        if (!confirm('¿Eliminar esta tarjeta?')) return;
+        
+        try {
+            const { db, doc, updateDoc, arrayRemove } = await getFirebase();
+            
+            const cardToDelete = cards.find(c => c.id === cardId);
+            const userRef = doc(db, 'users', userId);
+            await updateDoc(userRef, {
+                virtualCards: arrayRemove(cardToDelete)
+            });
+            
+            showMessage('✅ Tarjeta eliminada', 'success');
+            await loadCards();
+            
+        } catch(error) {
+            console.error('Error:', error);
+            showMessage('❌ Error al eliminar', 'error');
+        }
+    }
+    
+    async function loadCards() {
+        try {
+            const { db, doc, getDoc } = await getFirebase();
+            
+            const userRef = doc(db, 'users', userId);
+            const userSnap = await getDoc(userRef);
+            
+            if (userSnap.exists()) {
+                cards = userSnap.data().virtualCards || [];
+            } else {
+                cards = [];
+            }
+            
+            displayCards();
+            
+        } catch(error) {
+            console.error('Error loading cards:', error);
+            cards = [];
+            displayCards();
+        }
+    }
+    
+    function displayCards() {
+        const savedList = document.getElementById('savedCardsList');
+        const section = document.getElementById('savedCardsSection');
+        
+        if (cards.length === 0) {
+            section.style.display = 'none';
+            document.getElementById('emptyState').classList.remove('hidden');
+            return;
+        }
+        
+        section.style.display = 'block';
+        document.getElementById('emptyState').classList.add('hidden');
+        
+        let html = '';
+        for (let card of cards) {
+            const lastFour = card.number.slice(-4);
+            html += `
+                <div class="saved-card" style="background:linear-gradient(135deg,${card.color},${card.color}99)">
+                    <div class="saved-card-info">
+                        <div class="saved-card-type">
+                            <i class="fas fa-credit-card"></i> ${card.name}
+                        </div>
+                        <div class="saved-card-number">•••• •••• •••• ${lastFour}</div>
+                        <div class="saved-card-holder">${card.holder}</div>
+                    </div>
+                    <div class="saved-card-actions">
+                        <button class="btn-delete" onclick="window.deleteCard('${card.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        savedList.innerHTML = html;
+    }
+    
+    // Cargar tarjetas al iniciar
+    loadCards();
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

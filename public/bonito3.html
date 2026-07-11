@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Depósitos em Tempo Real</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f5f5f5; padding:20px; }
+    .deposit-card {
+      background:#fff; border-radius:8px; padding:16px; margin-bottom:16px;
+      box-shadow:0 2px 6px rgba(0,0,0,.1);
+    }
+    .deposit-card img {
+      max-width:200px; border-radius:6px; margin-top:10px; cursor:pointer;
+    }
+    .status { font-weight:bold; }
+    .profile { color:#1B3A6B; margin-bottom:8px; }
+    #searchBar { margin-bottom:20px; }
+    #searchInput { padding:8px; width:250px; }
+    #searchBtn { padding:8px 12px; }
+
+    /* Modal para imagem grande */
+    #imgModal {
+      display:none; position:fixed; z-index:9999; left:0; top:0;
+      width:100%; height:100%; overflow:auto;
+      background-color:rgba(0,0,0,0.8);
+    }
+    #imgModal img {
+      display:block; margin:40px auto; max-width:90%; max-height:80%;
+      border-radius:8px; box-shadow:0 0 20px rgba(0,0,0,0.5);
+    }
+    #imgModal span {
+      position:absolute; top:20px; right:35px; color:#fff;
+      font-size:40px; font-weight:bold; cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Consultar Depósitos</h1>
+
+  <!-- 🔎 Barra de busca -->
+  <div id="searchBar">
+    <input id="searchInput" placeholder="Digite UID ou Nº de celular">
+    <button id="searchBtn">Procurar</button>
+  </div>
+
+  <div id="profileInfo">Digite um UID ou celular para ver perfil...</div>
+  <div id="depositsList">Digite um UID ou celular para ver depósitos...</div>
+
+  <!-- Modal para imagem -->
+  <div id="imgModal">
+    <span id="closeModal">&times;</span>
+    <img id="modalImg" src="">
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // 🔑 Configuração Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+      authDomain: "proibidoreplica.firebaseapp.com",
+      projectId: "proibidoreplica",
+      storageBucket: "proibidoreplica.firebasestorage.app",
+      messagingSenderId: "794009646952",
+      appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const db   = getFirestore(app);
+
+    let unsubProfile = null;
+    let unsubDeposits = null;
+
+    async function loadUserData(identifier) {
+      if (unsubProfile) unsubProfile();
+      if (unsubDeposits) unsubDeposits();
+
+      // 🔎 Primeiro tenta como UID (doc direto)
+      unsubProfile = onSnapshot(doc(db, "users", identifier), (snap) => {
+        if (snap.exists()) {
+          const d = snap.data();
+          document.getElementById("profileInfo").innerHTML = `
+            <div class="profile">👤 Nome: ${d.fullName || "—"}</div>
+            <div class="profile">📱 Celular: ${d.phoneNumber || "—"}</div>
+            <div class="profile">🏦 Banco: ${(d.bankName || "—")} · IBAN: ${(d.iban || "—")}</div>
+            <div class="profile">📍 Local: ${(d.province || "—")} · ${(d.city || "—")}</div>
+          `;
+          // Escuta depósitos pelo UID
+          listenDeposits(identifier);
+        } else {
+          // 🔎 Se não for UID, tenta buscar por celular
+          const qUser = query(collection(db, "users"), where("phoneNumber", "==", identifier));
+          unsubProfile = onSnapshot(qUser, (snapUsers) => {
+            if (!snapUsers.empty) {
+              const userDoc = snapUsers.docs[0];
+              const d = userDoc.data();
+              document.getElementById("profileInfo").innerHTML = `
+                <div class="profile">👤 Nome: ${d.fullName || "—"}</div>
+                <div class="profile">📱 Celular: ${d.phoneNumber || "—"}</div>
+                <div class="profile">🏦 Banco: ${(d.bankName || "—")} · IBAN: ${(d.iban || "—")}</div>
+                <div class="profile">📍 Local: ${(d.province || "—")} · ${(d.city || "—")}</div>
+              `;
+              // Escuta depósitos pelo UID encontrado
+              listenDeposits(userDoc.id);
+            } else {
+              document.getElementById("profileInfo").innerHTML = "<div>Perfil não encontrado.</div>";
+              document.getElementById("depositsList").innerHTML = "<div>Nenhum depósito encontrado.</div>";
+            }
+          });
+        }
+      });
+    }
+
+    function listenDeposits(uid) {
+      if (unsubDeposits) unsubDeposits();
+      const q = query(collection(db, "deposits"), where("uid", "==", uid));
+      unsubDeposits = onSnapshot(q, (snap) => {
+        const list = document.getElementById("depositsList");
+        list.innerHTML = "";
+
+        if (snap.empty) {
+          list.innerHTML = "<div>Nenhum depósito encontrado.</div>";
+          return;
+        }
+
+        snap.forEach(doc => {
+          const d = doc.data();
+          const card = document.createElement("div");
+          card.className = "deposit-card";
+          card.innerHTML = `
+            <div>💰 Valor: ${Number(d.amount).toLocaleString('pt-AO')} MT</div>
+            <div>🏦 Conta: ${d.account}</div>
+            <div class="status">📌 Status: ${d.status}</div>
+            <div>📅 Data: ${d.createdAt?.toDate().toLocaleString() || ''}</div>
+            ${d.proofBase64 && d.proofBase64 !== 'ficheiro_grande' 
+              ? `<img src="${d.proofBase64}" alt="Comprovativo" class="proofImg">`
+              : `<div>⚠️ Comprovativo muito grande ou não disponível</div>`}
+          `;
+          list.appendChild(card);
+        });
+
+        // Ativar clique nas imagens
+        document.querySelectorAll(".proofImg").forEach(img => {
+          img.addEventListener("click", () => {
+            document.getElementById("modalImg").src = img.src;
+            document.getElementById("imgModal").style.display = "block";
+          });
+        });
+      });
+    }
+
+    // Botão de busca
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const val = document.getElementById("searchInput").value.trim();
+      if (!val) {
+        alert("Digite um UID ou número de celular.");
+        return;
+      }
+      loadUserData(val);
+    });
+
+    // Fechar modal
+    document.getElementById("closeModal").addEventListener("click", () => {
+      document.getElementById("imgModal").style.display = "none";
+    });
+    document.getElementById("imgModal").addEventListener("click", (e) => {
+      if (e.target.id === "imgModal") {
+        document.getElementById("imgModal").style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PALPITÃO — Sistema Único de Previsão</title>
+<style>
+:root{
+  --pitch:#0B3D2E;
+  --pitch-dark:#062119;
+  --amber:#FFC93C;
+  --amber-dim:#8a6a1c;
+  --chalk:#F2EFE6;
+  --ticket-red:#C1272D;
+  --win-green:#1e7d3a;
+  --ink:#121210;
+  --line:rgba(242,239,230,.14);
+  --panel-soft:rgba(18,18,16,.045);
+  --panel-soft-2:rgba(18,18,16,.075);
+  --mono: 'Courier New', Courier, monospace;
+  --display: Impact, Haettenschweiler, 'Arial Narrow Bold', 'Arial Black', sans-serif;
+  --body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--pitch-dark);color:var(--chalk);font-family:var(--body);}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255,201,60,.10), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 2px, transparent 2px 46px),
+    linear-gradient(180deg, var(--pitch) 0%, var(--pitch-dark) 55%);
+  min-height:100vh;
+  padding:22px 14px 60px;
+}
+.wrap{max-width:1000px;margin:0 auto;}
+
+/* ---------- HEADER ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{
+  width:38px;height:38px;border-radius:8px;background:var(--amber);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:var(--display);color:var(--ink);font-size:20px;transform:skewX(-6deg);
+  box-shadow:0 0 0 3px var(--pitch-dark), 0 0 0 4px var(--amber-dim);
+}
+.logo-text{font-family:var(--display);font-size:24px;letter-spacing:1px;color:var(--chalk);line-height:1;}
+.logo-sub{font-size:9.5px;letter-spacing:2.5px;color:var(--amber);text-transform:uppercase;opacity:.8;}
+.round-pill{
+  font-family:var(--mono);font-size:11px;color:var(--chalk);opacity:.75;
+  border:1px solid var(--line);padding:5px 10px;border-radius:20px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.admin-toggle{
+  background:none;border:1px solid var(--line);color:var(--chalk);opacity:.6;
+  padding:6px 10px;border-radius:20px;font-size:11px;cursor:pointer;font-family:var(--mono);
+}
+.admin-toggle:hover{opacity:1;border-color:var(--amber);}
+
+/* ---------- SCOREBOARD HERO ---------- */
+.scoreboard{
+  position:relative;border-radius:14px;overflow:hidden;
+  background:linear-gradient(160deg,#0e4a37,#062119 75%);
+  border:1px solid rgba(255,201,60,.18);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 0 80px rgba(0,0,0,.25);
+  padding:18px 18px 22px;
+  margin-bottom:24px;
+}
+.scoreboard::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 20% 0%, rgba(255,201,60,.12), transparent 40%),
+             radial-gradient(circle at 85% 0%, rgba(255,201,60,.10), transparent 40%);
+}
+.status-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;position:relative;z-index:1;flex-wrap:wrap;}
+.pill{font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;padding:5px 10px;border-radius:4px;text-transform:uppercase;}
+.pill.live{background:var(--ticket-red);color:var(--chalk);animation:pulse 1.6s infinite;}
+.pill.scheduled{background:var(--amber-dim);color:var(--chalk);}
+.pill.finished{background:var(--chalk);color:var(--ink);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.45;}}
+.game-title{font-family:var(--display);font-size:12px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;opacity:.85;}
+.game-when{font-family:var(--mono);font-size:10.5px;opacity:.55;margin-bottom:12px;position:relative;z-index:1;}
+
+.teams-row{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  position:relative;z-index:1;margin-bottom:16px;flex-wrap:nowrap;
+}
+.team-name{font-family:var(--display);font-size:clamp(15px,4.6vw,32px);color:var(--chalk);text-align:center;letter-spacing:.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.team-name.a{text-align:right;}
+.team-name.b{text-align:left;}
+.vs-clock{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;}
+.vs-label{font-family:var(--mono);font-size:9.5px;color:var(--chalk);opacity:.5;letter-spacing:1.5px;white-space:nowrap;}
+.flipclock{display:flex;gap:3px;}
+.flipdigit{
+  background:var(--ink);color:var(--amber);font-family:var(--mono);font-weight:bold;
+  font-size:clamp(13px,3.2vw,20px);padding:4px 5px;border-radius:4px;min-width:14px;text-align:center;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.06);
+}
+
+.media-row{display:flex;gap:16px;position:relative;z-index:1;flex-wrap:wrap;}
+.video-col{flex:1 1 320px;min-width:260px;}
+.video-box{
+  border-radius:8px;overflow:hidden;background:#000;aspect-ratio:16/9;border:1px solid var(--line);
+  position:relative;cursor:default;
+}
+.video-box iframe{width:100%;height:100%;border:0;display:block;}
+.video-box img{width:100%;height:100%;object-fit:cover;display:block;}
+.video-poster-btn{
+  position:absolute;inset:0;border:none;background:linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.45));
+  display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+}
+.video-poster-btn .play-circle{
+  width:60px;height:60px;border-radius:50%;background:rgba(18,18,16,.65);
+  border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;
+  color:var(--amber);font-size:22px;transition:transform .15s ease, background .15s ease;
+}
+.video-poster-btn:hover .play-circle{background:var(--amber);color:var(--ink);transform:scale(1.06);}
+.video-hint{font-family:var(--mono);font-size:10px;color:var(--chalk);opacity:.55;margin-top:6px;text-align:center;}
+.desc-box{flex:1 1 240px;min-width:220px;}
+.desc-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--amber);opacity:.8;text-transform:uppercase;margin-bottom:6px;}
+.desc-text{font-size:13.5px;line-height:1.55;color:var(--chalk);opacity:.9;white-space:pre-wrap;}
+.lock-note{margin-top:10px;font-size:11.5px;color:var(--chalk);opacity:.55;font-family:var(--mono);}
+.empty-hero{padding:26px 10px;text-align:center;position:relative;z-index:1;}
+.empty-hero h2{font-family:var(--display);color:var(--amber);letter-spacing:1px;margin:0 0 8px;font-size:clamp(16px,4vw,22px);}
+.empty-hero p{font-size:12.5px;opacity:.7;margin:0;}
+
+/* ---------- TICKET (prediction form) ---------- */
+.ticket-wrap{display:flex;justify-content:center;margin-bottom:22px;}
+.ticket{
+  position:relative;background:var(--chalk);color:var(--ink);
+  border-radius:10px;padding:20px 22px 18px;max-width:560px;width:100%;
+  box-shadow:0 20px 40px -20px rgba(0,0,0,.6);
+}
+.ticket::before,.ticket::after{
+  content:"";position:absolute;top:50%;transform:translateY(-50%);
+  width:22px;height:22px;border-radius:50%;background:var(--pitch-dark);
+}
+.ticket::before{left:-11px;}
+.ticket::after{right:-11px;}
+.ticket .perf{border-top:2px dashed rgba(18,18,16,.25);margin:14px 0;}
+.ticket-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;gap:8px;}
+.ticket-title{font-family:var(--display);font-size:19px;letter-spacing:1px;}
+.ticket-id{font-family:var(--mono);font-size:10px;opacity:.5;white-space:nowrap;}
+.ticket-sub{font-size:12px;opacity:.6;margin-bottom:10px;}
+.nick-row{display:flex;gap:8px;margin-bottom:14px;}
+.nick-row input{
+  flex:1;padding:9px 10px;border:none;border-radius:6px;min-width:0;
+  font-family:var(--mono);font-size:13px;background:var(--panel-soft-2);color:var(--ink);
+}
+
+/* below-guess area: flat panels, no borders anywhere */
+.score-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0;flex-wrap:nowrap;
+  background:var(--panel-soft);border-radius:10px;padding:12px 8px;}
+.score-team{font-family:var(--display);font-size:clamp(11px,3.4vw,14px);text-align:center;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.3px;}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--panel-soft-2);border-radius:8px;padding:5px 6px;flex-shrink:0;}
+.stepper button{
+  width:28px;height:28px;border-radius:6px;border:none;background:var(--ink);color:var(--amber);
+  font-size:15px;font-weight:bold;cursor:pointer;flex-shrink:0;
+}
+.stepper button:active{transform:scale(.92);}
+.stepper .val{font-family:var(--display);font-size:20px;min-width:22px;text-align:center;}
+.score-colon{font-family:var(--display);font-size:18px;opacity:.4;flex-shrink:0;}
+
+.extras-toggle{
+  width:100%;text-align:left;background:var(--panel-soft);border:none;border-radius:8px;
+  padding:10px 12px;font-family:var(--mono);font-size:11.5px;color:var(--ink);opacity:.75;
+  cursor:pointer;margin-bottom:8px;
+}
+.extras-toggle:hover{opacity:1;}
+.extras-panel{display:none;flex-direction:column;gap:8px;margin-bottom:8px;}
+.extras-panel.open{display:flex;}
+.extra-row{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap;
+  background:var(--panel-soft);border-radius:8px;padding:8px 10px;
+}
+.extra-row .extra-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.3px;text-transform:uppercase;opacity:.7;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.extra-row .stepper{padding:3px 5px;}
+.extra-row .stepper button{width:22px;height:22px;font-size:12px;}
+.extra-row .stepper .val{font-size:14px;min-width:16px;}
+.extra-row .score-colon{font-size:14px;}
+
+.submit-btn{
+  width:100%;padding:13px;border:none;border-radius:8px;background:var(--ticket-red);
+  color:#fff;font-family:var(--display);font-size:14.5px;letter-spacing:1.5px;cursor:pointer;
+  text-transform:uppercase;
+}
+.submit-btn:disabled{background:#999;cursor:not-allowed;}
+.submit-btn:not(:disabled):hover{filter:brightness(1.08);}
+.ticket-msg{margin-top:10px;font-size:12px;font-family:var(--mono);text-align:center;min-height:16px;}
+.ticket-msg.ok{color:var(--win-green);}
+.ticket-msg.err{color:var(--ticket-red);}
+.rules-note{font-size:10.5px;opacity:.55;margin-top:6px;text-align:center;line-height:1.5;}
+
+/* ---------- FICHA (bet receipt) ---------- */
+.ficha-wrap{display:flex;justify-content:center;margin-bottom:26px;}
+.ficha{
+  max-width:560px;width:100%;background:var(--panel-soft-2);border-radius:10px;
+  padding:16px 20px;color:var(--chalk);display:none;
+}
+.ficha.show{display:block;}
+.ficha-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px;}
+.ficha-title{font-family:var(--display);font-size:14px;letter-spacing:1.5px;color:var(--amber);}
+.ficha-id{font-family:var(--mono);font-size:10px;opacity:.5;white-space:nowrap;}
+.ficha-line{font-family:var(--mono);font-size:12px;padding:4px 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:nowrap;}
+.ficha-line .k{opacity:.55;flex-shrink:0;}
+.ficha-line span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;}
+.ficha-cut{border-top:1px dashed rgba(242,239,230,.25);margin:10px 0;}
+.ficha-note{font-family:var(--mono);font-size:10.5px;opacity:.5;margin-top:8px;text-align:center;}
+
+/* ---------- COLUMNS / COLLAPSIBLE PANELS ---------- */
+.cols{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
+details.panel{
+  flex:1 1 280px;min-width:260px;background:rgba(255,255,255,.03);
+  border:1px solid var(--line);border-radius:12px;padding:0;
+}
+details.panel > summary{
+  list-style:none;cursor:pointer;padding:16px 18px;
+  font-family:var(--display);font-size:14.5px;letter-spacing:1.5px;
+  color:var(--amber);text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+details.panel > summary::-webkit-details-marker{display:none;}
+details.panel > summary::after{
+  content:"▾";font-family:var(--mono);font-size:12px;color:var(--chalk);opacity:.5;transition:transform .15s ease;flex-shrink:0;
+}
+details.panel[open] > summary::after{transform:rotate(180deg);}
+details.panel > summary span.sub{font-family:var(--mono);font-size:10px;color:var(--chalk);opacity:.5;text-transform:none;letter-spacing:0;margin-right:auto;margin-left:8px;}
+.panel-body{padding:0 18px 18px;}
+.lb-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;flex-wrap:nowrap;}
+.lb-row:nth-child(odd){background:rgba(255,255,255,.03);}
+.lb-rank{font-family:var(--mono);width:22px;color:var(--amber);font-weight:bold;flex-shrink:0;}
+.lb-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+.lb-pts{font-family:var(--mono);color:var(--chalk);opacity:.8;flex-shrink:0;}
+.lb-empty,.hist-empty,.sch-empty,.cmt-empty,.res-empty,.search-empty{font-size:12px;opacity:.5;font-family:var(--mono);padding:8px 4px;}
+.hist-row{padding:9px 10px;border-radius:8px;font-size:12.5px;margin-bottom:6px;background:rgba(255,255,255,.03);}
+.hist-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;gap:8px;flex-wrap:nowrap;}
+.hist-game{opacity:.9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1;}
+.hist-badge{font-family:var(--mono);font-size:9.5px;padding:2px 7px;border-radius:10px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.hist-badge.pend{background:var(--amber-dim);color:var(--chalk);}
+.hist-badge.win{background:var(--win-green);color:#fff;}
+.hist-badge.loss{background:var(--ticket-red);color:#fff;opacity:.85;}
+.hist-sub{font-family:var(--mono);font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hist-extras{font-family:var(--mono);font-size:10px;opacity:.5;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.sch-row{display:flex;gap:10px;padding:10px;border-radius:8px;align-items:center;margin-bottom:6px;background:rgba(255,255,255,.03);}
+.sch-thumb{width:58px;height:34px;border-radius:6px;object-fit:cover;background:#000;flex-shrink:0;}
+.sch-info{flex:1;min-width:0;}
+.sch-teams{font-family:var(--display);font-size:12.5px;letter-spacing:.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sch-when{font-family:var(--mono);font-size:10px;opacity:.6;}
+.sch-countdown{font-family:var(--mono);font-size:9.5px;color:var(--amber);opacity:.9;white-space:nowrap;text-align:right;flex-shrink:0;}
+
+/* ---------- SEARCH PANEL ---------- */
+.search-form{display:flex;gap:8px;margin-bottom:10px;}
+.search-form input{flex:1;min-width:0;padding:9px 10px;border:none;border-radius:8px;background:var(--panel-soft-2);color:var(--chalk);font-family:var(--body);font-size:13px;}
+.search-form button{padding:9px 14px;border:none;border-radius:8px;background:var(--amber);color:var(--ink);font-family:var(--display);letter-spacing:.5px;cursor:pointer;font-size:12px;text-transform:uppercase;white-space:nowrap;}
+
+/* ---------- PUBLIC RESULTS FEED ---------- */
+.results-panel{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:20px;}
+.results-panel h3{font-family:var(--display);font-size:14.5px;letter-spacing:1.5px;margin:0 0 12px;color:var(--amber);text-transform:uppercase;}
+.res-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.03);border-radius:8px;padding:9px 12px;margin-bottom:6px;flex-wrap:nowrap;}
+.res-teams{font-family:var(--display);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+.res-score{font-family:var(--mono);color:var(--amber);font-size:13px;flex-shrink:0;}
+
+/* ---------- COMMENTS ---------- */
+.comments-panel{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:20px;}
+.comments-panel h3{font-family:var(--display);font-size:14.5px;letter-spacing:1.5px;margin:0 0 4px;color:var(--amber);text-transform:uppercase;}
+.comments-sub{font-family:var(--mono);font-size:10.5px;opacity:.5;margin-bottom:12px;}
+.cmt-row{display:flex;gap:10px;background:rgba(255,255,255,.03);border-radius:8px;padding:9px 12px;margin-bottom:6px;}
+.cmt-avatar{width:26px;height:26px;border-radius:50%;background:var(--amber-dim);color:var(--chalk);
+  display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:11px;flex-shrink:0;}
+.cmt-body{flex:1;min-width:0;}
+.cmt-top{display:flex;justify-content:space-between;gap:8px;}
+.cmt-nick{font-family:var(--mono);font-size:11.5px;color:var(--amber);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cmt-time{font-family:var(--mono);font-size:9.5px;opacity:.45;flex-shrink:0;}
+.cmt-text{font-size:12.5px;margin-top:3px;opacity:.9;word-break:break-word;}
+.cmt-form{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.cmt-form input{flex:1;min-width:200px;padding:9px 10px;border:none;border-radius:8px;background:var(--panel-soft-2);color:var(--chalk);font-family:var(--body);font-size:13px;}
+.cmt-form button{padding:9px 16px;border:none;border-radius:8px;background:var(--amber);color:var(--ink);font-family:var(--display);letter-spacing:.5px;cursor:pointer;font-size:12.5px;text-transform:uppercase;}
+.cmt-note{font-family:var(--mono);font-size:10px;opacity:.4;margin-top:8px;}
+
+/* ---------- ADMIN MODAL ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-start;justify-content:center;
+  z-index:50;padding:24px 12px;overflow:auto;
+}
+.overlay.show{display:flex;}
+.modal{
+  background:var(--pitch-dark);border:1px solid var(--line);border-radius:12px;
+  max-width:560px;width:100%;padding:20px;
+}
+.modal h3{font-family:var(--display);color:var(--amber);letter-spacing:1px;margin-top:0;}
+.modal label{display:block;font-family:var(--mono);font-size:11px;opacity:.7;margin:12px 0 4px;text-transform:uppercase;}
+.modal input,.modal textarea{
+  width:100%;padding:8px 10px;border-radius:6px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:var(--chalk);font-family:var(--body);font-size:13px;
+}
+.modal textarea{resize:vertical;min-height:60px;}
+.modal-row2{display:flex;gap:10px;}
+.modal-row2>div{flex:1;min-width:0;}
+.media-type-row{display:flex;gap:8px;margin-top:6px;}
+.media-type-row label{
+  flex:1;margin:0;display:flex;align-items:center;justify-content:center;gap:6px;
+  background:rgba(255,255,255,.04);border-radius:6px;padding:8px;cursor:pointer;text-transform:none;font-size:12px;opacity:.85;
+}
+.media-type-row input{width:auto;padding:0;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.modal-actions button{
+  flex:1;padding:10px;border-radius:7px;border:none;font-family:var(--display);
+  letter-spacing:1px;cursor:pointer;font-size:13px;text-transform:uppercase;
+}
+.btn-primary{background:var(--amber);color:var(--ink);}
+.btn-ghost{background:transparent;color:var(--chalk);border:1px solid var(--line) !important;}
+.modal-close{position:sticky;top:0;float:right;background:none;border:none;color:var(--chalk);opacity:.6;font-size:18px;cursor:pointer;}
+.gate{text-align:center;padding:10px 0;}
+.gate input{text-align:center;letter-spacing:3px;}
+.footnote{text-align:center;font-size:11px;opacity:.4;margin-top:30px;font-family:var(--mono);}
+
+.adm-list-title{font-family:var(--mono);font-size:11px;opacity:.6;letter-spacing:1px;text-transform:uppercase;margin:22px 0 8px;}
+.adm-game-row{background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;margin-bottom:10px;}
+.adm-game-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+.adm-game-title{font-family:var(--display);font-size:13px;letter-spacing:.5px;}
+.adm-game-when{font-family:var(--mono);font-size:10.5px;opacity:.6;margin-top:2px;}
+.adm-badge{font-family:var(--mono);font-size:9.5px;padding:2px 8px;border-radius:10px;text-transform:uppercase;white-space:nowrap;}
+.adm-badge.live{background:var(--ticket-red);color:#fff;}
+.adm-badge.scheduled{background:var(--amber-dim);color:var(--chalk);}
+.adm-badge.finished{background:rgba(255,255,255,.1);color:var(--chalk);opacity:.7;}
+.adm-game-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.adm-game-actions button{
+  font-family:var(--mono);font-size:10.5px;padding:6px 10px;border-radius:6px;
+  border:none;background:rgba(255,255,255,.06);color:var(--chalk);cursor:pointer;
+}
+.adm-game-actions button.primary{background:var(--amber);color:var(--ink);}
+.adm-game-actions button.danger{background:var(--ticket-red);color:#fff;}
+.adm-result-inputs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.adm-result-inputs .grp{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border-radius:6px;padding:6px 8px;}
+.adm-result-inputs .grp label{margin:0;font-size:9.5px;opacity:.6;}
+.adm-result-inputs input{width:44px;padding:5px;border-radius:6px;border:none;background:rgba(255,255,255,.08);color:var(--chalk);font-family:var(--mono);}
+.adm-result-inputs button.finish-btn{width:100%;margin-top:6px;padding:9px;border:none;border-radius:6px;background:var(--amber);color:var(--ink);font-family:var(--display);letter-spacing:1px;cursor:pointer;text-transform:uppercase;}
+
+@media (max-width: 560px){
+  details.panel > summary{padding:13px 14px;font-size:13px;}
+  .panel-body{padding:0 14px 14px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-mark">P</div>
+      <div>
+        <div class="logo-text">PALPITÃO</div>
+        <div class="logo-sub">previsão ao vivo</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="round-pill" id="roundPill">—</div>
+      <button class="admin-toggle" id="adminBtn">⚙ admin</button>
+    </div>
+  </div>
+
+  <div class="scoreboard">
+    <div id="heroFilled">
+      <div class="status-row">
+        <span class="pill live" id="statusPill">AO VIVO</span>
+        <span class="game-title" id="gameTitle">CARREGANDO JOGO...</span>
+      </div>
+      <div class="game-when" id="gameWhen"></div>
+      <div class="teams-row">
+        <div class="team-name a" id="teamA">TIME A</div>
+        <div class="vs-clock">
+          <div class="vs-label" id="clockLabel">COMEÇA EM</div>
+          <div class="flipclock" id="flipclock"></div>
+        </div>
+        <div class="team-name b" id="teamB">TIME B</div>
+      </div>
+      <div class="media-row">
+        <div class="video-col">
+          <div class="video-box" id="videoBox">
+            <img id="videoPoster" src="" alt="" style="display:none;">
+            <img id="photoFrame" src="" alt="" style="display:none;">
+            <iframe id="videoFrame" src="" style="display:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <button class="video-poster-btn" id="videoPlayBtn" style="display:none;" aria-label="Assistir vídeo">
+              <span class="play-circle">▶</span>
+            </button>
+          </div>
+          <div class="video-hint" id="videoHint">toque para assistir com som — pausa/volume ficam no próprio player</div>
+        </div>
+        <div class="desc-box">
+          <div class="desc-label">Descrição do jogo atual</div>
+          <div class="desc-text" id="gameDesc">—</div>
+          <div class="lock-note" id="lockNote"></div>
+        </div>
+      </div>
+    </div>
+    <div id="heroEmpty" class="empty-hero" style="display:none;">
+      <h2>Nenhum jogo agendado no momento</h2>
+      <p>Volte mais tarde ou veja se o administrador já marcou o próximo jogo.</p>
+    </div>
+  </div>
+
+  <div class="ticket-wrap">
+    <div class="ticket">
+      <div class="ticket-head">
+        <div class="ticket-title">SEU PALPITE</div>
+        <div class="ticket-id" id="ticketId">TKT-0000</div>
+      </div>
+      <div class="ticket-sub">Registre o placar exato e, se quiser, mais mercados. O resultado só aparece quando o admin encerrar o jogo.</div>
+      <div class="perf"></div>
+      <div class="nick-row">
+        <input type="text" id="nickInput" placeholder="seu nome / apelido" maxlength="18">
+      </div>
+      <div class="score-row">
+        <div class="score-team" id="stepTeamA">TIME A</div>
+        <div class="stepper">
+          <button data-step="-1" data-team="a" data-market="score">−</button>
+          <div class="val" id="valA">0</div>
+          <button data-step="1" data-team="a" data-market="score">+</button>
+        </div>
+        <div class="score-colon">×</div>
+        <div class="stepper">
+          <button data-step="-1" data-team="b" data-market="score">−</button>
+          <div class="val" id="valB">0</div>
+          <button data-step="1" data-team="b" data-market="score">+</button>
+        </div>
+        <div class="score-team" id="stepTeamB">TIME B</div>
+      </div>
+
+      <button class="extras-toggle" id="extrasToggle">▾ mercados extras (pênaltis, escanteios, faltas, impedimentos, cartões)</button>
+      <div class="extras-panel" id="extrasPanel"></div>
+
+      <button class="submit-btn" id="submitBtn">Registrar palpite</button>
+      <div class="ticket-msg" id="ticketMsg"></div>
+      <div class="rules-note">Acertou o vencedor (ou empate) = GANHOU · Cravou o placar = GANHOU com bônus 🎯 · Mercados extras entram na sua ficha, mas não valem pontos ainda.</div>
+    </div>
+  </div>
+
+  <div class="ficha-wrap">
+    <div class="ficha" id="fichaCard"></div>
+  </div>
+
+  <div class="cols">
+    <details class="panel" open>
+      <summary>Ranking <span class="sub" id="lbCount"></span></summary>
+      <div class="panel-body">
+        <div id="leaderboard"><div class="lb-empty">Nenhum ponto registrado ainda.</div></div>
+      </div>
+    </details>
+    <details class="panel" open>
+      <summary>Meu histórico</summary>
+      <div class="panel-body">
+        <div id="history"><div class="hist-empty">Faça seu primeiro palpite.</div></div>
+      </div>
+    </details>
+    <details class="panel" open>
+      <summary>Próximos jogos <span class="sub">fique de olho</span></summary>
+      <div class="panel-body">
+        <div id="schedule"><div class="sch-empty">Nenhum outro jogo agendado ainda.</div></div>
+      </div>
+    </details>
+    <details class="panel" open>
+      <summary>Buscar palpites</summary>
+      <div class="panel-body">
+        <div class="search-form">
+          <input type="text" id="searchInput" placeholder="buscar por apelido...">
+          <button id="searchBtn">Buscar</button>
+        </div>
+        <div id="searchResults"><div class="search-empty">Nenhum palpite registrado ainda.</div></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="results-panel">
+    <h3>Resultados finais divulgados</h3>
+    <div id="resultsFeed"><div class="res-empty">Nenhum jogo encerrado ainda — resultados só saem quando o admin lança o placar final.</div></div>
+  </div>
+
+  <div class="comments-panel">
+    <h3>Comentários do jogo</h3>
+    <div class="comments-sub">Preencha seu apelido no bilhete acima para comentar com seu nome.</div>
+    <div id="commentsList"><div class="cmt-empty">Seja o primeiro a comentar.</div></div>
+    <div class="cmt-form">
+      <input type="text" id="cmtInput" placeholder="deixe seu comentário sobre o jogo..." maxlength="220">
+      <button id="cmtSend">Enviar</button>
+    </div>
+    <div class="cmt-note">Comentários são públicos neste protótipo e ficam salvos no armazenamento compartilhado.</div>
+  </div>
+
+  <div class="footnote">Protótipo demonstrativo · dados fictícios · armazenamento compartilhado do artifact</div>
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-close" id="closeModal">✕</button>
+    <div id="gateView" class="gate">
+      <h3>Área do administrador</h3>
+      <p style="font-size:12px;opacity:.7;">Digite a senha de demonstração para gerenciar os jogos.</p>
+      <label>Senha</label>
+      <input type="password" id="gatePass" placeholder="senha">
+      <div class="modal-actions">
+        <button class="btn-primary" id="gateEnter">Entrar</button>
+      </div>
+      <p style="font-size:11px;opacity:.4;margin-top:10px;">dica: gol2026</p>
+    </div>
+    <div id="adminView" style="display:none;">
+      <h3 id="formHeading">Agendar novo jogo</h3>
+      <label>Título / competição</label>
+      <input type="text" id="admTitle" placeholder="ex: FINAL — LIGA DE VERÃO">
+      <div class="modal-row2">
+        <div><label>Time A</label><input type="text" id="admTeamA"></div>
+        <div><label>Time B</label><input type="text" id="admTeamB"></div>
+      </div>
+      <label>Tipo de mídia</label>
+      <div class="media-type-row">
+        <label><input type="radio" name="admMediaType" value="youtube" id="admMediaYoutube" checked> Vídeo YouTube</label>
+        <label><input type="radio" name="admMediaType" value="photo" id="admMediaPhoto"> Foto (URL)</label>
+      </div>
+      <div id="admVideoWrap">
+        <label>URL ou ID do vídeo do YouTube (o torcedor só dá play manualmente, sem autoplay)</label>
+        <input type="text" id="admVideo" placeholder="ex: https://youtu.be/dQw4w9WgXcQ">
+      </div>
+      <div id="admPhotoWrap" style="display:none;">
+        <label>URL da foto</label>
+        <input type="text" id="admPhoto" placeholder="ex: https://exemplo.com/foto.jpg">
+      </div>
+      <label>Descrição do jogo</label>
+      <textarea id="admDesc" placeholder="Contexto, escalação, o que está em jogo..."></textarea>
+      <div class="modal-row2">
+        <div><label>Data de início</label><input type="date" id="admDate"></div>
+        <div><label>Hora de início</label><input type="time" id="admTime"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-primary" id="admSave">Agendar jogo</button>
+        <button class="btn-ghost" id="admCancelEdit" style="display:none;">Cancelar edição</button>
+      </div>
+
+      <div class="adm-list-title">Fila de jogos</div>
+      <div id="admGameList"></div>
+
+      <div class="perf"></div>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="admReset">Zerar sistema (debug)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const ADMIN_PASS = "gol2026";
+  const $ = (id) => document.getElementById(id);
+
+  const EXTRA_MARKETS = [
+    { key:"penalties", label:"Pênaltis" },
+    { key:"corners",   label:"Escanteios" },
+    { key:"fouls",     label:"Faltas" },
+    { key:"offsides",  label:"Impedimentos" },
+    { key:"cards",     label:"Cartões" }
+  ];
+  function emptyExtras(){
+    const o = {};
+    EXTRA_MARKETS.forEach(m => o[m.key] = {a:0,b:0});
+    return o;
+  }
+
+  // ---------- storage helpers ----------
+  async function sGet(key, shared){
+    try{
+      const r = await window.storage.get(key, !!shared);
+      return r ? JSON.parse(r.value) : null;
+    }catch(e){ return null; }
+  }
+  async function sSet(key, value, shared){
+    try{ await window.storage.set(key, JSON.stringify(value), !!shared); }catch(e){ console.error("storage set failed", e); }
+  }
+
+  function genId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  function extractYoutubeId(raw){
+    const url = (raw || "").trim();
+    if(!url) return "dQw4w9WgXcQ";
+    const patterns = [
+      /youtu\.be\/([a-zA-Z0-9_-]{6,})/,
+      /[?&]v=([a-zA-Z0-9_-]{6,})/,
+      /youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/,
+      /youtube\.com\/live\/([a-zA-Z0-9_-]{6,})/,
+      /youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/
+    ];
+    for(const p of patterns){ const m = url.match(p); if(m) return m[1]; }
+    if(/^[a-zA-Z0-9_-]{6,15}$/.test(url)) return url;
+    return url;
+  }
+
+  function seedGames(){
+    return [
+      {
+        id: genId(), title:"AMISTOSO DE ABERTURA", teamA:"FALCÕES FC", teamB:"LEÕES UNITED",
+        mediaType:"youtube", videoId:"dQw4w9WgXcQ", photoUrl:"",
+        desc:"Partida de abertura da temporada. Falcões FC chega embalado após 5 vitórias seguidas, enquanto Leões United estreia novo técnico. Palpite no placar exato e dispute o topo do ranking!",
+        startAt: Date.now() + 3*60000, status:"scheduled", result:null, preds:{}, comments:[]
+      },
+      {
+        id: genId(), title:"CLÁSSICO DE VERÃO", teamA:"TUBARÕES", teamB:"CONDORES",
+        mediaType:"youtube", videoId:"dQw4w9WgXcQ", photoUrl:"",
+        desc:"O duelo mais aguardado da temporada. Fique de olho na agenda para não perder a abertura dos palpites.",
+        startAt: Date.now() + 2*24*3600000, status:"scheduled", result:null, preds:{}, comments:[]
+      }
+    ];
+  }
+
+  let state = {
+    games: [], nickname: "",
+    myGuess: { a:0, b:0 },
+    myExtras: emptyExtras(),
+    editingId: null
+  };
+
+  // tracks whether the current featured game's video has been started by the user (per game id)
+  let mediaState = { gameId: null, started: false };
+
+  function featuredGame(){
+    const scheduled = state.games.filter(g=>g.status==="scheduled").sort((a,b)=>a.startAt-b.startAt);
+    return scheduled[0] || null;
+  }
+  function upcomingGames(){
+    const scheduled = state.games.filter(g=>g.status==="scheduled").sort((a,b)=>a.startAt-b.startAt);
+    return scheduled.slice(1);
+  }
+  function finishedGames(){
+    return state.games.filter(g=>g.status==="finished").sort((a,b)=>b.startAt-a.startAt);
+  }
+
+  function fmtDateTime(ts){
+    return new Date(ts).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+  function fmtClockParts(ms){
+    if(ms < 0) ms = 0;
+    const totalSec = Math.floor(ms/1000);
+    const h = Math.floor(totalSec/3600);
+    const m = Math.floor((totalSec%3600)/60);
+    const s = totalSec%60;
+    return [h,m,s].map(v=>String(v).padStart(2,"0"));
+  }
+  function fmtCountdownShort(ms){
+    if(ms <= 0) return "começando";
+    const totalMin = Math.floor(ms/60000);
+    const days = Math.floor(totalMin/1440);
+    const hours = Math.floor((totalMin%1440)/60);
+    const mins = totalMin%60;
+    if(days>0) return `em ${days}d ${hours}h`;
+    if(hours>0) return `em ${hours}h ${mins}min`;
+    return `em ${mins}min`;
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function hashCode(str){
+    let h = 0;
+    for(let i=0;i<str.length;i++){ h = (Math.imul(31,h) + str.charCodeAt(i))|0; }
+    return h;
+  }
+  function initials(nick){
+    const clean = (nick||"?").trim();
+    return clean.slice(0,1).toUpperCase() || "?";
+  }
+
+  // ---------- extras panel (built once, values re-bound as state changes) ----------
+  function buildExtrasPanel(){
+    const panel = $("extrasPanel");
+    panel.innerHTML = EXTRA_MARKETS.map(m => `
+      <div class="extra-row" data-key="${m.key}">
+        <span class="extra-label">${m.label}</span>
+        <div class="stepper">
+          <button data-step="-1" data-team="a" data-market="${m.key}">−</button>
+          <div class="val" data-val="${m.key}-a">0</div>
+          <button data-step="1" data-team="a" data-market="${m.key}">+</button>
+        </div>
+        <span class="score-colon">×</span>
+        <div class="stepper">
+          <button data-step="-1" data-team="b" data-market="${m.key}">−</button>
+          <div class="val" data-val="${m.key}-b">0</div>
+          <button data-step="1" data-team="b" data-market="${m.key}">+</button>
+        </div>
+      </div>`).join("");
+    panel.querySelectorAll("button[data-market]").forEach(btn=>{
+      btn.addEventListener("click", () => {
+        const market = btn.dataset.market, team = btn.dataset.team, step = parseInt(btn.dataset.step,10);
+        const cur = state.myExtras[market][team];
+        const next = Math.max(0, Math.min(30, cur + step));
+        state.myExtras[market][team] = next;
+        updateExtrasUI();
+      });
+    });
+  }
+  function updateExtrasUI(){
+    EXTRA_MARKETS.forEach(m => {
+      const va = document.querySelector(`[data-val="${m.key}-a"]`);
+      const vb = document.querySelector(`[data-val="${m.key}-b"]`);
+      if(va) va.textContent = state.myExtras[m.key].a;
+      if(vb) vb.textContent = state.myExtras[m.key].b;
+    });
+  }
+
+  // ---------- media: click-to-play youtube (no autoplay) / static photo ---------
+  function startVideo(g){
+    const frame = $("videoFrame");
+    frame.src = "https://www.youtube.com/embed/" + g.videoId + "?autoplay=1";
+    frame.style.display = "block";
+    $("videoPoster").style.display = "none";
+    $("videoPlayBtn").style.display = "none";
+    $("videoHint").textContent = "pausa, volume e tela cheia ficam nos controles do próprio player";
+    mediaState = { gameId: g.id, started: true };
+  }
+
+  function setupMedia(g){
+    const poster = $("videoPoster"), photo = $("photoFrame"), frame = $("videoFrame"), playBtn = $("videoPlayBtn"), hint = $("videoHint");
+
+    if(g.mediaType === "photo"){
+      frame.style.display = "none"; frame.removeAttribute("src");
+      poster.style.display = "none"; playBtn.style.display = "none";
+      photo.style.display = "block";
+      if(photo.getAttribute("src") !== g.photoUrl) photo.setAttribute("src", g.photoUrl || "");
+      hint.textContent = "foto ilustrativa do jogo";
+      mediaState = { gameId: g.id, started: false };
+      return;
+    }
+
+    photo.style.display = "none";
+    if(mediaState.gameId !== g.id){
+      // new featured game: reset back to click-to-play poster, never autoplay
+      mediaState = { gameId: g.id, started: false };
+      frame.style.display = "none"; frame.removeAttribute("src");
+      poster.setAttribute("src", "https://img.youtube.com/vi/" + g.videoId + "/hqdefault.jpg");
+      poster.style.display = "block";
+      playBtn.style.display = "flex";
+      hint.textContent = "toque para assistir com som — pausa/volume ficam no próprio player";
+    } else if(!mediaState.started){
+      poster.style.display = "block";
+      playBtn.style.display = "flex";
+    }
+  }
+
+  // ---------- render hero ----------
+  function renderHero(){
+    const g = featuredGame();
+    if(!g){
+      $("heroFilled").style.display = "none";
+      $("heroEmpty").style.display = "block";
+      $("roundPill").textContent = "Sem jogo ativo";
+      $("submitBtn").disabled = true;
+      $("submitBtn").textContent = "Nenhum jogo disponível";
+      return;
+    }
+    $("heroFilled").style.display = "block";
+    $("heroEmpty").style.display = "none";
+
+    $("roundPill").textContent = g.teamA + " x " + g.teamB;
+    $("gameTitle").textContent = g.title;
+    $("teamA").textContent = g.teamA;
+    $("teamB").textContent = g.teamB;
+    $("stepTeamA").textContent = g.teamA;
+    $("stepTeamB").textContent = g.teamB;
+    $("gameDesc").textContent = g.desc;
+    $("gameWhen").textContent = "Início: " + fmtDateTime(g.startAt);
+
+    setupMedia(g);
+
+    const live = Date.now() >= g.startAt;
+    const pill = $("statusPill");
+    pill.className = "pill " + (live ? "live" : "scheduled");
+    pill.textContent = live ? "AO VIVO" : "AGENDADO";
+
+    $("lockNote").textContent = "Você pode registrar ou atualizar seu palpite até o administrador lançar o resultado final.";
+
+    $("submitBtn").disabled = false;
+    $("submitBtn").textContent = "Registrar palpite";
+
+    renderClock(g, live);
+  }
+
+  function renderClock(g, live){
+    const clockEl = $("flipclock");
+    if(live){
+      $("clockLabel").textContent = "AO VIVO HÁ";
+      const [h,m,s] = fmtClockParts(Date.now() - g.startAt);
+      clockEl.innerHTML = [h,m,s].map(part=>part.split("").map(d=>`<div class="flipdigit">${d}</div>`).join("")).join('<div class="flipdigit">:</div>');
+    } else {
+      $("clockLabel").textContent = "COMEÇA EM";
+      const [h,m,s] = fmtClockParts(g.startAt - Date.now());
+      clockEl.innerHTML = [h,m,s].map(part=>part.split("").map(d=>`<div class="flipdigit">${d}</div>`).join("")).join('<div class="flipdigit">:</div>');
+    }
+  }
+
+  function tickClockOnly(){
+    const g = featuredGame();
+    if(!g) return;
+    renderClock(g, Date.now() >= g.startAt);
+    const pill = $("statusPill");
+    const live = Date.now() >= g.startAt;
+    const wantClass = "pill " + (live ? "live" : "scheduled");
+    if(pill.className !== wantClass){
+      pill.className = wantClass;
+      pill.textContent = live ? "AO VIVO" : "AGENDADO";
+    }
+  }
+
+  function updateStepUI(){
+    $("valA").textContent = state.myGuess.a;
+    $("valB").textContent = state.myGuess.b;
+  }
+
+  // ---------- schedule panel ----------
+  function renderSchedule(){
+    const list = upcomingGames();
+    const el = $("schedule");
+    if(!list.length){ el.innerHTML = '<div class="sch-empty">Nenhum outro jogo agendado ainda.</div>'; return; }
+    el.innerHTML = list.map(g => {
+      const thumb = g.mediaType === "photo" ? (g.photoUrl || "") : `https://img.youtube.com/vi/${g.videoId}/mqdefault.jpg`;
+      return `
+      <div class="sch-row">
+        <img class="sch-thumb" src="${thumb}" alt="">
+        <div class="sch-info">
+          <div class="sch-teams">${escapeHtml(g.teamA)} × ${escapeHtml(g.teamB)}</div>
+          <div class="sch-when">${fmtDateTime(g.startAt)}</div>
+        </div>
+        <div class="sch-countdown">${fmtCountdownShort(g.startAt - Date.now())}</div>
+      </div>`;
+    }).join("");
+  }
+
+  // ---------- predictions ----------
+  async function submitGuess(){
+    const msg = $("ticketMsg");
+    msg.className = "ticket-msg";
+    const nick = $("nickInput").value.trim();
+    if(!nick){ msg.textContent = "Digite um apelido para registrar o palpite."; msg.classList.add("err"); return; }
+    const g = featuredGame();
+    if(!g){ msg.textContent = "Nenhum jogo disponível para palpite agora."; msg.classList.add("err"); return; }
+
+    state.nickname = nick;
+    await sSet("nickname", nick, false);
+
+    const already = !!g.preds[nick];
+    const ts = Date.now();
+    g.preds[nick] = {
+      a: state.myGuess.a, b: state.myGuess.b,
+      extras: JSON.parse(JSON.stringify(state.myExtras)),
+      ts
+    };
+    await sSet("games_all", state.games, true);
+
+    msg.textContent = (already ? "Palpite atualizado: " : "Palpite registrado: ") + g.teamA + " " + state.myGuess.a + " x " + state.myGuess.b + " " + g.teamB;
+    msg.classList.add("ok");
+
+    const ticketCode = "TKT-" + g.id.slice(-4).toUpperCase() + "-" + Math.abs(hashCode(nick)).toString(36).slice(0,4).toUpperCase();
+    $("ticketId").textContent = ticketCode;
+
+    renderFicha(g, nick, g.preds[nick], ticketCode);
+    renderHistory();
+    renderSearchResults($("searchInput").value);
+  }
+
+  function renderFicha(g, nick, pred, ticketCode){
+    const card = $("fichaCard");
+    const extrasLines = EXTRA_MARKETS
+      .filter(m => pred.extras[m.key].a > 0 || pred.extras[m.key].b > 0)
+      .map(m => `<div class="ficha-line"><span class="k">${m.label}</span><span>${pred.extras[m.key].a} x ${pred.extras[m.key].b}</span></div>`)
+      .join("");
+    card.innerHTML = `
+      <div class="ficha-head">
+        <div class="ficha-title">FICHA DO PALPITE</div>
+        <div class="ficha-id">${ticketCode}</div>
+      </div>
+      <div class="ficha-line"><span class="k">Apostador</span><span>${escapeHtml(nick)}</span></div>
+      <div class="ficha-line"><span class="k">Jogo</span><span>${escapeHtml(g.teamA)} × ${escapeHtml(g.teamB)}</span></div>
+      <div class="ficha-line"><span class="k">Competição</span><span>${escapeHtml(g.title)}</span></div>
+      <div class="ficha-cut"></div>
+      <div class="ficha-line"><span class="k">Placar (principal)</span><span>${pred.a} x ${pred.b}</span></div>
+      ${extrasLines ? '<div class="ficha-cut"></div>' + extrasLines : ""}
+      <div class="ficha-cut"></div>
+      <div class="ficha-line"><span class="k">Registrado em</span><span>${fmtDateTime(pred.ts)}</span></div>
+      <div class="ficha-note">guarde este código — o resultado sai quando o admin encerrar o jogo</div>
+    `;
+    card.classList.add("show");
+  }
+
+  function maybeRestoreFicha(){
+    const g = featuredGame();
+    if(!g || !state.nickname) return;
+    const pred = g.preds[state.nickname];
+    if(!pred) return;
+    const ticketCode = "TKT-" + g.id.slice(-4).toUpperCase() + "-" + Math.abs(hashCode(state.nickname)).toString(36).slice(0,4).toUpperCase();
+    $("ticketId").textContent = ticketCode;
+    state.myGuess = { a: pred.a, b: pred.b };
+    state.myExtras = pred.extras ? JSON.parse(JSON.stringify(pred.extras)) : emptyExtras();
+    updateStepUI();
+    updateExtrasUI();
+    renderFicha(g, state.nickname, pred, ticketCode);
+  }
+
+  async function renderLeaderboard(){
+    const lb = (await sGet("leaderboard", true)) || {};
+    const entries = Object.entries(lb).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    const el = $("leaderboard");
+    $("lbCount").textContent = entries.length ? entries.length + " jogador(es)" : "";
+    if(!entries.length){ el.innerHTML = '<div class="lb-empty">Nenhum ponto registrado ainda.</div>'; return; }
+    el.innerHTML = entries.map((e,i)=>`
+      <div class="lb-row">
+        <div class="lb-rank">${i+1}º</div>
+        <div class="lb-name">${escapeHtml(e[0])}${e[0]===state.nickname ? " (você)" : ""}</div>
+        <div class="lb-pts">${e[1]} pts</div>
+      </div>`).join("");
+  }
+
+  function renderHistory(){
+    const el = $("history");
+    if(!state.nickname){ el.innerHTML = '<div class="hist-empty">Digite seu apelido e faça um palpite.</div>'; return; }
+    const rows = [];
+
+    const featured = featuredGame();
+    if(featured && featured.preds[state.nickname]){
+      const g = featured.preds[state.nickname];
+      rows.push(`
+        <div class="hist-row">
+          <div class="hist-top">
+            <span class="hist-game" title="${escapeHtml(featured.teamA)} ${g.a} x ${g.b} ${escapeHtml(featured.teamB)}">${escapeHtml(featured.teamA)} ${g.a} x ${g.b} ${escapeHtml(featured.teamB)}</span>
+            <span class="hist-badge pend">aguardando</span>
+          </div>
+          <div class="hist-sub">${escapeHtml(featured.title)}</div>
+        </div>`);
+    }
+
+    const finished = finishedGames().slice(0,8);
+    for(const h of finished){
+      const g = h.preds ? h.preds[state.nickname] : null;
+      if(!g) continue;
+      const exact = g.a === h.result.a && g.b === h.result.b;
+      const guessWinner = g.a===g.b ? "draw" : (g.a>g.b ? "a" : "b");
+      const realWinner = h.result.a===h.result.b ? "draw" : (h.result.a>h.result.b ? "a" : "b");
+      const won = exact || guessWinner === realWinner;
+      const badge = won ? "win" : "loss";
+      const label = won ? (exact ? "GANHOU 🎯 +5" : "GANHOU +2") : "PERDEU";
+      const extrasText = g.extras ? EXTRA_MARKETS
+        .filter(m => g.extras[m.key] && (g.extras[m.key].a>0 || g.extras[m.key].b>0))
+        .map(m => `${m.label} ${g.extras[m.key].a}x${g.extras[m.key].b}`).join(" · ") : "";
+      rows.push(`
+        <div class="hist-row">
+          <div class="hist-top">
+            <span class="hist-game" title="${escapeHtml(h.teamA)} ${g.a} x ${g.b} ${escapeHtml(h.teamB)}">${escapeHtml(h.teamA)} ${g.a} x ${g.b} ${escapeHtml(h.teamB)}</span>
+            <span class="hist-badge ${badge}">${label}</span>
+          </div>
+          <div class="hist-sub">Resultado real: ${h.result.a} x ${h.result.b} · ${escapeHtml(h.title)}</div>
+          ${extrasText ? `<div class="hist-extras">${extrasText}</div>` : ""}
+        </div>`);
+    }
+    el.innerHTML = rows.length ? rows.join("") : '<div class="hist-empty">Faça seu primeiro palpite.</div>';
+  }
+
+  // ---------- search / browse all predictions ----------
+  function allPredictionEntries(){
+    const out = [];
+    state.games.forEach(g => {
+      Object.entries(g.preds || {}).forEach(([nick, p]) => {
+        out.push({
+          nick, a:p.a, b:p.b, ts:p.ts,
+          teamA:g.teamA, teamB:g.teamB, title:g.title,
+          status:g.status, result:g.result
+        });
+      });
+    });
+    return out.sort((x,y) => y.ts - x.ts);
+  }
+  function renderSearchResults(query){
+    const all = allPredictionEntries();
+    const q = (query || "").trim().toLowerCase();
+    const filtered = q ? all.filter(e => e.nick.toLowerCase().includes(q)) : all;
+    const list = filtered.slice(0, 15);
+    const el = $("searchResults");
+    if(!list.length){
+      el.innerHTML = '<div class="search-empty">' + (q ? ("Nenhum palpite encontrado para \"" + escapeHtml(query) + "\".") : "Nenhum palpite registrado ainda.") + '</div>';
+      return;
+    }
+    el.innerHTML = list.map(e => {
+      const statusTag = (e.status === "finished" && e.result)
+        ? `resultado final ${e.result.a} x ${e.result.b}`
+        : "aguardando o apito final";
+      return `
+        <div class="hist-row">
+          <div class="hist-top">
+            <span class="hist-game" title="${escapeHtml(e.nick)}: ${escapeHtml(e.teamA)} ${e.a} x ${e.b} ${escapeHtml(e.teamB)}">${escapeHtml(e.nick)}: ${escapeHtml(e.teamA)} ${e.a} x ${e.b} ${escapeHtml(e.teamB)}</span>
+          </div>
+          <div class="hist-sub">${escapeHtml(e.title)} · ${statusTag}</div>
+        </div>`;
+    }).join("");
+  }
+
+  // ---------- public results feed ----------
+  function renderResultsFeed(){
+    const list = finishedGames().slice(0, 10);
+    const el = $("resultsFeed");
+    if(!list.length){
+      el.innerHTML = '<div class="res-empty">Nenhum jogo encerrado ainda — resultados só saem quando o admin lança o placar final.</div>';
+      return;
+    }
+    el.innerHTML = list.map(g => `
+      <div class="res-row">
+        <div class="res-teams" title="${escapeHtml(g.teamA)} × ${escapeHtml(g.teamB)} — ${escapeHtml(g.title)}">${escapeHtml(g.teamA)} × ${escapeHtml(g.teamB)} <span style="opacity:.5;font-family:var(--mono);font-size:10px;">· ${escapeHtml(g.title)}</span></div>
+        <div class="res-score">${g.result.a} x ${g.result.b}</div>
+      </div>`).join("");
+  }
+
+  // ---------- comments ----------
+  function renderComments(){
+    const g = featuredGame();
+    const el = $("commentsList");
+    if(!g || !g.comments || !g.comments.length){ el.innerHTML = '<div class="cmt-empty">Seja o primeiro a comentar.</div>'; return; }
+    el.innerHTML = g.comments.slice().reverse().slice(0,30).map(c => `
+      <div class="cmt-row">
+        <div class="cmt-avatar">${escapeHtml(initials(c.nick))}</div>
+        <div class="cmt-body">
+          <div class="cmt-top"><span class="cmt-nick">${escapeHtml(c.nick)}</span><span class="cmt-time">${fmtDateTime(c.ts)}</span></div>
+          <div class="cmt-text">${escapeHtml(c.text)}</div>
+        </div>
+      </div>`).join("");
+  }
+  async function sendComment(){
+    const nick = $("nickInput").value.trim();
+    const text = $("cmtInput").value.trim();
+    if(!nick){ alert("Preencha seu apelido no bilhete de palpite antes de comentar."); return; }
+    if(!text) return;
+    const g = featuredGame();
+    if(!g) return;
+    state.nickname = nick;
+    await sSet("nickname", nick, false);
+    g.comments = g.comments || [];
+    g.comments.push({ nick, text, ts: Date.now() });
+    await sSet("games_all", state.games, true);
+    $("cmtInput").value = "";
+    renderComments();
+  }
+
+  // ---------- game state sync ----------
+  async function loadGames(){
+    let g = await sGet("games_all", true);
+    if(!g || !g.length){ g = seedGames(); await sSet("games_all", g, true); }
+    g.forEach(game => { if(!game.comments) game.comments = []; if(!game.mediaType) game.mediaType = "youtube"; if(game.photoUrl===undefined) game.photoUrl=""; });
+    state.games = g;
+  }
+
+  function renderAll(){
+    renderHero();
+    updateStepUI();
+    updateExtrasUI();
+    renderSchedule();
+    renderHistory();
+    renderComments();
+    renderResultsFeed();
+    renderSearchResults($("searchInput") ? $("searchInput").value : "");
+  }
+
+  async function poll(){
+    const g = await sGet("games_all", true);
+    if(g && JSON.stringify(g) !== JSON.stringify(state.games)){
+      state.games = g;
+      renderAll();
+    }
+    renderLeaderboard();
+    renderAdminList();
+  }
+
+  // ---------- admin: add / edit / finish / delete ----------
+  function readAdminForm(){
+    const date = $("admDate").value;
+    const time = $("admTime").value || "00:00";
+    let startAt = Date.now() + 5*60000;
+    if(date){
+      const dt = new Date(date + "T" + time);
+      if(!isNaN(dt.getTime())) startAt = dt.getTime();
+    }
+    const mediaType = $("admMediaPhoto").checked ? "photo" : "youtube";
+    return {
+      title: $("admTitle").value.trim() || "JOGO SEM TÍTULO",
+      teamA: $("admTeamA").value.trim() || "TIME A",
+      teamB: $("admTeamB").value.trim() || "TIME B",
+      mediaType,
+      videoId: extractYoutubeId($("admVideo").value),
+      photoUrl: $("admPhoto").value.trim(),
+      desc: $("admDesc").value.trim() || "Sem descrição fornecida.",
+      startAt
+    };
+  }
+
+  function clearAdminForm(){
+    $("admTitle").value = ""; $("admTeamA").value = ""; $("admTeamB").value = "";
+    $("admVideo").value = ""; $("admPhoto").value = ""; $("admDesc").value = ""; $("admDate").value = ""; $("admTime").value = "";
+    $("admMediaYoutube").checked = true;
+    $("admVideoWrap").style.display = "block";
+    $("admPhotoWrap").style.display = "none";
+    state.editingId = null;
+    $("formHeading").textContent = "Agendar novo jogo";
+    $("admSave").textContent = "Agendar jogo";
+    $("admCancelEdit").style.display = "none";
+  }
+
+  async function admSaveGame(){
+    const data = readAdminForm();
+    if(state.editingId){
+      const g = state.games.find(x=>x.id===state.editingId);
+      if(g){ Object.assign(g, data); }
+    } else {
+      state.games.push({ id: genId(), ...data, status:"scheduled", result:null, preds:{}, comments:[] });
+    }
+    await sSet("games_all", state.games, true);
+    clearAdminForm();
+    renderAll();
+    renderAdminList();
+  }
+
+  function admEditGame(id){
+    const g = state.games.find(x=>x.id===id);
+    if(!g) return;
+    state.editingId = id;
+    $("admTitle").value = g.title;
+    $("admTeamA").value = g.teamA;
+    $("admTeamB").value = g.teamB;
+    $("admMediaYoutube").checked = g.mediaType !== "photo";
+    $("admMediaPhoto").checked = g.mediaType === "photo";
+    $("admVideoWrap").style.display = g.mediaType === "photo" ? "none" : "block";
+    $("admPhotoWrap").style.display = g.mediaType === "photo" ? "block" : "none";
+    $("admVideo").value = g.videoId || "";
+    $("admPhoto").value = g.photoUrl || "";
+    $("admDesc").value = g.desc;
+    const d = new Date(g.startAt);
+    $("admDate").value = d.toISOString().slice(0,10);
+    $("admTime").value = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+    $("formHeading").textContent = "Editar jogo agendado";
+    $("admSave").textContent = "Salvar alterações";
+    $("admCancelEdit").style.display = "block";
+  }
+
+  async function admDeleteGame(id){
+    if(!confirm("Excluir este jogo agendado?")) return;
+    state.games = state.games.filter(x=>x.id!==id);
+    await sSet("games_all", state.games, true);
+    renderAll();
+    renderAdminList();
+  }
+
+  async function admBumpNow(id){
+    const g = state.games.find(x=>x.id===id);
+    if(!g) return;
+    g.startAt = Date.now() - 1000;
+    await sSet("games_all", state.games, true);
+    renderAll();
+    renderAdminList();
+  }
+
+  async function admFinishGame(id){
+    const g = state.games.find(x=>x.id===id);
+    if(!g || g.status === "finished") return;
+    const aInput = $("resA_" + id), bInput = $("resB_" + id);
+    const a = parseInt((aInput && aInput.value) || "0", 10);
+    const b = parseInt((bInput && bInput.value) || "0", 10);
+
+    const lb = (await sGet("leaderboard", true)) || {};
+    for(const [nick, guess] of Object.entries(g.preds || {})){
+      const exact = guess.a === a && guess.b === b;
+      const guessWinner = guess.a===guess.b ? "draw" : (guess.a>guess.b ? "a" : "b");
+      const realWinner = a===b ? "draw" : (a>b ? "a" : "b");
+      const won = exact || guessWinner === realWinner;
+      const pts = exact ? 5 : (won ? 2 : 0);
+      lb[nick] = (lb[nick] || 0) + pts;
+    }
+    await sSet("leaderboard", lb, true);
+
+    g.status = "finished";
+    g.result = { a, b };
+    await sSet("games_all", state.games, true);
+
+    renderAll();
+    renderLeaderboard();
+    renderAdminList();
+  }
+
+  async function admResetAll(){
+    if(!confirm("Isso vai apagar todos os jogos, o ranking e o histórico compartilhados. Confirmar?")) return;
+    const fresh = seedGames();
+    await sSet("games_all", fresh, true);
+    await sSet("leaderboard", {}, true);
+    state.games = fresh;
+    clearAdminForm();
+    renderAll();
+    renderLeaderboard();
+    renderAdminList();
+  }
+
+  function renderAdminList(){
+    if($("overlay").classList.contains("show") === false) return;
+    const list = $("admGameList");
+    if(!list) return;
+    const scheduled = state.games.filter(g=>g.status==="scheduled").sort((a,b)=>a.startAt-b.startAt);
+    const finished = finishedGames().slice(0,5);
+    const rows = [];
+
+    scheduled.forEach((g, idx) => {
+      const live = Date.now() >= g.startAt;
+      const isFeatured = idx === 0;
+      rows.push(`
+        <div class="adm-game-row">
+          <div class="adm-game-top">
+            <div>
+              <div class="adm-game-title">${escapeHtml(g.teamA)} × ${escapeHtml(g.teamB)} <span class="adm-badge ${live?'live':'scheduled'}">${live?'ao vivo':'agendado'}</span></div>
+              <div class="adm-game-when">${escapeHtml(g.title)} · ${fmtDateTime(g.startAt)} · ${Object.keys(g.preds||{}).length} palpite(s) · ${g.mediaType==="photo"?"foto":"vídeo"}</div>
+            </div>
+          </div>
+          <div class="adm-game-actions">
+            <button data-action="edit" data-id="${g.id}">Editar</button>
+            ${isFeatured ? "" : `<button data-action="bump" data-id="${g.id}">Tornar atual agora</button>`}
+            <button class="danger" data-action="delete" data-id="${g.id}">Excluir</button>
+          </div>
+          ${isFeatured ? `
+          <div class="adm-result-inputs">
+            <div class="grp"><label>${escapeHtml(g.teamA)}</label><input type="number" id="resA_${g.id}" min="0" value="0"></div>
+            <div class="grp"><label>${escapeHtml(g.teamB)}</label><input type="number" id="resB_${g.id}" min="0" value="0"></div>
+            <button class="finish-btn" data-action="finish" data-id="${g.id}">Encerrar e lançar resultado</button>
+          </div>` : ""}
+        </div>`);
+    });
+
+    finished.forEach(g => {
+      rows.push(`
+        <div class="adm-game-row" style="opacity:.7;">
+          <div class="adm-game-top">
+            <div>
+              <div class="adm-game-title">${escapeHtml(g.teamA)} × ${escapeHtml(g.teamB)} <span class="adm-badge finished">finalizado</span></div>
+              <div class="adm-game-when">${escapeHtml(g.title)} · placar final ${g.result.a} x ${g.result.b}</div>
+            </div>
+          </div>
+        </div>`);
+    });
+
+    list.innerHTML = rows.length ? rows.join("") : '<div class="sch-empty">Nenhum jogo cadastrado ainda.</div>';
+
+    list.querySelectorAll("button[data-action]").forEach(btn=>{
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.id, action = btn.dataset.action;
+        if(action === "edit") admEditGame(id);
+        else if(action === "delete") admDeleteGame(id);
+        else if(action === "bump") admBumpNow(id);
+        else if(action === "finish") admFinishGame(id);
+      });
+    });
+  }
+
+  function openModal(){
+    $("overlay").classList.add("show");
+    $("gateView").style.display = "block";
+    $("adminView").style.display = "none";
+    $("gatePass").value = "";
+  }
+  function closeModal(){ $("overlay").classList.remove("show"); }
+
+  function applyPanelDefaults(){
+    const isMobile = window.innerWidth <= 680;
+    document.querySelectorAll("details.panel").forEach(d=>{
+      if(isMobile) d.removeAttribute("open");
+      else d.setAttribute("open","");
+    });
+  }
+
+  // ---------- wire events ----------
+  buildExtrasPanel();
+
+  document.querySelectorAll(".score-row .stepper button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const team = btn.dataset.team, step = parseInt(btn.dataset.step,10);
+      const cur = team === "a" ? state.myGuess.a : state.myGuess.b;
+      const next = Math.max(0, Math.min(99, cur + step));
+      if(team === "a") state.myGuess.a = next; else state.myGuess.b = next;
+      updateStepUI();
+    });
+  });
+
+  $("extrasToggle").addEventListener("click", ()=>{
+    const panel = $("extrasPanel");
+    const open = panel.classList.toggle("open");
+    $("extrasToggle").textContent = (open ? "▴" : "▾") + " mercados extras (pênaltis, escanteios, faltas, impedimentos, cartões)";
+  });
+
+  $("submitBtn").addEventListener("click", submitGuess);
+  $("videoPlayBtn").addEventListener("click", ()=>{
+    const g = featuredGame();
+    if(g && g.mediaType !== "photo") startVideo(g);
+  });
+
+  $("adminBtn").addEventListener("click", ()=>{ openModal(); });
+  $("closeModal").addEventListener("click", closeModal);
+  $("overlay").addEventListener("click", (e)=>{ if(e.target.id === "overlay") closeModal(); });
+  $("gateEnter").addEventListener("click", ()=>{
+    if($("gatePass").value === ADMIN_PASS){
+      $("gateView").style.display = "none";
+      $("adminView").style.display = "block";
+      clearAdminForm();
+      renderAdminList();
+    } else {
+      $("gatePass").style.borderColor = "var(--ticket-red)";
+      $("gatePass").value = "";
+      $("gatePass").placeholder = "senha incorreta";
+    }
+  });
+  $("admSave").addEventListener("click", admSaveGame);
+  $("admCancelEdit").addEventListener("click", clearAdminForm);
+  $("admReset").addEventListener("click", admResetAll);
+  $("admMediaYoutube").addEventListener("change", ()=>{ $("admVideoWrap").style.display="block"; $("admPhotoWrap").style.display="none"; });
+  $("admMediaPhoto").addEventListener("change", ()=>{ $("admVideoWrap").style.display="none"; $("admPhotoWrap").style.display="block"; });
+
+  $("cmtSend").addEventListener("click", sendComment);
+  $("cmtInput").addEventListener("keydown", (e)=>{ if(e.key === "Enter") sendComment(); });
+
+  $("searchBtn").addEventListener("click", ()=> renderSearchResults($("searchInput").value));
+  $("searchInput").addEventListener("keydown", (e)=>{ if(e.key === "Enter") renderSearchResults($("searchInput").value); });
+  $("searchInput").addEventListener("input", ()=> renderSearchResults($("searchInput").value));
+
+  $("nickInput").addEventListener("change", async ()=>{
+    const v = $("nickInput").value.trim();
+    if(v){ state.nickname = v; await sSet("nickname", v, false); renderHistory(); renderLeaderboard(); maybeRestoreFicha(); }
+  });
+
+  // ---------- init ----------
+  async function init(){
+    applyPanelDefaults();
+
+    const savedNick = await sGet("nickname", false);
+    if(savedNick){ state.nickname = savedNick; $("nickInput").value = savedNick; }
+
+    await loadGames();
+    renderAll();
+    await renderLeaderboard();
+    maybeRestoreFicha();
+
+    setInterval(tickClockOnly, 1000);
+    setInterval(poll, 4000);
+  }
+  init();
+})();
+</script>
+</body>
+</html>

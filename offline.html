@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<title>Sem conexão · USHK Angola</title>
+
+<!-- PWA metas -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="USHK Angola">
+<meta name="theme-color" content="#062119">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<style>
+  :root{
+    --pitch:#0B3D2E;
+    --pitch-dark:#062119;
+    --amber:#FFC93C;
+    --amber-dim:#8a6a1c;
+    --chalk:#F2EFE6;
+    --ticket-red:#C1272D;
+    --win-green:#1e7d3a;
+    --mono:'Courier New', Courier, monospace;
+    --display: Impact, Haettenschweiler, 'Arial Narrow Bold', 'Arial Black', sans-serif;
+    --body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--body);
+    color:var(--chalk);
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255,201,60,.10), transparent 60%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 2px, transparent 2px 46px),
+      linear-gradient(180deg, var(--pitch) 0%, var(--pitch-dark) 55%);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow-x:hidden;
+  }
+
+  .card{
+    position:relative;
+    max-width:400px;
+    width:100%;
+    background:rgba(6,33,25,.55);
+    border:1px solid rgba(255,201,60,.18);
+    border-radius:16px;
+    padding:34px 26px 28px;
+    text-align:center;
+    box-shadow:0 30px 60px -25px rgba(0,0,0,.65), inset 0 0 60px rgba(0,0,0,.2);
+    animation:slideUp .5s ease-out;
+  }
+  @keyframes slideUp{ from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)} }
+
+  /* signature element: radar pulse around a still ball, standing in for
+     "searching for a signal" instead of a generic spinner */
+  .radar{
+    width:104px; height:104px; margin:0 auto 20px;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .radar-ring{
+    position:absolute; inset:0; border-radius:50%;
+    border:1.5px solid var(--amber);
+    opacity:0;
+    animation:ping 2.4s cubic-bezier(.2,.7,.3,1) infinite;
+  }
+  .radar-ring.r2{ animation-delay:.8s }
+  .radar-ring.r3{ animation-delay:1.6s }
+  @keyframes ping{
+    0%{ transform:scale(.35); opacity:.55 }
+    100%{ transform:scale(1); opacity:0 }
+  }
+  .radar-ball{
+    width:46px; height:46px; border-radius:50%;
+    background:var(--chalk);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+    box-shadow:0 0 0 3px var(--pitch-dark), 0 6px 16px rgba(0,0,0,.4);
+  }
+  .radar.online .radar-ring{ border-color: var(--win-green); }
+  .radar.online .radar-ball{ animation:none; }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:2.5px;
+    color:var(--amber); text-transform:uppercase; opacity:.85; margin-bottom:6px;
+  }
+  h1{
+    font-family:var(--display); font-size:30px; letter-spacing:1px;
+    color:var(--chalk); text-transform:uppercase; margin-bottom:14px;
+  }
+  .divider{
+    width:56px; height:2px; background:var(--amber-dim); margin:0 auto 18px; opacity:.6;
+  }
+  .status-text{
+    font-size:15px; color:var(--chalk); margin-bottom:8px; line-height:1.5; font-weight:600;
+  }
+  .description{
+    font-size:13px; color:var(--chalk); opacity:.7; margin-bottom:22px; line-height:1.6;
+  }
+
+  .retry-btn{
+    display:inline-block; padding:13px 34px;
+    background:var(--amber); color:var(--pitch-dark);
+    border:none; border-radius:30px;
+    font-family:var(--display); font-size:14px; letter-spacing:1px; text-transform:uppercase;
+    cursor:pointer; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .retry-btn:hover:not(:disabled){ transform:translateY(-2px); box-shadow:0 10px 22px -8px rgba(255,201,60,.5) }
+  .retry-btn:active:not(:disabled){ transform:translateY(0) }
+  .retry-btn:disabled{ opacity:.55; cursor:not-allowed; transform:none }
+  .retry-btn:focus-visible{ outline:2px solid var(--chalk); outline-offset:3px }
+
+  .connection-status{
+    margin-top:14px; font-family:var(--mono); font-size:11px; letter-spacing:.4px;
+    color:var(--amber); min-height:16px;
+  }
+  .connection-status.ok{ color: var(--win-green); }
+  .connection-status.fail{ color: var(--ticket-red); }
+
+  .tagline{
+    font-family:var(--mono); font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--chalk); opacity:.45; margin-top:22px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ animation:none }
+    .radar-ring{ animation:none; opacity:.35 }
+  }
+</style>
+</head>
+<body>
+
+  <main class="card" role="main">
+    <div class="radar" id="radar" aria-hidden="true">
+      <div class="radar-ring r1"></div>
+      <div class="radar-ring r2"></div>
+      <div class="radar-ring r3"></div>
+      <div class="radar-ball">⚽</div>
+    </div>
+
+    <p class="eyebrow">USHK Angola</p>
+    <h1>Sem conexão</h1>
+    <div class="divider"></div>
+
+    <p class="status-text">Você está offline no momento.</p>
+    <p class="description">
+      Verifique sua conexão com a internet para continuar acessando palpites,
+      staking e o restante da plataforma.
+    </p>
+
+    <button class="retry-btn" id="retryBtn">Tentar novamente</button>
+
+    <p class="connection-status" id="connectionStatus" role="status" aria-live="polite">
+      Verificando conexão…
+    </p>
+
+    <p class="tagline">Futebol · Staking · Renda diária</p>
+  </main>
+
+<script>
+(function(){
+  "use strict";
+
+  const radarEl = document.getElementById('radar');
+  const statusEl = document.getElementById('connectionStatus');
+  const retryBtn = document.getElementById('retryBtn');
+
+  function setStatus(text, mode){
+    statusEl.textContent = text;
+    statusEl.className = 'connection-status' + (mode ? ' ' + mode : '');
+  }
+
+  function markOnline(){
+    radarEl.classList.add('online');
+    setStatus('Conexão restaurada! Recarregando…', 'ok');
+    retryBtn.disabled = true;
+    setTimeout(() => location.reload(), 1200);
+  }
+
+  function markOffline(){
+    radarEl.classList.remove('online');
+    setStatus('Sem conexão de internet', 'fail');
+  }
+
+  // --- Service Worker ---
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => {
+          console.log('✅ Service Worker registrado');
+          // Verifica atualizações a cada 60 segundos
+          setInterval(() => reg.update(), 60000);
+        })
+        .catch(err => console.warn('❌ Service Worker não registrado:', err));
+    });
+  }
+
+  // --- Eventos nativos do navegador (sinal mais confiável) ---
+  window.addEventListener('online', markOnline);
+  window.addEventListener('offline', markOffline);
+
+  // --- Verificação ativa por fetch com backoff progressivo ---
+  let attempt = 0;
+  let pollTimer = null;
+  let stopped = false;
+
+  function scheduleNextCheck(){
+    if (stopped) return;
+    attempt++;
+    // Backoff: 2s → 3s → 4.5s → 6.75s → até 15s
+    const delay = Math.min(2000 * Math.pow(1.5, attempt - 1), 15000);
+    pollTimer = setTimeout(checkConnection, delay);
+  }
+
+  function checkConnection(){
+    if (stopped) return;
+    // Testa a raiz da origem com cache desabilitado
+    fetch(location.origin + '/?ping=' + Date.now(), { 
+      method: 'HEAD', 
+      cache: 'no-store'
+    })
+      .then(() => {
+        stopped = true;
+        clearTimeout(pollTimer);
+        markOnline();
+      })
+      .catch(() => {
+        setStatus(`Sem conexão — tentativa ${attempt}…`, 'fail');
+        scheduleNextCheck();
+      });
+  }
+
+  // --- Botão de retry manual ---
+  retryBtn.addEventListener('click', () => {
+    retryBtn.disabled = true;
+    setStatus('Verificando conexão…');
+    fetch(location.origin + '/?ping=' + Date.now(), { 
+      method: 'HEAD', 
+      cache: 'no-store' 
+    })
+      .then(() => { 
+        location.reload(); 
+      })
+      .catch(() => {
+        retryBtn.disabled = false;
+        setStatus('Ainda sem conexão. Tente novamente em instantes.', 'fail');
+      });
+  });
+
+  // --- Limpeza ao descarregar ---
+  window.addEventListener('beforeunload', () => {
+    stopped = true;
+    clearTimeout(pollTimer);
+  });
+
+  // --- Início: usa o estado que o navegador já conhece ---
+  if (navigator.onLine) {
+    // Se a rede já voltou quando a página foi aberta
+    checkConnection();
+  } else {
+    // Começa offline
+    markOffline();
+    scheduleNextCheck();
+  }
+})();
+</script>
+</body>
+</html>

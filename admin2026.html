@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PALPITÃO — Painel Admin</title>
+<style>
+:root{
+  --pitch:#0B3D2E; --pitch-dark:#062119; --amber:#FFC93C; --amber-dim:#8a6a1c;
+  --chalk:#F2EFE6; --ticket-red:#C1272D; --win-green:#1e7d3a; --ink:#121210;
+  --line:rgba(242,239,230,.14); --panel:rgba(255,255,255,.04);
+  --mono:'Courier New',Courier,monospace;
+  --display: Impact, Haettenschweiler, 'Arial Narrow Bold','Arial Black',sans-serif;
+  --body:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--pitch-dark);color:var(--chalk);font-family:var(--body);}
+body{padding:20px 14px 60px;min-height:100vh;
+  background:radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255,201,60,.08), transparent 60%), var(--pitch-dark);}
+.wrap{max-width:920px;margin:0 auto;}
+h1{font-family:var(--display);letter-spacing:1px;color:var(--amber);font-size:26px;margin:0 0 4px;}
+.sub{font-family:var(--mono);font-size:11px;opacity:.55;margin-bottom:22px;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:20px;}
+.card h2{font-family:var(--display);letter-spacing:1px;color:var(--amber);font-size:16px;margin:0 0 14px;text-transform:uppercase;}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.field{flex:1 1 220px;min-width:180px;display:flex;flex-direction:column;gap:5px;}
+.field.full{flex-basis:100%;}
+label{font-family:var(--mono);font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;opacity:.65;}
+input[type=text], input[type=number], input[type=datetime-local], textarea, select{
+  background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;
+  color:var(--chalk);padding:9px 10px;font-family:var(--body);font-size:13.5px;width:100%;
+}
+textarea{min-height:70px;resize:vertical;font-family:var(--body);}
+select{cursor:pointer;}
+input:focus, textarea:focus, select:focus{outline:none;border-color:var(--amber);}
+.hint{font-family:var(--mono);font-size:10px;opacity:.45;margin-top:2px;}
+.list-input-row{display:flex;gap:8px;margin-bottom:6px;}
+.list-input-row input{flex:1;}
+.icon-btn{
+  background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--chalk);
+  border-radius:6px;width:34px;height:34px;flex-shrink:0;cursor:pointer;font-size:15px;
+}
+.icon-btn:hover{border-color:var(--amber);color:var(--amber);}
+.add-btn{
+  background:none;border:1px dashed var(--line);color:var(--chalk);opacity:.7;
+  border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:11px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.add-btn:hover{opacity:1;border-color:var(--amber);color:var(--amber);}
+.result-block{display:none;}
+.result-block.show{display:flex;}
+.btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.btn{
+  border:none;border-radius:8px;padding:12px 18px;font-family:var(--display);letter-spacing:1px;
+  font-size:13px;cursor:pointer;text-transform:uppercase;
+}
+.btn.primary{background:var(--ticket-red);color:#fff;}
+.btn.secondary{background:rgba(255,255,255,.1);color:var(--chalk);}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--chalk);}
+.btn:hover{filter:brightness(1.1);}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:none;}
+.msg{font-family:var(--mono);font-size:12px;margin-top:10px;min-height:16px;}
+.msg.ok{color:var(--win-green);}
+.msg.err{color:var(--ticket-red);}
+.msg.warn{color:var(--amber);}
+
+.game-row{
+  display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);
+  border-radius:8px;padding:10px 12px;margin-bottom:8px;flex-wrap:wrap;
+}
+.game-row .gi{flex:1;min-width:200px;}
+.game-row .gi .t{font-family:var(--display);font-size:14px;letter-spacing:.3px;}
+.game-row .gi .s{font-family:var(--mono);font-size:10.5px;opacity:.6;margin-top:2px;}
+.badge{font-family:var(--mono);font-size:9.5px;padding:3px 8px;border-radius:10px;text-transform:uppercase;flex-shrink:0;}
+.badge.featured{background:var(--ticket-red);color:#fff;}
+.badge.upcoming{background:var(--amber-dim);color:var(--chalk);}
+.badge.finished{background:var(--chalk);color:var(--ink);}
+.game-row .actions{display:flex;gap:6px;flex-shrink:0;}
+.game-row .actions button{
+  background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--chalk);
+  border-radius:6px;padding:7px 10px;font-family:var(--mono);font-size:10.5px;cursor:pointer;
+}
+.game-row .actions button:hover{border-color:var(--amber);color:var(--amber);}
+.game-row .actions button.del:hover{border-color:var(--ticket-red);color:var(--ticket-red);}
+.empty{font-size:12px;opacity:.5;font-family:var(--mono);padding:10px 4px;}
+.config-warning{
+  background:rgba(193,39,45,.15);border:1px solid var(--ticket-red);border-radius:10px;
+  padding:14px 16px;margin-bottom:20px;font-size:12.5px;line-height:1.6;
+}
+.config-warning b{color:var(--amber);}
+.config-warning a{color:var(--amber);}
+
+/* ---------- auth gate ---------- */
+#authGate{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:14px;padding:60px 20px;
+}
+#authGate .icon{font-size:40px;}
+#authGate h2{font-family:var(--display);color:var(--amber);letter-spacing:1px;font-size:20px;margin:0;text-transform:uppercase;}
+#authGate p{font-family:var(--mono);font-size:12.5px;opacity:.75;max-width:460px;line-height:1.7;margin:0;}
+#authGate .uidbox{
+  font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.06);
+  border:1px solid var(--line);border-radius:8px;padding:8px 12px;word-break:break-all;
+}
+#adminStatus{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;opacity:.75;margin-bottom:18px;
+  background:rgba(30,125,58,.12);border:1px solid var(--win-green);border-radius:8px;padding:8px 12px;
+}
+#adminStatus b{color:var(--win-green);}
+#logoutBtn{
+  background:none;border:1px solid var(--line);color:var(--chalk);border-radius:6px;
+  padding:5px 10px;font-family:var(--mono);font-size:10.5px;cursor:pointer;
+}
+#logoutBtn:hover{border-color:var(--ticket-red);color:var(--ticket-red);}
+#panelContent{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>PALPITÃO — Painel Admin</h1>
+  <div class="sub">Gerencia a coleção "games" no Firestore. O acesso é controlado pela sessão do Firebase Auth — faça login em outra página do mesmo site para liberar este painel.</div>
+
+  <!-- ===== Tela exibida enquanto não sabemos / não há sessão válida ===== -->
+  <div id="authGate" class="card">
+    <div class="icon">🔒</div>
+    <h2 id="authGateTitle">Verificando sessão...</h2>
+    <p id="authGateText">Aguarde enquanto verificamos se você já está autenticado em outra página deste site.</p>
+    <div class="uidbox" id="authGateUid" style="display:none;"></div>
+  </div>
+
+  <!-- ===== Conteúdo real do painel (só aparece se for o admin autenticado) ===== -->
+  <div id="panelContent">
+
+    <div id="adminStatus">
+      <span>Logado como admin: <b id="adminEmailLabel">—</b></span>
+      <button type="button" id="logoutBtn">Sair</button>
+    </div>
+
+    <div class="card">
+      <h2>Criar / Editar jogo</h2>
+      <form id="gameForm">
+        <input type="hidden" id="gameId">
+
+        <div class="row">
+          <div class="field full">
+            <label>Título da competição</label>
+            <input type="text" id="f_title" placeholder="ex: FINAL — LIGA DE VERÃO">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Time A</label>
+            <input type="text" id="f_teamA" placeholder="ex: Palmeiras">
+          </div>
+          <div class="field">
+            <label>Time B</label>
+            <input type="text" id="f_teamB" placeholder="ex: Flamengo">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Início (data e hora)</label>
+            <input type="datetime-local" id="f_startAt">
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="f_status">
+              <option value="featured">featured (destaque — exclusivo)</option>
+              <option value="upcoming">upcoming (próximo jogo — lista)</option>
+              <option value="finished">finished (encerrado)</option>
+            </select>
+            <div class="hint" id="statusHint"></div>
+          </div>
+        </div>
+
+        <div class="row result-block" id="resultBlock">
+          <div class="field">
+            <label>Placar final — Time A</label>
+            <input type="number" id="f_resultA" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Placar final — Time B</label>
+            <input type="number" id="f_resultB" min="0" value="0">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field full">
+            <label>Descrição do jogo</label>
+            <textarea id="f_desc" placeholder="Descrição que aparece na tela principal"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Tipo de mídia</label>
+            <select id="f_mediaType">
+              <option value="youtube">youtube (vídeo)</option>
+              <option value="photo">photo (galeria de fotos)</option>
+            </select>
+          </div>
+          <div class="field" id="videoIdField">
+            <label>URL ou ID do YouTube</label>
+            <input type="text" id="f_videoId" placeholder="https://youtu.be/xxxxxxxxxxx">
+            <div class="hint">Aceita link completo (youtu.be, watch?v=, embed, shorts) ou só o ID.</div>
+          </div>
+        </div>
+
+        <div class="row" id="photosField" style="display:none;">
+          <div class="field full">
+            <label>Fotos (mínimo 2 URLs)</label>
+            <div id="photosList"></div>
+            <button type="button" class="add-btn" id="addPhotoBtn">+ adicionar foto</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Quantidade de anúncios a exibir (adsCount)</label>
+            <input type="number" id="f_adsCount" min="0" value="0">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field full">
+            <label>Anúncios / patrocinadores (URLs de imagem)</label>
+            <div id="adsList"></div>
+            <button type="button" class="add-btn" id="addAdBtn">+ adicionar anúncio</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn primary" id="saveBtn">Salvar jogo</button>
+          <button type="button" class="btn ghost" id="clearBtn">Limpar formulário / novo jogo</button>
+        </div>
+        <div class="msg" id="formMsg"></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Jogos cadastrados</h2>
+      <div id="gamesList"><div class="empty">Carregando...</div></div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, orderBy, query
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+    authDomain: "proibidoreplica.firebaseapp.com",
+    projectId: "proibidoreplica",
+    storageBucket: "proibidoreplica.firebasestorage.app",
+    messagingSenderId: "794009646952",
+    appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+
+  // UID autorizado como admin (precisa bater com as Firestore Rules)
+  const ADMIN_UID = "fGMSSpJepdPZ1QkSYqCTzeyaHGD2";
+
+  // Ajuste aqui se o login do site fica em outra página/arquivo
+  const LOGIN_PAGE_URL = "login.html";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const gamesCol = collection(db, "games");
+
+  const $ = id => document.getElementById(id);
+
+  let unsubscribeGames = null;
+
+  // ---------- auth gate ----------
+  function showGate(state, extra){
+    $("authGate").style.display = "flex";
+    $("panelContent").style.display = "none";
+
+    const title = $("authGateTitle");
+    const text = $("authGateText");
+    const uidBox = $("authGateUid");
+    uidBox.style.display = "none";
+
+    if(state === "checking"){
+      title.textContent = "Verificando sessão...";
+      text.textContent = "Aguarde enquanto verificamos se você já está autenticado em outra página deste site.";
+    } else if(state === "no-session"){
+      title.textContent = "Nenhuma sessão encontrada";
+      text.innerHTML = `Você não está logado. Faça login como admin em <b>${LOGIN_PAGE_URL}</b> (mesmo domínio) e volte a esta página — a sessão do Firebase Auth é compartilhada automaticamente entre as páginas do site.`;
+    } else if(state === "wrong-user"){
+      title.textContent = "Sem permissão de admin";
+      text.textContent = "Você está logado, mas esta conta não tem permissão de administrador para gerenciar os jogos.";
+      if(extra){
+        uidBox.style.display = "block";
+        uidBox.textContent = "UID logado: " + extra;
+      }
+    }
+  }
+
+  function showPanel(user){
+    $("authGate").style.display = "none";
+    $("panelContent").style.display = "block";
+    $("adminEmailLabel").textContent = user.email || user.uid;
+
+    // só assina a coleção de jogos depois de confirmado o admin
+    if(!unsubscribeGames){
+      subscribeGames();
+    }
+  }
+
+  $("logoutBtn").addEventListener("click", async () => {
+    if(unsubscribeGames){ unsubscribeGames(); unsubscribeGames = null; }
+    await signOut(auth);
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    if(!user){
+      showGate("no-session");
+      return;
+    }
+    if(user.uid !== ADMIN_UID){
+      showGate("wrong-user", user.uid);
+      return;
+    }
+    showPanel(user);
+  });
+
+  showGate("checking");
+
+  // ---------- dynamic list helpers (photos / ads) ----------
+  function makeListRow(container, value, placeholder){
+    const row = document.createElement("div");
+    row.className = "list-input-row";
+    row.innerHTML = `<input type="text" value="${value ? value.replace(/"/g,'&quot;') : ""}" placeholder="${placeholder}">
+      <button type="button" class="icon-btn del-row">✕</button>`;
+    row.querySelector(".del-row").addEventListener("click", () => row.remove());
+    container.appendChild(row);
+  }
+  function getListValues(container){
+    return Array.from(container.querySelectorAll("input"))
+      .map(i => i.value.trim())
+      .filter(v => v.length > 0);
+  }
+
+  $("addPhotoBtn").addEventListener("click", () => makeListRow($("photosList"), "", "https://... (URL da foto)"));
+  $("addAdBtn").addEventListener("click", () => makeListRow($("adsList"), "", "https://... (URL do anúncio)"));
+
+  // ---------- show/hide conditional fields ----------
+  function syncMediaFields(){
+    const isPhoto = $("f_mediaType").value === "photo";
+    $("videoIdField").style.display = isPhoto ? "none" : "flex";
+    $("photosField").style.display = isPhoto ? "flex" : "none";
+  }
+  $("f_mediaType").addEventListener("change", syncMediaFields);
+
+  function syncStatusFields(){
+    const finished = $("f_status").value === "finished";
+    $("resultBlock").classList.toggle("show", finished);
+
+    const hint = $("statusHint");
+    if($("f_status").value === "featured"){
+      const currentId = $("gameId").value;
+      const otherFeatured = cachedGames.filter(g => g.status === "featured" && g.id !== currentId);
+      hint.textContent = otherFeatured.length
+        ? "Atenção: já existe um jogo em destaque (" + (otherFeatured[0].teamA + " × " + otherFeatured[0].teamB) + "). Ao salvar, ele será movido automaticamente para \"upcoming\"."
+        : "Este será o único jogo em destaque (Agendado) na tela principal.";
+    } else if($("f_status").value === "upcoming"){
+      hint.textContent = "Aparece na lista de Próximos Jogos, com seus próprios dados.";
+    } else {
+      hint.textContent = "";
+    }
+  }
+  $("f_status").addEventListener("change", syncStatusFields);
+
+  // ---------- form reset ----------
+  function resetForm(){
+    $("gameForm").reset();
+    $("gameId").value = "";
+    $("photosList").innerHTML = "";
+    $("adsList").innerHTML = "";
+    makeListRow($("photosList"), "", "https://... (URL da foto)");
+    makeListRow($("photosList"), "", "https://... (URL da foto)");
+    $("f_mediaType").value = "youtube";
+    $("f_status").value = "upcoming";
+    syncMediaFields();
+    syncStatusFields();
+    $("formMsg").textContent = "";
+    $("formMsg").className = "msg";
+    $("saveBtn").textContent = "Salvar jogo";
+    // default start time = now, rounded to next 30 min, in local datetime-local format
+    const d = new Date(Date.now() + 30*60000);
+    d.setSeconds(0,0);
+    const iso = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    $("f_startAt").value = iso;
+  }
+
+  // ---------- load a game into the form for editing ----------
+  function loadGameIntoForm(g){
+    $("gameId").value = g.id;
+    $("f_title").value = g.title || "";
+    $("f_teamA").value = g.teamA || "";
+    $("f_teamB").value = g.teamB || "";
+    $("f_desc").value = g.desc || "";
+    $("f_mediaType").value = g.mediaType === "photo" ? "photo" : "youtube";
+    $("f_videoId").value = g.videoId || "";
+    $("f_adsCount").value = g.adsCount || 0;
+    $("f_status").value = (g.status === "finished" || g.status === "featured") ? g.status : "upcoming";
+    $("f_resultA").value = g.result ? g.result.a : 0;
+    $("f_resultB").value = g.result ? g.result.b : 0;
+
+    const d = new Date(g.startAt || Date.now());
+    const iso = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    $("f_startAt").value = iso;
+
+    $("photosList").innerHTML = "";
+    const photos = g.photos && g.photos.length ? g.photos : ["",""];
+    photos.forEach(p => makeListRow($("photosList"), p, "https://... (URL da foto)"));
+
+    $("adsList").innerHTML = "";
+    (g.ads || []).forEach(a => makeListRow($("adsList"), a, "https://... (URL do anúncio)"));
+
+    syncMediaFields();
+    syncStatusFields();
+    $("saveBtn").textContent = "Atualizar jogo";
+    $("formMsg").textContent = "Editando: " + (g.title || g.id);
+    $("formMsg").className = "msg ok";
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  // ---------- submit ----------
+  $("gameForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("formMsg");
+    msg.className = "msg";
+
+    if(!auth.currentUser || auth.currentUser.uid !== ADMIN_UID){
+      msg.textContent = "Sessão de admin não encontrada. Faça login novamente.";
+      msg.classList.add("err");
+      return;
+    }
+
+    const teamA = $("f_teamA").value.trim();
+    const teamB = $("f_teamB").value.trim();
+    if(!teamA || !teamB){
+      msg.textContent = "Preencha os nomes dos dois times.";
+      msg.classList.add("err");
+      return;
+    }
+    const startVal = $("f_startAt").value;
+    if(!startVal){
+      msg.textContent = "Defina a data/hora de início.";
+      msg.classList.add("err");
+      return;
+    }
+
+    const mediaType = $("f_mediaType").value;
+    const status = $("f_status").value;
+
+    const data = {
+      title: $("f_title").value.trim() || "JOGO SEM TÍTULO",
+      teamA, teamB,
+      desc: $("f_desc").value.trim(),
+      mediaType,
+      videoId: mediaType === "youtube" ? $("f_videoId").value.trim() : "",
+      photos: mediaType === "photo" ? getListValues($("photosList")) : [],
+      startAt: new Date(startVal).getTime(),
+      status,
+      adsCount: parseInt($("f_adsCount").value, 10) || 0,
+      ads: getListValues($("adsList"))
+    };
+
+    if(status === "finished"){
+      data.result = {
+        a: parseInt($("f_resultA").value, 10) || 0,
+        b: parseInt($("f_resultB").value, 10) || 0
+      };
+    }
+
+    try{
+      const existingId = $("gameId").value;
+      const ref = existingId ? doc(db, "games", existingId) : doc(gamesCol);
+
+      // "featured" é exclusivo: se este jogo está virando destaque, qualquer
+      // outro jogo que já esteja marcado como "featured" é rebaixado para
+      // "upcoming" automaticamente, garantindo só 1 destaque por vez.
+      let demoted = 0;
+      if(status === "featured"){
+        const others = cachedGames.filter(g => g.status === "featured" && g.id !== ref.id);
+        for(const other of others){
+          await updateDoc(doc(db, "games", other.id), { status: "upcoming" });
+          demoted++;
+        }
+      }
+
+      await setDoc(ref, data, { merge: true });
+
+      msg.textContent = "Jogo salvo com sucesso: " + data.title +
+        (demoted ? " (" + demoted + " jogo(s) anterior(es) movido(s) de destaque para próximos jogos)" : "");
+      msg.classList.add("ok");
+      if(!existingId){
+        $("gameId").value = ref.id;
+        $("saveBtn").textContent = "Atualizar jogo";
+      }
+    }catch(err){
+      console.error(err);
+      msg.textContent = "Erro ao salvar no Firestore: " + err.message;
+      msg.classList.add("err");
+    }
+  });
+
+  $("clearBtn").addEventListener("click", resetForm);
+
+  // ---------- games list ----------
+  function fmtDate(ms){
+    return new Date(ms).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+
+  const STATUS_LABEL = { featured: "destaque", upcoming: "próximo", finished: "encerrado" };
+
+  let cachedGames = [];
+
+  function renderGamesList(){
+    const el = $("gamesList");
+    if(!cachedGames.length){
+      el.innerHTML = '<div class="empty">Nenhum jogo cadastrado ainda.</div>';
+      return;
+    }
+    // mostra o destaque primeiro, depois os próximos jogos (por data), depois os encerrados
+    const order = { featured: 0, upcoming: 1, finished: 2 };
+    const sorted = [...cachedGames].sort((a,b) => (order[a.status] ?? 1) - (order[b.status] ?? 1) || a.startAt - b.startAt);
+
+    el.innerHTML = sorted.map(g => {
+      const st = (g.status === "finished" || g.status === "featured") ? g.status : "upcoming";
+      return `
+      <div class="game-row" data-id="${g.id}">
+        <div class="gi">
+          <div class="t">${g.teamA || "TIME A"} × ${g.teamB || "TIME B"}</div>
+          <div class="s">${g.title || "sem título"} · ${fmtDate(g.startAt)} · ${g.mediaType}</div>
+        </div>
+        <span class="badge ${st}">${STATUS_LABEL[st]}</span>
+        <div class="actions">
+          <button class="edit" data-id="${g.id}">Editar</button>
+          <button class="del" data-id="${g.id}">Excluir</button>
+        </div>
+      </div>`;
+    }).join("");
+
+    el.querySelectorAll(".edit").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const g = cachedGames.find(x => x.id === btn.dataset.id);
+        if(g) loadGameIntoForm(g);
+      });
+    });
+    el.querySelectorAll(".del").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const g = cachedGames.find(x => x.id === btn.dataset.id);
+        const label = g ? (g.teamA + " × " + g.teamB) : btn.dataset.id;
+        if(!confirm("Excluir permanentemente o jogo \"" + label + "\"? Isso apaga também os palpites e comentários dele.")) return;
+        try{
+          await deleteDoc(doc(db, "games", btn.dataset.id));
+        }catch(err){
+          alert("Erro ao excluir: " + err.message);
+        }
+      });
+    });
+  }
+
+  function subscribeGames(){
+    const q = query(gamesCol, orderBy("startAt", "asc"));
+    unsubscribeGames = onSnapshot(q, (snap) => {
+      cachedGames = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderGamesList();
+      syncStatusFields();
+    }, (err) => {
+      $("gamesList").innerHTML = '<div class="empty">Erro ao carregar jogos: ' + err.message + '</div>';
+    });
+  }
+
+  // ---------- init ----------
+  resetForm();
+</script>
+</body>
+</html>

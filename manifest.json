@@ -1,0 +1,109 @@
+{
+  "id": "https://www-ushk.onrender.com/login.html",
+  "name": "USHK ANGOLA",
+  "short_name": "USHK",
+  "description": "Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário.",
+  "start_url": "https://www-ushk.onrender.com/register.html",
+  "scope": "https://www-ushk.onrender.com/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "dir": "ltr",
+  "lang": "pt-MZ",
+  "theme_color": "#1a5d2a",
+  "background_color": "#0d3e1a",
+  "categories": ["finance", "productivity", "business"],
+  "prefer_related_applications": false,
+  "colors": [
+    {
+      "name": "primary-green",
+      "hex": "#1a5d2a"
+    },
+    {
+      "name": "dark-green",
+      "hex": "#0d3e1a"
+    },
+    {
+      "name": "accent-blue",
+      "hex": "#0066cc"
+    },
+    {
+      "name": "cristiano-gold",
+      "hex": "#fbbf24"
+    }
+  ],
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "img/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "img/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Registar",
+      "short_name": "Registar",
+      "description": "Registre-se com seu código de referência",
+      "url": "https://www-ushk.onrender.com/register.html",
+      "icons": [{ "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Apostar",
+      "short_name": "Apostar",
+      "description": "Aceda aos palpites e apostas",
+      "url": "https://www-ushk.onrender.com/index.html",
+      "icons": [{ "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "VIP",
+      "short_name": "VIP",
+      "description": "Programa VIP",
+      "url": "https://www-ushk.onrender.com/vip.html",
+      "icons": [{ "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Perfil",
+      "short_name": "Perfil",
+      "description": "Gerencie seu perfil",
+      "url": "https://www-ushk.onrender.com/profile.html",
+      "icons": [{ "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "img/screenshot-dashboard-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "img/screenshot-dashboard-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+ushk",
+      "url": "https://www-ushk.onrender.com/login.html"
+    }
+  ]
+}

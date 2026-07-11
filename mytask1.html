@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding-bottom: 70px; }
+        .container { max-width: 430px; margin: 0 auto; background: #f0f2f5; min-height: 100vh; }
+        
+        .header { background: linear-gradient(135deg, #1a5d2a, #0d3e1a); padding: 20px; text-align: center; color: white; border-radius: 0 0 25px 25px; }
+        .header h2 { font-size: 20px; }
+        .header p { font-size: 12px; opacity: 0.9; margin-top: 5px; }
+        
+        .balance-card { background: white; border-radius: 16px; padding: 20px; margin: -20px 15px 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .balance-amount { font-size: 32px; font-weight: bold; color: #22C55E; }
+        .balance-label { font-size: 12px; color: #666; margin-top: 5px; }
+        
+        .total-income-card { background: linear-gradient(135deg, #22C55E, #16a34a); border-radius: 16px; padding: 20px; margin: 15px; text-align: center; color: white; }
+        .total-income-label { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
+        .total-income-amount { font-size: 36px; font-weight: bold; }
+        .total-products-count { font-size: 12px; opacity: 0.9; margin-top: 8px; }
+        
+        .products-list { margin: 15px; }
+        .section-title { font-size: 16px; font-weight: bold; color: #1a5d2a; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; padding-left: 5px; }
+        .section-title i { color: #22C55E; }
+        
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        .product-card:hover { transform: translateY(-2px); }
+        
+        .product-header {
+            background: linear-gradient(135deg, #1a5d2a, #0d3e1a);
+            padding: 12px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .product-name { font-size: 16px; font-weight: bold; }
+        .product-badge { background: #FFD700; color: #1a5d2a; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        
+        .product-body { padding: 15px; }
+        .product-info-row { display: flex; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .product-info-label { color: #666; font-size: 13px; }
+        .product-info-value { font-weight: bold; color: #333; }
+        .product-income { color: #22C55E; font-size: 18px; font-weight: bold; }
+        
+        .countdown-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .countdown-label { color: #94a3b8; font-size: 11px; margin-bottom: 5px; }
+        .countdown-timer { font-size: 20px; font-weight: bold; font-family: monospace; color: #FFD700; letter-spacing: 2px; }
+        .countdown-status { font-size: 11px; margin-top: 5px; }
+        .status-available { color: #22C55E; }
+        .status-waiting { color: #f59e0b; }
+        
+        .next-reward-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 15px;
+            text-align: center;
+            color: white;
+        }
+        .next-reward-label { font-size: 12px; opacity: 0.8; margin-bottom: 8px; }
+        .next-reward-timer { font-size: 28px; font-weight: bold; font-family: monospace; color: #FFD700; letter-spacing: 3px; }
+        .next-reward-products { font-size: 11px; opacity: 0.7; margin-top: 8px; }
+        
+        .claim-btn {
+            background: #22C55E;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            width: calc(100% - 30px);
+            margin: 10px 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .claim-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .claim-btn.available { background: #22C55E; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        
+        .info-card { background: white; border-radius: 16px; padding: 15px; margin: 15px; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .info-row:last-child { border-bottom: none; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        
+        .empty-state { text-align: center; padding: 40px 20px; background: white; border-radius: 16px; }
+        .empty-icon { font-size: 48px; color: #ccc; margin-bottom: 15px; }
+        .empty-text { color: #999; font-size: 14px; margin-bottom: 15px; }
+        .buy-link { background: #22C55E; color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; display: inline-block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2><i class="fas fa-calendar-alt"></i> Ganancias Diarias</h2>
+        <p>Cada producto VIP genera ingresos diarios <strong>8%</strong> después de 24h</p>
+    </div>
+    
+    <div class="balance-card">
+        <div class="balance-amount" id="userBalance">0 kz</div>
+        <div class="balance-label">💰 Saldo disponible</div>
+    </div>
+    
+    <div class="total-income-card">
+        <div class="total-income-label">📈 Ingreso Diario Total</div>
+        <div class="total-income-amount" id="totalDailyIncome">0 kz</div>
+        <div class="total-products-count" id="totalProductsCount">0 productos activos</div>
+    </div>
+    
+    <div class="products-list">
+        <div class="section-title"><i class="fas fa-boxes"></i> Tus Productos VIP</div>
+        <div id="productsContainer">
+            <div style="text-align: center; padding: 40px;">
+                <i class="fas fa-spinner fa-spin"></i> Cargando...
+            </div>
+        </div>
+    </div>
+    
+    <div class="next-reward-card" id="nextRewardCard" style="display: none;">
+        <div class="next-reward-label">⏳ Próxima recompensa disponible en:</div>
+        <div class="next-reward-timer" id="nextRewardTimer">--:--:--</div>
+        <div class="next-reward-products" id="nextRewardProducts"></div>
+    </div>
+    
+    <button class="claim-btn" id="claimBtn" onclick="claimDailyIncome()">
+        <i class="fas fa-gift"></i> Recoger Ingreso Diario
+    </button>
+    
+    <div class="info-card">
+        <div class="info-row">
+            <span><i class="fas fa-percent"></i> Porcentaje de Retorno</span>
+            <span>8%</span>
+        </div>
+        <div class="info-row">
+            <span><i class="fas fa-clock"></i> Última recogida</span>
+            <span id="lastClaim">--</span>
+        </div>
+        <div class="info-row">
+            <span><i class="fas fa-chart-line"></i> Productos activos</span>
+            <span id="activeProductsCount">0</span>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item active" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item active" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, increment, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const token = localStorage.getItem('userToken');
+const userId = localStorage.getItem('userId');
+
+if (!token || !userId) window.location.href = 'login.html';
+
+let userProducts = [];
+let totalDailyIncome = 0;
+let lastClaimTime = null;
+let countdownInterval = null;
+let productIntervals = {};
+
+function showMessage(msg, type) {
+    var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+    $('body').append(div);
+    setTimeout(() => div.fadeOut(300, () => div.remove()), 2500);
+}
+
+function getProductNextAvailable(product) {
+    const now = new Date();
+    const purchaseDate = new Date(product.purchaseDate);
+    const lastClaimDate = product.lastClaimDate ? new Date(product.lastClaimDate) : null;
+    
+    if (!lastClaimDate) {
+        const firstAvailable = new Date(purchaseDate.getTime() + (24 * 60 * 60 * 1000));
+        return firstAvailable;
+    } else {
+        return new Date(lastClaimDate.getTime() + (24 * 60 * 60 * 1000));
+    }
+}
+
+function canClaimProduct(product) {
+    const nextAvailable = getProductNextAvailable(product);
+    return new Date() >= nextAvailable;
+}
+
+async function loadUserProducts() {
+    try {
+        const userRef = doc(db, 'users', userId);
+        const userSnap = await getDoc(userRef);
+        
+        if (!userSnap.exists()) {
+            $('#productsContainer').html('<div class="empty-state"><div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="empty-text">Usuário não encontrado</div></div>');
+            return;
+        }
+        
+        const userData = userSnap.data();
+        const purchases = userData.purchases || [];
+        
+        userProducts = purchases.filter(p => p.status === 'active' && p.price > 0);
+        totalDailyIncome = userProducts.reduce((sum, p) => sum + (p.dailyIncome || 0), 0);
+        
+        $('#totalDailyIncome').text(totalDailyIncome.toFixed(2) + ' kz');
+        $('#totalProductsCount').text(userProducts.length + ' productos activos');
+        $('#activeProductsCount').text(userProducts.length);
+        
+        displayProducts();
+        updateGlobalCountdown();
+    } catch(e) {
+        console.error('Error loading products:', e);
+        $('#productsContainer').html('<div class="empty-state"><div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="empty-text">Error al cargar productos</div></div>');
+    }
+}
+
+function displayProducts() {
+    if (userProducts.length === 0) {
+        $('#productsContainer').html(`
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                <div class="empty-text">No tienes productos VIP activos</div>
+                <a href="funds.html" class="buy-link">🛒 Comprar producto VIP</a>
+            </div>
+        `);
+        return;
+    }
+    
+    let html = '';
+    
+    for (let product of userProducts) {
+        const purchaseDate = new Date(product.purchaseDate);
+        const expiryDate = new Date(purchaseDate);
+        expiryDate.setDate(expiryDate.getDate() + 180);
+        const nextAvailable = getProductNextAvailable(product);
+        const isAvailable = canClaimProduct(product);
+        const now = new Date();
+        const diff = nextAvailable - now;
+        
+        let countdownHtml = '';
+        let statusHtml = '';
+        
+        if (isAvailable) {
+            statusHtml = '<span class="status-available"><i class="fas fa-check-circle"></i> Disponible para cobrar</span>';
+            countdownHtml = `<div class="countdown-timer">00:00:00</div>`;
+        } else if (diff > 0) {
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (3600000)) / (1000 * 60));
+            const seconds = Math.floor((diff % 60000) / 1000);
+            statusHtml = '<span class="status-waiting"><i class="fas fa-hourglass-half"></i> Esperando próxima recompensa</span>';
+            countdownHtml = `<div class="countdown-timer" id="timer_${product.id}">${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</div>`;
+            
+            if (productIntervals[product.id]) clearInterval(productIntervals[product.id]);
+            productIntervals[product.id] = setInterval(() => updateProductTimer(product.id, nextAvailable), 1000);
+        }
+        
+        html += `
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-name">${product.productName}</span>
+                    <span class="product-badge">8% retorno</span>
+                </div>
+                <div class="product-body">
+                    <div class="product-info-row">
+                        <span class="product-info-label">💰 Precio</span>
+                        <span class="product-info-value">${(product.price || 0).toLocaleString()} kz</span>
+                    </div>
+                    <div class="product-info-row">
+                        <span class="product-info-label">📈 Ingreso diario</span>
+                        <span class="product-income">+${(product.dailyIncome || 0).toFixed(2)} kz</span>
+                    </div>
+                    <div class="product-info-row">
+                        <span class="product-info-label">📅 Comprado</span>
+                        <span class="product-info-value">${purchaseDate.toLocaleDateString()}</span>
+                    </div>
+                    <div class="product-info-row">
+                        <span class="product-info-label">⏰ Vence</span>
+                        <span class="product-info-value">${expiryDate.toLocaleDateString()}</span>
+                    </div>
+                    <div class="countdown-card">
+                        <div class="countdown-label">⏳ Próxima recompensa</div>
+                        ${countdownHtml}
+                        <div class="countdown-status">${statusHtml}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    $('#productsContainer').html(html);
+}
+
+function updateProductTimer(productId, nextAvailable) {
+    const now = new Date();
+    const diff = nextAvailable - now;
+    
+    if (diff <= 0) {
+        clearInterval(productIntervals[productId]);
+        delete productIntervals[productId];
+        loadUserProducts();
+        return;
+    }
+    
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (3600000)) / (1000 * 60));
+    const seconds = Math.floor((diff % 60000) / 1000);
+    const timerHtml = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    const timerElement = document.getElementById(`timer_${productId}`);
+    if (timerElement) timerElement.innerHTML = timerHtml;
+}
+
+function updateGlobalCountdown() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    
+    const update = () => {
+        if (userProducts.length === 0) {
+            $('#nextRewardCard').hide();
+            return;
+        }
+        
+        let nearestTime = null;
+        let nearestProducts = [];
+        
+        for (let product of userProducts) {
+            const nextAvailable = getProductNextAvailable(product);
+            const now = new Date();
+            
+            if (nextAvailable > now) {
+                if (!nearestTime || nextAvailable < nearestTime) {
+                    nearestTime = nextAvailable;
+                    nearestProducts = [product];
+                } else if (nearestTime && nextAvailable.getTime() === nearestTime.getTime()) {
+                    nearestProducts.push(product);
+                }
+            }
+        }
+        
+        if (nearestTime) {
+            const now = new Date();
+            const diff = nearestTime - now;
+            
+            if (diff <= 0) {
+                $('#nextRewardTimer').html('00:00:00');
+                $('#nextRewardProducts').html('¡Recompensa disponible ahora!');
+                $('#claimBtn').prop('disabled', false);
+                $('#claimBtn').addClass('available');
+            } else {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (3600000)) / (1000 * 60));
+                const seconds = Math.floor((diff % 60000) / 1000);
+                $('#nextRewardTimer').html(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+                $('#nextRewardProducts').html(`${nearestProducts.map(p => p.productName).join(', ')}`);
+                $('#claimBtn').prop('disabled', true);
+                $('#claimBtn').removeClass('available');
+            }
+            $('#nextRewardCard').show();
+        } else {
+            $('#nextRewardTimer').html('00:00:00');
+            $('#nextRewardProducts').html('¡Todos los productos disponibles!');
+            $('#claimBtn').prop('disabled', false);
+            $('#claimBtn').addClass('available');
+            $('#nextRewardCard').show();
+        }
+    };
+    
+    update();
+    countdownInterval = setInterval(update, 1000);
+}
+
+async function loadDailyStatus() {
+    try {
+        const userRef = doc(db, 'users', userId);
+        const userSnap = await getDoc(userRef);
+        
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            lastClaimTime = userData.lastClaim ? new Date(userData.lastClaim) : null;
+            if (lastClaimTime) $('#lastClaim').text(lastClaimTime.toLocaleString());
+            else $('#lastClaim').text('Nunca');
+            
+            $('#userBalance').text((userData.balance || 0).toFixed(2) + ' kz');
+        }
+    } catch(e) {
+        console.error('Error:', e);
+    }
+}
+
+window.claimDailyIncome = async function() {
+    if (userProducts.length === 0) {
+        showMessage('⚠️ No tienes productos VIP activos', 'error');
+        return;
+    }
+    
+    const availableProducts = userProducts.filter(p => canClaimProduct(p));
+    
+    if (availableProducts.length === 0) {
+        showMessage('⚠️ No hay recompensas disponibles ahora', 'error');
+        return;
+    }
+    
+    const totalAvailable = availableProducts.reduce((sum, p) => sum + (p.dailyIncome || 0), 0);
+    
+    const btn = $('#claimBtn');
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Procesando...');
+    
+    try {
+        const userRef = doc(db, 'users', userId);
+        
+        await updateDoc(userRef, {
+            balance: increment(totalAvailable),
+            lastClaim: new Date()
+        });
+        
+        const updatedProducts = userProducts.map(p => {
+            if (availableProducts.find(ap => ap.id === p.id)) {
+                return { ...p, lastClaimDate: new Date() };
+            }
+            return p;
+        });
+        
+        await updateDoc(userRef, {
+            purchases: updatedProducts
+        });
+        
+        showMessage(`✅ Has recibido ${totalAvailable.toFixed(2)} kz de ${availableProducts.length} producto(s)!`, 'success');
+        await loadUserProducts();
+        await loadDailyStatus();
+    } catch(e) {
+        showMessage('Error: ' + e.message, 'error');
+    } finally {
+        btn.prop('disabled', false).html('<i class="fas fa-gift"></i> Recoger Ingreso Diario');
+    }
+};
+
+async function loadAllData() {
+    await loadUserProducts();
+    await loadDailyStatus();
+}
+
+loadAllData();
+setInterval(loadAllData, 30000);
+</script>
+</body>
+</html>

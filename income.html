@@ -1,0 +1,609 @@
+
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; min-height: 100vh; }
+        .header-bar { background: linear-gradient(135deg, #22C55E, #16A34A); padding: 15px; text-align: center; position: relative; }
+        .back-btn { position: absolute; left: 15px; top: 15px; color: white; font-size: 20px; text-decoration: none; }
+        .header-title { color: white; font-size: 18px; font-weight: bold; }
+        .header-subtitle { color: rgba(255,255,255,0.9); font-size: 12px; margin-top: 5px; }
+        .stats-grid { display: flex; gap: 12px; padding: 15px; background: white; margin: -20px 15px 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .stat-card { flex: 1; text-align: center; }
+        .stat-value { font-size: 22px; font-weight: bold; color: #22C55E; }
+        .stat-label { font-size: 11px; color: #666; margin-top: 5px; }
+        .invite-section { background: white; margin: 0 15px 15px; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .invite-title { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .invite-title i { color: #22C55E; }
+        .code-box { background: #f8f9fa; border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #e5e5e5; }
+        .code-label { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .code-value { font-size: 24px; font-weight: bold; color: #22C55E; direction: ltr; font-family: monospace; letter-spacing: 2px; background: white; padding: 12px; border-radius: 10px; text-align: center; border: 1px dashed #22C55E; word-break: break-all; overflow-wrap: break-word; }
+        .copy-btn { background: #22C55E; color: white; border: none; padding: 10px 20px; border-radius: 30px; margin-top: 12px; cursor: pointer; width: 100%; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+        .copy-btn:active { transform: scale(0.97); }
+        .copy-btn:hover { background: #16A34A; }
+        .invite-link-box { background: #f0fdf4; border-radius: 12px; padding: 12px; margin-top: 10px; }
+        .invite-link-label { font-size: 11px; color: #666; margin-bottom: 5px; }
+        .invite-link { font-size: 11px; color: #22C55E; word-break: break-all; overflow-wrap: break-word; font-family: monospace; background: white; padding: 8px; border-radius: 6px; border: 1px solid #22C55E; line-height: 1.4; }
+        .commission-section { background: white; margin: 0 15px 15px; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .commission-title { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-left: 3px solid #22C55E; padding-left: 10px; }
+        .commission-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .commission-level { font-size: 14px; color: #333; }
+        .commission-level span { font-size: 11px; color: #999; }
+        .commission-rate { font-size: 18px; font-weight: bold; color: #22C55E; }
+        .total-commission { background: linear-gradient(135deg, #22C55E, #16A34A); border-radius: 12px; padding: 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .total-commission-label { color: white; font-size: 14px; }
+        .total-commission-value { color: #FFD700; font-size: 24px; font-weight: bold; }
+        .team-section { background: white; margin: 0 15px 15px; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .team-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #eee; }
+        .team-tab { flex: 1; padding: 10px; text-align: center; font-size: 14px; font-weight: 500; cursor: pointer; color: #666; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .team-tab.active { color: #22C55E; border-bottom-color: #22C55E; }
+        .team-list { max-height: 400px; overflow-y: auto; }
+        .team-member { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; animation: slideIn 0.3s ease-out; }
+        .member-info { flex: 1; }
+        .member-phone { font-size: 14px; font-weight: 500; color: #333; }
+        .member-date { font-size: 10px; color: #999; margin-top: 3px; }
+        .member-status { display: flex; align-items: center; gap: 8px; }
+        .member-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; white-space: nowrap; }
+        .badge-active { background: #dcfce7; color: #166534; }
+        .badge-inactive { background: #fee2e2; color: #b91c1c; }
+        .badge-vip { background: #fef3c7; color: #d97706; }
+        .empty-team { text-align: center; padding: 40px 20px; color: #999; }
+        .empty-team i { font-size: 48px; margin-bottom: 15px; color: #ccc; }
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; animation: slideDown 0.3s ease-out; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        .loading { text-align: center; padding: 20px; color: #999; }
+        .loading i { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    </style>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, query, where, getDocs, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+    authDomain: "proibidoreplica.firebaseapp.com",
+    projectId: "proibidoreplica",
+    storageBucket: "proibidoreplica.firebasestorage.app",
+    messagingSenderId: "794009646952",
+    appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.firebaseModules = { auth, db, doc, getDoc, collection, query, where, getDocs, onSnapshot, setDoc };
+</script>
+
+<div class="app-container">
+    <div class="header-bar">
+        <a class='back-btn' href='/'><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">👥 Mi Equipo y Ganancias</div>
+        <div class="header-subtitle">Invita a tus amigos y gana comisión</div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-value" id="totalInvited">0</div><div class="stat-label">Total de invitados</div></div>
+        <div class="stat-card"><div class="stat-value" id="activeInvestors">0</div><div class="stat-label">Inversores activos</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalCommission">0</div><div class="stat-label">Comisión total</div></div>
+    </div>
+
+    <div class="invite-section">
+        <div class="invite-title"><i class="fas fa-gift"></i> Tu código de invitación</div>
+        <div class="code-box">
+            <div class="code-label">🎁 Código de invitación</div>
+            <div class="code-value" id="inviteCode">Cargando...</div>
+            <button class="copy-btn" id="copyCodeBtn"><i class="fas fa-copy"></i> Copiar código</button>
+        </div>
+        <div class="invite-link-box">
+            <div class="invite-link-label">🔗 Enlace de invitación directo</div>
+            <div class="invite-link" id="inviteLink">Cargando...</div>
+            <button class="copy-btn" id="copyLinkBtn" style="margin-top:10px; background:#16A34A;"><i class="fas fa-link"></i> Copiar enlace</button>
+        </div>
+        <div style="font-size: 12px; color: #666; text-align: center; margin-top: 12px;">
+            <i class="fas fa-info-circle"></i> Cada persona que se registre con tu código se une a tu equipo
+        </div>
+    </div>
+
+    <div class="commission-section">
+        <div class="commission-title"><i class="fas fa-chart-line"></i> Sistema de comisiones</div>
+        <div class="commission-item">
+            <div class="commission-level">Nivel 1 <span>(Invitados directos)</span></div>
+            <div class="commission-rate">25%</div>
+        </div>
+        <div class="commission-item">
+            <div class="commission-level">Nivel 2 <span>(Invitados de tus invitados)</span></div>
+            <div class="commission-rate">2%</div>
+        </div>
+        <div class="commission-item">
+            <div class="commission-level">Nivel 3 <span>(Invitados del nivel 2)</span></div>
+            <div class="commission-rate">1%</div>
+        </div>
+        <div class="total-commission">
+            <span class="total-commission-label">💰 Comisión total pendiente</span>
+            <span class="total-commission-value" id="totalCommissionAmount">0 kz</span>
+        </div>
+        <div style="font-size: 11px; color: #999; margin-top: 12px; text-align: center;">
+            <i class="fas fa-chart-simple"></i> Cuando los miembros de tu equipo compran productos VIP, ganas comisión inmediata
+        </div>
+    </div>
+
+    <div class="team-section">
+        <div class="team-tabs">
+            <div class="team-tab active" data-level="1">Nivel 1 <span id="tab1Count" style="font-size: 11px;">(0)</span></div>
+            <div class="team-tab" data-level="2">Nivel 2 <span id="tab2Count" style="font-size: 11px;">(0)</span></div>
+            <div class="team-tab" data-level="3">Nivel 3 <span id="tab3Count" style="font-size: 11px;">(0)</span></div>
+        </div>
+        <div class="team-list" id="teamList">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando equipo...</div>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class='nav-item' href='/'><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class='nav-item' href='/funds'><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class='nav-item' href='/income'><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class='nav-item' href='/mytask'><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class='nav-item' href='/profile'><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+const userId = localStorage.getItem('userId');
+
+if (!userId) {
+    window.location.href = 'login.html';
+}
+
+let currentLevel = 1;
+let teamData = { 
+    level1: [], 
+    level2: [], 
+    level3: [], 
+    level1Active: 0, 
+    level2Active: 0, 
+    level3Active: 0 
+};
+
+let firebaseAPI = null;
+let referralCache = {};
+let userCache = {}; // 🚀 CACHE DE USUARIOS
+
+function getFirebase() {
+    return new Promise((resolve) => {
+        const check = setInterval(() => {
+            if (window.firebaseModules) {
+                clearInterval(check);
+                resolve(window.firebaseModules);
+            }
+        }, 100);
+    });
+}
+
+function showMessage(msg, type) {
+    var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+    $('body').append(div);
+    setTimeout(function() { div.fadeOut(300, function() { $(this).remove(); }); }, 3000);
+}
+
+// ✅ OBTENER USUARIOS QUE USARON MI CÓDIGO
+async function getUsersWithMyReferralCode(db, myReferralCode) {
+    try {
+        const { collection, query, where, getDocs } = firebaseAPI;
+        console.log('🔍 Buscando usuarios con código referral:', myReferralCode);
+        
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('referredBy', '==', myReferralCode));
+        const snaps = await getDocs(q);
+        
+        const users = snaps.docs.map(d => ({ 
+            id: d.id, 
+            ...d.data() 
+        }));
+        
+        // 🚀 GUARDAR EN CACHE
+        users.forEach(u => {
+            userCache[u.id] = u;
+        });
+        
+        console.log('✅ Usuarios encontrados con mi código:', users.length);
+        return users;
+    } catch (err) {
+        console.error('❌ Error al buscar usuarios:', err.message);
+        return [];
+    }
+}
+
+// ✅ GUARDAR CONVIDADO EN LA ESTRUCTURA CORRECTA
+async function saveInvitedUser(db, referrerId, invitedUser) {
+    try {
+        const { setDoc, doc } = firebaseAPI;
+        
+        const invitedRef = doc(db, 'referrals', referrerId, 'invited', invitedUser.id);
+        await setDoc(invitedRef, {
+            invitedUserId: invitedUser.id,
+            invitedPhone: invitedUser.phone || '',
+            invitedEmail: invitedUser.email || '',
+            invitedAt: new Date().toISOString(),
+            invitedCode: invitedUser.referralCode || '',
+            phone: invitedUser.phone || '',
+            email: invitedUser.email || '',
+            createdAt: invitedUser.createdAt || new Date().toISOString(),
+            vipLevel: invitedUser.vipLevel || 0,
+            hasPurchased: invitedUser.hasPurchased || false,
+            balance: invitedUser.balance || 0
+        });
+        
+        return true;
+    } catch (e) {
+        console.warn('⚠️ Error al guardar convidado:', e.message);
+        return false;
+    }
+}
+
+// ✅ VERIFICAR SI MIEMBRO ESTA ACTIVO
+function isActiveMember(member) {
+    return member.hasPurchased === true || 
+           member.hasPurchased === 'true' || 
+           (member.vipLevel && Number(member.vipLevel) > 0);
+}
+
+// ✅ OBTENER CONVIDADOS CON DATOS DEL CACHE (SIN ENRICHIR)
+async function getMyInvited(db, userId) {
+    try {
+        if (referralCache[userId]) {
+            console.log('⚡ Cache hit para:', userId);
+            return referralCache[userId];
+        }
+
+        const { collection, getDocs } = firebaseAPI;
+        console.log('🔍 Buscando en /referrals/' + userId + '/invited');
+        
+        const invitedRef = collection(db, 'referrals', userId, 'invited');
+        const snaps = await getDocs(invitedRef);
+        
+        const invited = snaps.docs.map(d => ({ 
+            id: d.id, 
+            ...d.data() 
+        }));
+        
+        referralCache[userId] = invited;
+        console.log('✅ Documentos encontrados:', invited.length);
+        return invited;
+    } catch (err) {
+        console.error('❌ Error al buscar en referrals:', err.message);
+        return [];
+    }
+}
+
+// ✅ CARREGAR DADOS DEL EQUIPO (OPTIMIZADO)
+async function loadTeamData() {
+    try {
+        firebaseAPI = await getFirebase();
+        const { db, doc: firebaseDoc, getDoc, collection, getDocs, query, where } = firebaseAPI;
+
+        console.log('\n📊 Iniciando carga de equipo...');
+        console.log('User ID:', userId);
+        
+        referralCache = {};
+        userCache = {};
+
+        // OBTER DATOS DO USUÁRIO ATUAL
+        const userRef = firebaseDoc(db, 'users', userId);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+            showMessage('Error: Usuario no encontrado', 'error');
+            return;
+        }
+
+        const userData = userSnap.data();
+        const inviteCode = userData.referralCode || userData.phone || userId.substring(0, 8);
+        const inviteLink = window.location.origin + '/register.html?ref=' + encodeURIComponent(inviteCode);
+
+        console.log('✅ Usuario encontrado - Código:', inviteCode);
+
+        $('#inviteCode').text(inviteCode);
+        $('#inviteLink').text(inviteLink);
+
+        // ✅ NIVEL 1: BUSCAR Y GUARDAR CONVIDADOS
+        console.log('\n📍 Cargando Nivel 1...');
+        const usersWithMyCode = await getUsersWithMyReferralCode(db, inviteCode);
+        
+        for (const user of usersWithMyCode) {
+            await saveInvitedUser(db, userId, user);
+        }
+        
+        const rawLevel1 = await getMyInvited(db, userId);
+        const level1Members = rawLevel1.map(r => ({
+            ...r,
+            userId: r.invitedUserId || r.id,
+            joinAt: r.createdAt || r.invitedAt || null,
+            phone: r.phone || r.invitedPhone || 'Sin contacto',
+            email: r.email || r.invitedEmail || '',
+            vipLevel: r.vipLevel || 0,
+            hasPurchased: r.hasPurchased || false
+        }));
+        
+        const level1ActiveCount = level1Members.filter(isActiveMember).length;
+        console.log('✅ Nivel 1:', level1Members.length, 'miembros,', level1ActiveCount, 'activos');
+
+        // ✅ NIVEL 2: EJECUTAR EN PARALELO
+        console.log('📍 Cargando Nivel 2...');
+        const level2Promises = level1Members.map(m1 => 
+            m1.userId ? getMyInvited(db, m1.userId) : Promise.resolve([])
+        );
+        const level2Results = await Promise.all(level2Promises);
+
+        const level2Members = [];
+        for (let i = 0; i < level2Results.length; i++) {
+            const m1 = level1Members[i];
+            const raw2 = level2Results[i];
+            
+            for (const r2 of raw2) {
+                level2Members.push({
+                    ...r2,
+                    userId: r2.invitedUserId || r2.id,
+                    parentId: m1.userId,
+                    joinAt: r2.createdAt || r2.invitedAt || null,
+                    phone: r2.phone || r2.invitedPhone || 'Sin contacto',
+                    email: r2.email || r2.invitedEmail || '',
+                    vipLevel: r2.vipLevel || 0,
+                    hasPurchased: r2.hasPurchased || false
+                });
+            }
+        }
+        
+        const level2ActiveCount = level2Members.filter(isActiveMember).length;
+        console.log('✅ Nivel 2:', level2Members.length, 'miembros,', level2ActiveCount, 'activos');
+
+        // ✅ NIVEL 3: EJECUTAR EN PARALELO
+        console.log('📍 Cargando Nivel 3...');
+        const level3Promises = level2Members.map(m2 => 
+            m2.userId ? getMyInvited(db, m2.userId) : Promise.resolve([])
+        );
+        const level3Results = await Promise.all(level3Promises);
+
+        const level3Members = [];
+        for (let i = 0; i < level3Results.length; i++) {
+            const m2 = level2Members[i];
+            const raw3 = level3Results[i];
+            
+            for (const r3 of raw3) {
+                level3Members.push({
+                    ...r3,
+                    userId: r3.invitedUserId || r3.id,
+                    parentId: m2.userId,
+                    joinAt: r3.createdAt || r3.invitedAt || null,
+                    phone: r3.phone || r3.invitedPhone || 'Sin contacto',
+                    email: r3.email || r3.invitedEmail || '',
+                    vipLevel: r3.vipLevel || 0,
+                    hasPurchased: r3.hasPurchased || false
+                });
+            }
+        }
+        
+        const level3ActiveCount = level3Members.filter(isActiveMember).length;
+        console.log('✅ Nivel 3:', level3Members.length, 'miembros,', level3ActiveCount, 'activos');
+
+        teamData = {
+            level1: level1Members,
+            level1Active: level1ActiveCount,
+            level2: level2Members,
+            level2Active: level2ActiveCount,
+            level3: level3Members,
+            level3Active: level3ActiveCount
+        };
+
+        const totalMembers = level1Members.length + level2Members.length + level3Members.length;
+        const activeInvestors = level1ActiveCount + level2ActiveCount + level3ActiveCount;
+
+        console.log('\n📊 TOTALES: ', totalMembers, 'miembros,', activeInvestors, 'activos');
+
+        $('#totalInvited').text(totalMembers);
+        $('#activeInvestors').text(activeInvestors);
+        $('#tab1Count').text('(' + level1Members.length + ')');
+        $('#tab2Count').text('(' + level2Members.length + ')');
+        $('#tab3Count').text('(' + level3Members.length + ')');
+
+        // ✅ CALCULAR COMISSIONES
+        console.log('💰 Buscando comisiones...');
+        let totalCommission = 0;
+        try {
+            const balancesRef = collection(db, 'balances');
+            const q = query(balancesRef, where('userId', '==', userId), where('type', '==', 'referral_bonus'));
+            const snaps = await getDocs(q);
+            
+            snaps.forEach(s => {
+                totalCommission += Number(s.data().amount || 0);
+            });
+        } catch (e) {
+            console.warn('⚠️ Error al calcular comisiones:', e.message);
+        }
+
+        $('#totalCommission').text(totalCommission.toFixed(0));
+        $('#totalCommissionAmount').text(totalCommission.toFixed(2) + ' kz');
+
+        console.log('✅ Carga completada en:', new Date().toLocaleTimeString());
+        renderTeamList();
+        
+    } catch (error) {
+        console.error('❌ ERROR:', error);
+        showMessage('Error al cargar equipo', 'error');
+        $('#teamList').html(`
+            <div class="empty-team">
+                <i class="fas fa-wifi"></i>
+                <p>Error de conexión</p>
+            </div>
+        `);
+    }
+}
+
+function renderTeamList() {
+    let members = [];
+    if (currentLevel === 1) members = teamData.level1 || [];
+    else if (currentLevel === 2) members = teamData.level2 || [];
+    else members = teamData.level3 || [];
+
+    if (members.length === 0) {
+        $('#teamList').html(`
+            <div class="empty-team">
+                <i class="fas fa-users"></i>
+                <p>No hay miembros</p>
+            </div>
+        `);
+        return;
+    }
+
+    let html = '';
+    members.forEach((member, index) => {
+        const isActive = isActiveMember(member);
+        const statusClass = isActive && member.vipLevel && Number(member.vipLevel) > 0 ? 'badge-vip' : 
+                           isActive ? 'badge-active' : 'badge-inactive';
+        const statusText = isActive && member.vipLevel && Number(member.vipLevel) > 0 ? `VIP${member.vipLevel} ✓` : 
+                          isActive ? '✓ Activo' : '✗ Inactivo';
+
+        let joinDate = 'N/D';
+        if (member.joinAt) {
+            try {
+                const d = new Date(member.joinAt);
+                if (!isNaN(d.getTime())) {
+                    joinDate = d.toLocaleDateString('es-MZ');
+                }
+            } catch (e) {
+                joinDate = String(member.joinAt).substring(0, 10);
+            }
+        }
+
+        html += `
+            <div class="team-member" style="animation-delay: ${index * 0.02}s;">
+                <div class="member-info">
+                    <div class="member-phone">📱 ${member.phone}</div>
+                    <div class="member-date">
+                        <i class="fas fa-calendar-alt"></i> ${joinDate}
+                        ${member.email ? `<br><i class="fas fa-envelope"></i> ${member.email}` : ''}
+                    </div>
+                </div>
+                <div class="member-status">
+                    <div class="member-badge ${statusClass}">${statusText}</div>
+                </div>
+            </div>
+        `;
+    });
+    
+    $('#teamList').html(html);
+}
+
+function copyInviteCode() {
+    const code = $('#inviteCode').text();
+    if (code && code !== 'Cargando...') {
+        navigator.clipboard.writeText(code).then(() => {
+            showMessage('✅ ¡Código copiado!', 'success');
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showMessage('✅ ¡Código copiado!', 'success');
+        });
+    }
+}
+
+function copyInviteLink() {
+    const link = $('#inviteLink').text();
+    if (link && link !== 'Cargando...') {
+        navigator.clipboard.writeText(link).then(() => {
+            showMessage('✅ ¡Enlace copiado!', 'success');
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = link;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showMessage('✅ ¡Enlace copiado!', 'success');
+        });
+    }
+}
+
+$(document).ready(function() {
+    $('#copyCodeBtn').on('click', copyInviteCode);
+    $('#copyLinkBtn').on('click', copyInviteLink);
+
+    $('.team-tab').on('click', function() {
+        $('.team-tab').removeClass('active');
+        $(this).addClass('active');
+        currentLevel = parseInt($(this).data('level'));
+        renderTeamList();
+    });
+
+    console.log('🚀 Inicializando...');
+    loadTeamData();
+
+    setInterval(loadTeamData, 120000);
+});
+</script>
+</body>
+</html>
