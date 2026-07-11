@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f0f2f5; min-height: 100vh; position: relative; }
+        
+        .header-section { position: relative; width: 100%; background: linear-gradient(135deg, #1a5d2a 0%, #0d3e1a 100%); padding: 20px 20px 50px; border-radius: 0 0 30px 30px; }
+        .support-icon { position: absolute; top: 15px; left: 20px; width: 35px; height: 35px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .support-icon i { color: white; font-size: 18px; }
+        .top-right-actions { position: absolute; top: 18px; right: 20px; }
+        .language-text { color: white; font-size: 13px; cursor: pointer; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; text-decoration: none; }
+        .logo-center { text-align: center; margin-bottom: 10px; }
+        .logo-circle { width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+        .logo-circle i { font-size: 45px; color: #22C55E; }
+        .main-title { text-align: center; color: white; font-size: 20px; font-weight: bold; }
+        
+        .main-content { padding: 0 15px; margin-top: -30px; }
+        
+        .balance-card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .balance-amount { font-size: 35px; font-weight: bold; color: #22C55E; }
+        .balance-label { font-size: 12px; color: #666; margin-top: 5px; }
+        
+        .wealth-life-section { margin-bottom: 15px; }
+        .tab-con { background: white; border-radius: 20px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .tab-a { font-size: 18px; font-weight: bold; color: #1a1a1a; margin-bottom: 15px; text-align: center; }
+        .white-card { background: transparent; }
+        .tab-c { display: flex; gap: 15px; }
+        .tab-d { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 5px; text-align: center; }
+        .tab-e { background: #22C55E; color: white; border: none; padding: 5px 10px; border-radius: 15px; font-size: 9px; cursor: pointer; width: 100%; }
+        .img-a { margin-top: 10px; text-align: center; }
+        .img-a i { font-size: 40px; color: #fbbf24; }
+        .flex { display: flex; }
+        .flex-between { justify-content: space-between; align-items: center; }
+        .mb-f-a { margin-bottom: 15px; }
+        .tab-f { flex: 1; }
+        .tab-g { font-size: 14px; font-weight: bold; color: #333; }
+        .tab-h { font-size: 11px; color: #888; margin-top: 3px; }
+        .tab-h span { color: #22C55E; }
+        .img-b i { font-size: 40px; }
+        
+        .three-column-grid { display: flex; gap: 12px; margin-bottom: 15px; }
+        .feature-card { flex: 1; background: white; border-radius: 16px; padding: 15px 8px; text-align: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .feature-title { font-size: 12px; font-weight: bold; color: #333; margin-bottom: 8px; }
+        .feature-icon { font-size: 30px; }
+        
+        .banner { background: white; border-radius: 16px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .banner-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .banner-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .banner-title { color: white; font-size: 14px; font-weight: bold; }
+        .banner-subtitle { color: rgba(255,255,255,0.9); font-size: 10px; margin-top: 5px; }
+        
+        .two-column-grid { display: flex; gap: 12px; margin-bottom: 15px; }
+        .two-column-card { flex: 1; background: white; border-radius: 16px; padding: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .two-column-card-title { font-size: 13px; font-weight: bold; color: #333; }
+        .two-column-card-action { font-size: 9px; color: #22C55E; margin-top: 5px; }
+        .two-column-card-image i { font-size: 35px; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10000; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        .tc { text-align: center; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-section">
+        <div class="support-icon" onclick="window.location.href='service.html'"><i class="fas fa-headset"></i></div>
+        <div class="top-right-actions"><a href="javascript:void(0);" class="language-text" onclick="openLanguageModal()">Idioma</a></div>
+        <div class="logo-center"><div class="logo-circle"><i class="fas fa-chart-line"></i></div></div>
+        <div class="main-title">USHK Angola</div>
+    </div>
+    
+    <div class="main-content">
+        <div class="balance-card">
+            <div class="balance-amount" id="userBalance">0 AO</div>
+            <div class="balance-label">Saldo disponível</div>
+        </div>
+        
+        <div class="wealth-life-section">
+            <div class="tab-con">
+                <div class="tab-a tc">Centro de Riqueza</div>
+                <div class="white-card">
+                    <div class="tab-c">
+                        <div style="width: 120px; cursor: pointer;" onclick="location.href='vip.html'">
+                            <div class="tc tab-d text-hidden">Atualizar VIP</div>
+                            <button class="tc tab-e text-hidden" onclick="event.stopPropagation(); location.href='vip.html'">Ganhe mais &gt;&gt;</button>
+                            <div class="img-a"><i class="fas fa-crown"></i></div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <div class="flex flex-between mb-f-a" onclick="location.href='recharge.html'" style="cursor: pointer;">
+                                <div class="tab-f"><div class="tab-g">Depositar</div><div class="tab-h">Recarregue seu saldo <span>&gt;&gt;</span></div></div>
+                                <div class="img-b"><i class="fas fa-money-bill-wave"></i></div>
+                            </div>
+                            <div class="flex flex-between" onclick="location.href='retrait.html'" style="cursor: pointer;">
+                                <div class="tab-f"><div class="tab-g">Sacar</div><div class="tab-h">Saque instantâneo <span>&gt;&gt;</span></div></div>
+                                <div class="img-b"><i class="fas fa-hand-holding-usd"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="three-column-grid">
+            <div class="feature-card" onclick="location.href='spin.html'"><div class="feature-title">Fundo de riqueza</div><div class="feature-icon"><i class="fas fa-chart-line"></i></div></div>
+            <div class="feature-card" onclick="location.href='football.html'"><div class="feature-title">Palpite</div><div class="feature-icon"><i class="fas fa-circle-notch fa-spin"></i></div></div>
+            <div class="feature-card" onclick="location.href='treasure.html'"><div class="feature-title">Recompensa do Tesouro</div><div class="feature-icon"><i class="fas fa-gift"></i></div></div>
+        </div>
+        
+<div class="banner banner-yellow" onclick="location.href='income.html'" style="background-image: url('https://i.postimg.cc/d3t4LCB1/Copilot-20260708-100037.png'); background-size: cover; background-position: center;">
+    <div class="banner-content"><div class="banner-title">Convide amigos e ganhe recompensas</div><div class="banner-subtitle">Ganhe recompensas quando seus amigos se juntarem</div></div>
+    <i class="fas fa-users" style="color:white; font-size:25px;"></i>
+</div>
+        
+        <div class="banner banner-green" onclick="location.href='football.html'" style="background-image: url('https://i.postimg.cc/tTpkwx2v/10316785-futebol-modelo-design-futebol-banner-esporte-layout-design-verde-tema-vetor.jpg'); background-size: cover; background-position: center;">
+            <div class="banner-content"><div class="banner-title">Previsões de Futebol Mundial</div><div class="banner-subtitle">Faça suas previsões</div></div>
+        </div>
+
+        
+        <div class="two-column-grid">
+            <div class="two-column-card" onclick="showAgentCenter()">
+                <div class="two-column-card-content"><div class="two-column-card-title">Central do Agente</div></div>
+                <div class="two-column-card-image"><i class="fas fa-user-tie"></i></div>
+            </div>
+            <div class="two-column-card" onclick="checkEmployeeStatus()">
+                <div class="two-column-card-content"><div class="two-column-card-title">Minha Equipe</div><div class="two-column-card-action">Ver equipe de convidados &gt;&gt;</div></div>
+                <div class="two-column-card-image"><i class="fas fa-users"></i></div>
+            </div>
+        </div>
+        
+        <div class="wealth-life-section">
+            <div class="tab-con">
+                <div class="tab-a tc">Trabalho</div>
+                <div class="white-card">
+                    <div class="tab-c">
+                        <div style="width: 120px;" onclick="location.href='checkin.html'">
+                            <div class="tc tab-d text-hidden">Check-in Diário</div>
+                            <button class="tc tab-e text-hidden" onclick="event.stopPropagation(); location.href='checkin.html'">Registrar</button>
+                            <div class="img-a"><i class="fas fa-calendar-check"></i></div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <div class="flex flex-between mb-f-a" onclick="location.href='employee.html'" style="cursor: pointer;">
+                                <div class="tab-f"><div class="tab-g">Tarefas de Funcionário</div><div class="tab-h">Entrar &gt;&gt;</div></div>
+                                <div class="img-b"><i class="fas fa-tasks"></i></div>
+                            </div>
+                            <div class="flex flex-between" onclick="location.href='manager.html'" style="cursor: pointer;">
+                                <div class="tab-f"><div class="tab-g">Tarefas de Gerente</div><div class="tab-h">Entrar &gt;&gt;</div></div>
+                                <div class="img-b"><i class="fas fa-chart-line"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bottom-nav">
+        <a class="nav-item active" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Início</div></a>
+        <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+        <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganhos</div></a>
+        <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tarefas</div></a>
+        <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Minha Conta</div></a>
+    </footer>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    function showMessage(msg, type) { 
+        var div = $('<div class="toast ' + type + '">' + msg + '</div>'); 
+        $('body').append(div); 
+        setTimeout(function(){ div.fadeOut(300, function(){ $(this).remove(); }); }, 2500);
+    }
+
+    function showAgentCenter() { showMessage("Aguarde pacientemente, estará disponível em breve", 'error'); }
+    function checkEmployeeStatus() { showMessage("Primeiro torne-se um funcionário oficial", 'error'); }
+
+    async function loadUserBalance() {
+        if (!token || !userId) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        try {
+            const userDocRef = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDocRef);
+            
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.data();
+                const balance = userData.balance || 0;
+                document.getElementById('userBalance').innerHTML = balance.toLocaleString() + ' AO';
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+            } else {
+                // Fallback para dados locais
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const user = JSON.parse(currentUser);
+                    document.getElementById('userBalance').innerHTML = (user.balance || 0).toLocaleString() + ' AO';
+                }
+            }
+        } catch(error) {
+            console.error('Erro ao carregar saldo:', error);
+            // Fallback para dados locais
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                document.getElementById('userBalance').innerHTML = (user.balance || 0).toLocaleString() + ' AO';
+            }
+        }
+    }
+
+    var overlay = null;
+    window.openLanguageModal = function() {
+        if(overlay) return;
+        overlay = $('<div class="overlay">');
+        var modal = $('<div class="language-modal"><h3><i class="fas fa-globe"></i> Selecione o Idioma</h3><div class="language-option" data-lang="pt">🇧🇷 Português</div><div class="language-option" data-lang="en">🇬🇧 English</div><div class="language-option" data-lang="es">🇪🇸 Español</div><button class="language-close-btn">Fechar</button></div>');
+        $('body').append(overlay).append(modal);
+        modal.find('.language-option').on('click', function(){ var lang = $(this).data('lang'); showMessage('Idioma: '+lang, 'success'); modal.remove(); overlay.remove(); overlay=null; });
+        modal.find('.language-close-btn').on('click', function(){ modal.remove(); overlay.remove(); overlay=null; });
+    };
+
+    window.showMessage = showMessage;
+    window.showAgentCenter = showAgentCenter;
+    window.checkEmployeeStatus = checkEmployeeStatus;
+
+    // Verificar autenticação
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            loadUserBalance();
+            setInterval(loadUserBalance, 30000);
+        }
+    });
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/pwabuilder-sw.js').catch(console.error);
+}
+</script>
+</body>
+</html>
