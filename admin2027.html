@@ -1,0 +1,4143 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+    <title>Painel Administrativo - BotStrak</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        dark: '#0f172a',
+                        light: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* --app-height é calculado via JS com a altura real e visível da
+           tela (window.visualViewport / innerHeight). É isso que resolve o
+           corte da caixa de digitação em celulares: 100vh, em muitos
+           navegadores mobile, inclui a área da barra de endereço mesmo
+           quando ela não está ocupando espaço visível de verdade. */
+        :root { --app-height: 100vh; }
+
+        html, body {
+            width: 100%;
+            height: 100vh;
+            height: var(--app-height);
+            overflow: hidden;
+            overscroll-behavior: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f172a;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .gradient-primary { background: linear-gradient(135deg, #1e40af, #1e3a8a); }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes toastSlide { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .message-animation { animation: slideIn 0.3s ease; }
+
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #1e40af;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .toast-animation { animation: toastSlide 0.3s ease-out; }
+
+        textarea { resize: none; font-family: inherit; }
+        textarea:focus { outline: none; }
+
+        .tab-active { background: #1e40af; color: white; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: var(--app-height);
+            background: rgba(0, 0, 0, 0.7);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000; overflow-y: auto; padding: 1rem;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(30, 64, 175, 0.2);
+        }
+
+        .table-responsive { overflow-x: auto; }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .main-container { display: flex; height: 100vh; height: var(--app-height); width: 100%; flex-direction: row; gap: 0; }
+        .main-container.hidden { display: none; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+            border-right: 1px solid #1e3a8a;
+            overflow-y: auto; flex-shrink: 0;
+            display: flex; flex-direction: column; color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease; z-index: 100;
+        }
+        /* Classe dedicada para fechar a sidebar (evita conflito com a utilitária .hidden !important) */
+        .sidebar.sidebar-closed {
+            transform: translateX(-100%);
+            position: fixed; left: 0; top: 0; height: 100vh; height: var(--app-height); width: 280px; z-index: 100;
+        }
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: var(--app-height);
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 99;
+        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .sidebar-header p { font-size: 0.875rem; opacity: 0.9; }
+        .sidebar-header button {
+            width: 100%; margin-top: 1rem; background: #dc2626; color: white; border: none;
+            padding: 0.5rem; border-radius: 0.375rem; cursor: pointer; font-weight: 600;
+            transition: background 0.2s;
+        }
+        .sidebar-header button:hover { background: #b91c1c; }
+
+        .sidebar-menu { flex: 1; overflow-y: auto; padding: 1rem; }
+
+        .tab-btn {
+            width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.375rem;
+            transition: all 0.2s; color: rgba(255, 255, 255, 0.8); cursor: pointer;
+            border: none; background: transparent; margin-bottom: 0.5rem; font-size: 0.875rem;
+        }
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+        .tab-btn.tab-active { background: rgba(255, 255, 255, 0.2); color: white; font-weight: 600; }
+
+        .sidebar-footer { padding: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-footer button {
+            width: 100%; background: rgba(255, 255, 255, 0.1); color: white; border: none;
+            padding: 0.5rem; border-radius: 0.375rem; cursor: pointer; font-weight: 600;
+            transition: background 0.2s;
+        }
+        .sidebar-footer button:hover { background: rgba(255, 255, 255, 0.2); }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column;
+            background: linear-gradient(to bottom right, #1e293b, #0f172a);
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: #1e293b; border-bottom: 1px solid #1e3a8a; padding: 1rem;
+            display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+            flex-shrink: 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: padding 0.2s ease;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; flex: 1; }
+        .menu-toggle {
+            background: #1e40af; border: none; color: white; width: 2.5rem; height: 2.5rem;
+            border-radius: 0.375rem; cursor: pointer; font-size: 1.25rem; transition: background 0.2s;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .menu-toggle:hover { background: #1e3a8a; }
+        .menu-toggle:active { transform: scale(0.95); }
+        .header-title { font-size: 1.5rem; font-weight: bold; color: white; flex: 1; }
+        .header-time { text-align: right; color: #94a3b8; font-size: 0.875rem; flex-shrink: 0; }
+
+        /* ===== CONTENT AREA ===== */
+        .content-area { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+
+        /* ===== MESSAGES TAB LAYOUT ===== */
+        .messages-container { display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; min-height: 0; }
+        .messages-stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem; padding: 1.5rem 1rem 1rem 1rem; flex-shrink: 0;
+        }
+        .messages-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; flex: 1; min-height: 0; overflow: hidden; padding: 1rem; }
+
+        .chat-list-section {
+            background: #1e293b; border-radius: 0.5rem; border: 1px solid #334155;
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            min-height: 0;
+        }
+        .chat-list-header { padding: 1rem; border-bottom: 1px solid #334155; flex-shrink: 0; }
+        .chat-search {
+            width: 100%; padding: 0.5rem; background: #0f172a; border: 1px solid #334155;
+            border-radius: 0.375rem; color: white; font-size: 0.875rem;
+        }
+        .chat-search::placeholder { color: #64748b; }
+        .chat-search:focus { outline: none; border-color: #1e40af; }
+        .chat-list { flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0; }
+
+        .chat-item {
+            padding: 0.75rem 1rem; border-bottom: 1px solid #334155; cursor: pointer;
+            transition: all 0.2s; background: transparent; border: none; width: 100%;
+            text-align: left; color: #cbd5e1; display: flex; justify-content: space-between;
+            align-items: center; gap: 0.5rem;
+        }
+        .chat-item:hover { background: #0f172a; }
+        .chat-item.active {
+            background: rgba(30, 64, 175, 0.2); border-left: 4px solid #1e40af;
+            padding-left: calc(1rem - 4px); color: #1e40af;
+        }
+        .chat-item-info { flex: 1; overflow: hidden; }
+        .chat-item-uid { font-weight: 600; font-size: 0.875rem; color: white; }
+        .chat-item-preview { font-size: 0.75rem; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .chat-item-time { font-size: 0.7rem; color: #64748b; flex-shrink: 0; }
+        .chat-item-badge {
+            background: #1e40af; color: white; border-radius: 9999px; width: 1.5rem; height: 1.5rem;
+            display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
+            font-weight: bold; flex-shrink: 0;
+        }
+
+        .chat-view-section {
+            background: #1e293b; border-radius: 0.5rem; border: 1px solid #334155;
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            min-height: 0;
+        }
+        .chat-header {
+            padding: 1rem; border-bottom: 1px solid #334155; background: #0f172a;
+            display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-shrink: 0;
+            transition: padding 0.2s ease;
+        }
+        .chat-header-info { flex: 1; overflow: hidden; }
+        .chat-header-name { font-weight: bold; color: white; font-size: 1rem; margin-bottom: 0.25rem; }
+        .chat-header-uid { font-size: 0.75rem; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .chat-header-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+        .btn-small {
+            background: #1e40af; color: white; border: none; padding: 0.5rem 1rem;
+            border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-small:hover { background: #1e3a8a; }
+        .btn-small.danger { background: #dc2626; }
+        .btn-small.danger:hover { background: #b91c1c; }
+
+        .empty-chat { flex: 1; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1rem; }
+
+        .messages-area {
+            flex: 1; overflow-y: auto; overflow-x: hidden; padding: 1rem;
+            display: flex; flex-direction: column; gap: 0.75rem; background: #1e293b;
+            min-height: 0;
+        }
+        .message-group { display: flex; flex-direction: column; gap: 0.5rem; animation: slideIn 0.3s ease; }
+
+        .message-user {
+            background: #065f46; border-left: 4px solid #10b981; border-radius: 0.5rem;
+            padding: 0.75rem 1rem; width: fit-content; max-width: 85%;
+        }
+        .message-user.image, .message-user.audio { width: fit-content; }
+        .message-user img { max-width: 300px; border-radius: 0.375rem; cursor: pointer; transition: opacity 0.2s; }
+        .message-user img:hover { opacity: 0.8; }
+        .message-user audio { max-width: 300px; }
+
+        .message-admin {
+            background: #1e3a8a; border-left: 4px solid #3b82f6; border-radius: 0.5rem;
+            padding: 0.75rem 1rem; width: fit-content; max-width: 85%; margin-left: auto;
+        }
+        .message-admin.image, .message-admin.audio { width: fit-content; }
+        .message-admin img { max-width: 300px; border-radius: 0.375rem; cursor: pointer; transition: opacity 0.2s; }
+        .message-admin img:hover { opacity: 0.8; }
+        .message-admin audio { max-width: 300px; }
+
+        .message-sender { font-size: 0.75rem; font-weight: bold; margin-bottom: 0.25rem; opacity: 0.8; }
+        .message-user .message-sender { color: #86efac; }
+        .message-admin .message-sender { color: #93c5fd; }
+        .message-content { font-size: 0.875rem; word-wrap: break-word; line-height: 1.4; }
+        .message-time { font-size: 0.7rem; margin-top: 0.5rem; opacity: 0.7; }
+
+        .input-section {
+            background: #0f172a; border-top: 1px solid #334155; padding: 1rem; flex-shrink: 0;
+            display: flex; flex-direction: column; gap: 0.5rem;
+            /* Nunca deixa a caixa de digitação embaixo da barra de gestos/notch do celular */
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+        .input-row { display: flex; gap: 0.5rem; }
+        .input-reply {
+            flex: 1; padding: 0.5rem; background: #1e293b; border: 1px solid #334155;
+            border-radius: 0.375rem; color: white; font-size: 0.875rem; resize: none; max-height: 100px;
+        }
+        .input-reply:focus { outline: none; border-color: #1e40af; }
+        .btn-icon {
+            background: #1e293b; border: 1px solid #334155; color: white; padding: 0.5rem;
+            border-radius: 0.375rem; cursor: pointer; font-size: 1.25rem; transition: all 0.2s; flex-shrink: 0;
+        }
+        .btn-icon:hover { background: #334155; border-color: #1e40af; }
+        .btn-send {
+            background: #1e40af; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem;
+            cursor: pointer; font-weight: 600; transition: background 0.2s; flex-shrink: 0;
+        }
+        .btn-send:hover { background: #1e3a8a; }
+        .recording-indicator { font-size: 0.75rem; color: #3b82f6; padding: 0 0.5rem; display: none; }
+        .recording-indicator.active { display: block; }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content { display: none; flex: 1; overflow: hidden; flex-direction: column; min-height: 0; }
+        .tab-content.active { display: flex; }
+        .tab-content-scrollable { flex: 1; overflow-y: auto; padding: 1rem; }
+
+        /* Status badges */
+        .badge-pending { background: #fcd34d; color: #78350f; padding: 0.25rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; }
+        .badge-approved { background: #86efac; color: #166534; padding: 0.25rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; }
+        .badge-rejected { background: #fca5a5; color: #7f1d1d; padding: 0.25rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; }
+        .badge-active { background: #6ee7b7; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; }
+        .badge-banned { background: #f87171; color: #7f1d1d; padding: 0.25rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; }
+
+        /* ===== MODAL FORMS (saques/depositos) ===== */
+        .modal-content {
+            background: #1e293b; border-radius: 0.75rem; border: 1px solid #334155;
+            padding: 1.5rem; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+        .modal-header {
+            font-size: 1.5rem; font-weight: bold; color: white; margin-bottom: 1rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-close {
+            background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;
+            padding: 0; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center;
+        }
+        .modal-close:hover { color: white; }
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem; }
+        .form-input {
+            width: 100%; padding: 0.5rem; background: #0f172a; border: 1px solid #334155;
+            border-radius: 0.375rem; color: white; font-size: 0.875rem;
+        }
+        .form-input:focus { outline: none; border-color: #1e40af; }
+        .btn-primary {
+            background: #1e40af; color: white; border: none; padding: 0.5rem 1rem;
+            border-radius: 0.375rem; cursor: pointer; font-weight: 600; transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #1e3a8a; }
+        .btn-danger {
+            background: #dc2626; color: white; border: none; padding: 0.5rem 1rem;
+            border-radius: 0.375rem; cursor: pointer; font-weight: 600; transition: background 0.2s;
+        }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-success {
+            background: #16a34a; color: white; border: none; padding: 0.5rem 1rem;
+            border-radius: 0.375rem; cursor: pointer; font-weight: 600; transition: background 0.2s;
+        }
+        .btn-success:hover { background: #15803d; }
+
+        /* ===== MOBILE STYLES ===== */
+        @media (max-width: 1024px) {
+            .messages-layout { grid-template-columns: 1fr; gap: 1rem; padding: 0.75rem; }
+            .chat-list-section { max-height: 30vh; }
+            .chat-view-section { flex: 1; min-height: 0; }
+            .messages-area { padding: 0.75rem; gap: 0.5rem; }
+            .input-section { padding: 0.75rem; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed; left: 0; top: 0; height: 100vh; height: var(--app-height); width: 280px; z-index: 100;
+                transform: translateX(0);
+            }
+            .sidebar.sidebar-closed { transform: translateX(-100%); }
+            .sidebar-overlay { display: block; }
+            .main-container { flex-direction: column; }
+            .main-content { width: 100%; }
+            .content-area { flex-direction: column; }
+
+            /* Layout de mensagens em modo "app de chat": lista OU conversa, nunca as duas cortadas */
+            .messages-layout {
+                display: flex;
+                flex-direction: column;
+                grid-template-columns: unset;
+                padding: 0.5rem;
+                gap: 0.5rem;
+                flex: 1;
+                min-height: 0;
+                overflow: hidden;
+            }
+            .chat-list-section, .chat-view-section {
+                flex: 1;
+                min-height: 0;
+                max-height: none;
+            }
+            /* Quando uma conversa está aberta: esconde a lista e ocupa a tela toda com o chat */
+            .messages-container.chat-active .chat-list-section { display: none; }
+            .messages-container.chat-active .messages-stats { display: none; }
+            /* Quando nenhuma conversa está aberta: esconde a área de chat e mostra só a lista */
+            .messages-container:not(.chat-active) .chat-view-section { display: none; }
+
+            .messages-area { padding: 0.75rem; gap: 0.5rem; }
+            .input-section { padding: 0.75rem; padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+            .messages-stats { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 0.75rem 0.5rem 0.5rem 0.5rem; }
+            .header-title { font-size: 1.25rem; }
+            .message-user, .message-admin { max-width: 90%; }
+            .message-user img, .message-user audio, .message-admin img, .message-admin audio { max-width: 100%; }
+            .chat-item-uid { font-size: 0.8rem; }
+            .input-reply { font-size: 0.875rem; }
+            .modal-content { width: 95%; max-height: 90vh; }
+
+            /* Quando o chat está aberto no celular, encolhe o cabeçalho do app e
+               o cabeçalho da conversa ao máximo para sobrar espaço vertical para
+               as mensagens + a caixa de digitação — que é o que estava sendo
+               cortado em alguns aparelhos. */
+            body.chat-open-mobile .header { padding: 0.5rem 0.75rem; }
+            body.chat-open-mobile .header-title { font-size: 1rem; }
+            body.chat-open-mobile .header-time { display: none; }
+            body.chat-open-mobile .chat-header { padding: 0.5rem 0.75rem; }
+            body.chat-open-mobile .chat-header-name { font-size: 0.875rem; margin-bottom: 0.1rem; }
+            body.chat-open-mobile .chat-header-uid { font-size: 0.7rem; }
+            body.chat-open-mobile .input-reply { max-height: 70px; }
+        }
+
+        @media (max-width: 480px) {
+            .header { padding: 0.75rem; gap: 0.5rem; }
+            .header-title { font-size: 1.125rem; }
+            .messages-stats { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; padding: 0.5rem; }
+            .stat-card { padding: 0.6rem !important; }
+            .stat-card div:first-child { font-size: 0.7rem !important; margin-bottom: 0.35rem !important; }
+            .stat-card div:nth-child(2) { font-size: 1.25rem !important; }
+            .messages-layout { padding: 0.5rem; gap: 0.5rem; }
+            .chat-search { font-size: 0.75rem; padding: 0.375rem; }
+            .chat-item { padding: 0.5rem; font-size: 0.75rem; }
+            .chat-item-uid { font-size: 0.75rem; }
+            .chat-item-preview { font-size: 0.65rem; }
+            .chat-item-time { font-size: 0.65rem; }
+            .chat-header { padding: 0.75rem; }
+            .chat-header-name { font-size: 0.9rem; }
+            .messages-area { padding: 0.5rem; gap: 0.5rem; }
+            .message-user, .message-admin { padding: 0.5rem 0.75rem; font-size: 0.8rem; max-width: 90%; }
+            .input-section { padding: 0.5rem; padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); gap: 0.375rem; }
+            .input-row { gap: 0.375rem; }
+            .input-reply { font-size: 0.8rem; padding: 0.375rem; }
+            .btn-small, .btn-icon, .btn-send { padding: 0.375rem 0.75rem; font-size: 0.75rem; }
+            .modal-overlay img { max-width: 95vw; max-height: 60vh; }
+
+            body.chat-open-mobile .input-reply { max-height: 56px; }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(100, 116, 139, 0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.5); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.8); }
+
+        .hidden { display: none !important; }
+        .notification-sound { display: none; }
+    </style>
+</head>
+<body class="bg-dark">
+    <!-- AUTH SCREEN -->
+    <div id="authScreen" class="fixed inset-0 bg-gradient-to-br from-dark to-slate-900 flex items-center justify-center z-50">
+        <div class="text-center">
+            <div class="spinner mb-4 mx-auto"></div>
+            <p class="text-slate-400 text-lg">Verificando autenticação...</p>
+        </div>
+    </div>
+
+    <!-- SIDEBAR OVERLAY -->
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="window.toggleSidebar()"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container hidden" id="mainContainer">
+        <!-- SIDEBAR -->
+        <div class="sidebar sidebar-closed" id="sidebar">
+            <div class="sidebar-header">
+                <h2>⚙️ BotStrak Admin</h2>
+                <p id="adminEmail">Carregando...</p>
+                <p id="lastAccess" style="font-size: 0.75rem; margin-top: 0.5rem;">Último: -</p>
+                <button onclick="window.handleLogout()">Sair</button>
+            </div>
+
+            <div class="sidebar-menu">
+                <button onclick="window.switchTab('messages')" class="tab-btn tab-active" data-tab="messages">💬 Mensagens SMS</button>
+                <button onclick="window.switchTab('dashboard')" class="tab-btn" data-tab="dashboard">📊 Dashboard</button>
+                <button onclick="window.switchTab('users')" class="tab-btn" data-tab="users">👥 Usuários</button>
+                <button onclick="window.switchTab('financial')" class="tab-btn" data-tab="financial">💰 Financeiro</button>
+                <button onclick="window.switchTab('referrals')" class="tab-btn" data-tab="referrals">🤝 Referências</button>
+                <button onclick="window.switchTab('moderation')" class="tab-btn" data-tab="moderation">🚫 Moderação</button>
+                <button onclick="window.switchTab('database')" class="tab-btn" data-tab="database">📂 Banco de Dados</button>
+            </div>
+
+            <div class="sidebar-footer">
+                <button onclick="window.toggleSidebar()">✕ Fechar Menu</button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-left">
+                    <button id="mobileMenuBtn" onclick="window.toggleSidebar()" class="menu-toggle" aria-label="Abrir menu">☰</button>
+                    <h1 class="header-title" id="pageTitle">Mensagens SMS</h1>
+                </div>
+                <div class="header-time">
+                    <p id="currentTime">00:00</p>
+                </div>
+            </div>
+
+            <!-- CONTENT AREA -->
+            <div class="content-area">
+                <!-- MESSAGES TAB -->
+                <div id="messages-tab" class="tab-content active">
+                    <div class="messages-container" id="messagesContainer">
+                        <div class="messages-stats">
+                            <div class="stat-card rounded-lg p-4 text-white">
+                                <div class="text-xs text-slate-400 mb-2">📨 Total de SMS</div>
+                                <div class="text-2xl md:text-3xl font-bold" id="totalSMS">0</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-4 text-white">
+                                <div class="text-xs text-slate-400 mb-2">✅ Respondidos</div>
+                                <div class="text-2xl md:text-3xl font-bold text-green-400" id="repliedSMS">0</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-4 text-white">
+                                <div class="text-xs text-slate-400 mb-2">⏳ Pendentes</div>
+                                <div class="text-2xl md:text-3xl font-bold text-yellow-400" id="pendingSMS">0</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-4 text-white">
+                                <div class="text-xs text-slate-400 mb-2">👥 Únicos</div>
+                                <div class="text-2xl md:text-3xl font-bold text-blue-400" id="uniqueUsers">0</div>
+                            </div>
+                        </div>
+
+                        <div class="messages-layout">
+                            <!-- LISTA DE CHATS -->
+                            <div class="chat-list-section">
+                                <div class="chat-list-header">
+                                    <input type="text" id="searchInput" placeholder="🔍 Buscar..." class="chat-search">
+                                </div>
+                                <div class="chat-list" id="chatList">
+                                    <div class="flex items-center justify-center h-32 text-slate-500">
+                                        <div class="spinner mb-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- VISUALIZAÇÃO DO CHAT -->
+                            <div class="chat-view-section">
+                                <div id="emptyChat" class="empty-chat">
+                                    <p>Selecione uma conversa</p>
+                                </div>
+
+                                <div id="chatView" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
+                                    <!-- HEADER DO CHAT -->
+                                    <div class="chat-header">
+                                        <div class="chat-header-info">
+                                            <div class="chat-header-name" id="chatUserName">Usuário</div>
+                                            <div class="chat-header-uid" id="chatUserID">ID</div>
+                                        </div>
+                                        <div class="chat-header-actions">
+                                            <button onclick="window.closeChat()" class="btn-small">← Voltar</button>
+                                            <button onclick="window.deleteCurrentChat()" class="btn-small danger">🗑️</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- ÁREA DE MENSAGENS -->
+                                    <div class="messages-area" id="messagesArea"></div>
+
+                                    <!-- INPUT SECTION -->
+                                    <div class="input-section">
+                                        <div class="input-row">
+                                            <textarea id="adminReply" placeholder="Responda..." rows="1" class="input-reply"></textarea>
+                                            <button id="audioBtn" onclick="window.toggleRecording()" class="btn-icon">🎤</button>
+                                            <button onclick="document.getElementById('imageInputAdmin').click()" class="btn-icon">🖼️</button>
+                                            <button onclick="window.sendReply()" class="btn-send">➤</button>
+                                        </div>
+                                        <div id="recordingIndicator" class="recording-indicator">🎙️ Gravando...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DASHBOARD TAB -->
+                <div id="dashboard-tab" class="tab-content">
+                    <div class="tab-content-scrollable">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">👥 Usuários</div>
+                                <div class="text-4xl font-bold" id="dashTotalUsers">0</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">💰 Saldo Total</div>
+                                <div class="text-4xl font-bold text-green-400" id="dashTotalBalance">0 MT</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">💵 Investido</div>
+                                <div class="text-4xl font-bold text-blue-400" id="dashTotalInvested">0 MT</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">🚫 Banidos</div>
+                                <div class="text-4xl font-bold text-red-400" id="dashBannedUsers">0</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+                            <h3 class="text-lg font-bold text-white mb-4">📈 Atividade Recente</h3>
+                            <div id="activityFeed" class="space-y-3 max-h-96 overflow-y-auto scrollbar-hide text-sm text-slate-300">
+                                <p class="text-slate-500">Carregando atividade...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USERS TAB -->
+                <div id="users-tab" class="tab-content">
+                    <div class="tab-content-scrollable">
+                        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700 mb-4">
+                            <input type="text" id="userSearchInput" placeholder="🔍 Buscar por ID ou Email..." class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:border-blue-500">
+                        </div>
+
+                        <div class="bg-slate-800 rounded-lg border border-slate-700 table-responsive">
+                            <table class="w-full text-white text-sm">
+                                <thead class="bg-slate-700 border-b border-slate-600 sticky top-0">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left">ID</th>
+                                        <th class="px-4 py-3 text-left">Telefone</th>
+                                        <th class="px-4 py-3 text-left">Email</th>
+                                        <th class="px-4 py-3 text-right">Saldo</th>
+                                        <th class="px-4 py-3 text-center">Status</th>
+                                        <th class="px-4 py-3 text-left">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable">
+                                    <tr class="border-b border-slate-700">
+                                        <td colspan="6" class="px-4 py-4 text-center text-slate-500">Carregando usuários...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FINANCIAL TAB -->
+                <div id="financial-tab" class="tab-content">
+                    <div class="tab-content-scrollable">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">💳 Saques Pendentes</div>
+                                <div class="text-3xl font-bold text-yellow-400" id="pendingWithdrawals">0</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">📥 Depósitos Pendentes</div>
+                                <div class="text-3xl font-bold text-yellow-400" id="pendingDeposits">0</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">💰 Fluxo Total</div>
+                                <div class="text-3xl font-bold text-green-400" id="totalFlow">0 MT</div>
+                            </div>
+                        </div>
+
+                        <!-- SAQUES SECTION -->
+                        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 mb-6">
+                            <h3 class="text-lg font-bold text-white mb-4">💳 Saques</h3>
+
+                            <div class="mb-4 flex gap-2 flex-wrap">
+                                <input type="text" id="withdrawalSearchUID" placeholder="🔍 Buscar por UID..." class="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:border-blue-500">
+                                <button onclick="window.openWithdrawalModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">➕ Novo</button>
+                            </div>
+
+                            <div id="withdrawalsContainer" class="space-y-3 max-h-96 overflow-y-auto scrollbar-hide">
+                                <p class="text-slate-500">Carregando saques...</p>
+                            </div>
+                        </div>
+
+                        <!-- DEPÓSITOS SECTION -->
+                        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6">
+                            <h3 class="text-lg font-bold text-white mb-4">📥 Depósitos</h3>
+
+                            <div class="mb-4 flex gap-2 flex-wrap">
+                                <input type="text" id="depositSearchUID" placeholder="🔍 Buscar por UID..." class="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:border-blue-500">
+                                <button onclick="window.openDepositModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">➕ Novo</button>
+                            </div>
+
+                            <div id="depositsContainer" class="space-y-3 max-h-96 overflow-y-auto scrollbar-hide">
+                                <p class="text-slate-500">Carregando depósitos...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REFERRALS TAB -->
+                <div id="referrals-tab" class="tab-content">
+                    <div class="tab-content-scrollable">
+                        <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+                            <h3 class="text-lg font-bold text-white mb-4">🔍 Pesquisar Referências</h3>
+
+                            <div class="flex gap-2 mb-6 flex-wrap">
+                                <input type="text" id="referralSearchInput" placeholder="Digite o código de referência (ex: MCSW261Q)..." class="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:border-blue-500">
+                                <button onclick="window.searchReferral()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold">🔍 Pesquisar</button>
+                            </div>
+
+                            <div id="referralResults" class="hidden bg-slate-700/50 p-6 rounded border border-slate-600">
+                                <h4 class="text-white font-semibold mb-4">📋 Resultados da Pesquisa</h4>
+                                <div id="referralResultsContent" class="space-y-3">
+                                    <!-- Resultados aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODERATION TAB -->
+                <div id="moderation-tab" class="tab-content">
+                    <div class="tab-content-scrollable">
+                        <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-6">
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">🚫 Banidos</div>
+                                <div class="text-3xl font-bold text-red-400" id="modTotalBanned">0</div>
+                            </div>
+                            <div class="stat-card rounded-lg p-6 text-white">
+                                <div class="text-sm text-slate-400 mb-2">✅ Ativos</div>
+                                <div class="text-3xl font-bold text-green-400" id="modActivUsers">0</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-6">
+                            <h3 class="font-bold text-white mb-4">🚫 Lista de Banidos</h3>
+                            <div id="bannedList" class="space-y-2 max-h-96 overflow-y-auto scrollbar-hide text-sm">
+                                <p class="text-slate-500">Carregando...</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
+                            <h3 class="font-bold text-white mb-4">🔒 Banir Usuário</h3>
+                            <div class="flex gap-2">
+                                <input type="text" id="banUserInput" placeholder="Digite o UID..." class="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:border-blue-500">
+                                <button onclick="window.banUser()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded font-semibold transition text-sm">Banir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DATABASE TAB -->
+                <div id="database-tab" class="tab-content">
+                    <div class="tab-content-scrollable">
+                        <div class="bg-slate-800 rounded-lg p-6 border border-slate-700 mb-6">
+                            <h3 class="text-lg font-bold text-white mb-4">🔍 Pesquisar / Editar Documento</h3>
+                            <p class="text-xs text-slate-400 mb-4">Busque por ID do documento (UID), email ou telefone (para usuários). Depois edite o JSON e salve diretamente no banco.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+                                <select id="dbCollectionSelect" class="px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:border-blue-500">
+                                    <option value="users">👥 users</option>
+                                    <option value="withdrawals">💳 withdrawals</option>
+                                    <option value="deposits">📥 deposits</option>
+                                    <option value="sms">💬 sms</option>
+                                </select>
+                                <input type="text" id="databaseSearchInput" placeholder="ID, email ou telefone..." class="md:col-span-2 px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:border-blue-500">
+                            </div>
+
+                            <button onclick="window.searchDatabase()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold">🔍 Pesquisar</button>
+
+                            <div id="databaseResults" class="hidden mt-6">
+                                <div class="bg-slate-700/50 p-6 rounded border border-slate-600">
+                                    <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+                                        <h4 class="text-white font-semibold">📄 Documento: <span id="dbDocId" class="text-blue-400 font-mono text-sm"></span></h4>
+                                        <span id="dbDocCollection" class="text-xs bg-slate-600 px-2 py-1 rounded"></span>
+                                    </div>
+                                    <textarea id="jsonDisplay" class="w-full h-96 px-4 py-2 bg-slate-900 border border-slate-600 rounded text-white font-mono text-sm"></textarea>
+                                    <div class="flex gap-2 mt-4 flex-wrap">
+                                        <button onclick="window.saveDocumentChanges()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold">💾 Salvar Alterações</button>
+                                        <button onclick="window.copyJsonToClipboard()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">📋 Copiar</button>
+                                        <button onclick="window.deleteDocumentFromDb()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold">🗑️ Deletar</button>
+                                        <button onclick="document.getElementById('databaseResults').classList.add('hidden')" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-semibold">Fechar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+                            <h3 class="text-lg font-bold text-white mb-2">💾 Backup Completo</h3>
+                            <p class="text-xs text-slate-400 mb-4">Baixa um JSON com todas as coleções (users, withdrawals, deposits, sms).</p>
+                            <button onclick="window.exportDatabase()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold">📤 Exportar Backup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WITHDRAWAL MODAL -->
+    <div id="withdrawalModal" class="modal-overlay" onclick="if(event.target === this) window.closeWithdrawalModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="withdrawalModalTitle">Novo Saque</span>
+                <button onclick="window.closeWithdrawalModal()" class="modal-close">✕</button>
+            </div>
+
+            <form onsubmit="window.saveWithdrawal(event)">
+                <div class="form-group">
+                    <label class="form-label">UID *</label>
+                    <input type="text" id="withdrawalUID" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Valor (MT) *</label>
+                    <input type="number" id="withdrawalAmount" class="form-input" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Endereço de Saque *</label>
+                    <input type="text" id="withdrawalAddress" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Taxa (%) *</label>
+                    <input type="number" id="withdrawalFee" class="form-input" step="0.01" value="15" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Data do Saque *</label>
+                    <input type="datetime-local" id="withdrawalDate" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select id="withdrawalStatus" class="form-input">
+                        <option value="pending">⏳ Pendente</option>
+                        <option value="approved">✅ Aprovado</option>
+                        <option value="rejected">❌ Rejeitado</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="submit" class="flex-1 btn-primary">💾 Salvar</button>
+                    <button type="button" onclick="window.closeWithdrawalModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-semibold">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DEPOSIT MODAL -->
+    <div id="depositModal" class="modal-overlay" onclick="if(event.target === this) window.closeDepositModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="depositModalTitle">Novo Depósito</span>
+                <button onclick="window.closeDepositModal()" class="modal-close">✕</button>
+            </div>
+
+            <form onsubmit="window.saveDeposit(event)">
+                <div class="form-group">
+                    <label class="form-label">UID *</label>
+                    <input type="text" id="depositUID" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Valor (MT) *</label>
+                    <input type="number" id="depositAmount" class="form-input" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Endereço de Depósito *</label>
+                    <input type="text" id="depositAddress" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Data do Depósito *</label>
+                    <input type="datetime-local" id="depositDate" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select id="depositStatus" class="form-input">
+                        <option value="pending">⏳ Pendente</option>
+                        <option value="approved">✅ Aprovado</option>
+                        <option value="rejected">❌ Rejeitado</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="submit" class="flex-1 btn-primary">💾 Salvar</button>
+                    <button type="button" onclick="window.closeDepositModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-semibold">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- IMAGE MODAL -->
+    <div id="imageModal" class="modal-overlay" onclick="if(event.target === this) window.closeImageModal()">
+        <div class="bg-slate-800 rounded-lg overflow-hidden max-w-2xl">
+            <img id="modalImage" class="w-full max-h-96 object-contain" src="" alt="Imagem">
+        </div>
+    </div>
+
+    <!-- FILE INPUTS -->
+    <input type="file" id="imageInputAdmin" accept="image/*" class="hidden">
+
+    <!-- AUDIO NOTIFICATION -->
+    <audio id="notificationSound" class="notification-sound">
+        <source src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" type="audio/wav">
+    </audio>
+
+    <script>
+        /* ============================================================
+           ALTURA REAL DA TELA (--app-height)
+           Corrige o problema de o chat / caixa de digitação ficarem
+           cortados em celulares: 100vh, em muitos navegadores mobile,
+           conta com a área da barra de endereço mesmo quando ela não
+           está ocupando espaço visível de verdade — e não reage quando
+           o teclado abre. Aqui medimos a altura visível de verdade
+           (visualViewport quando disponível) e atualizamos ao vivo.
+           ============================================================ */
+        (function () {
+            function setAppHeight() {
+                const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+                document.documentElement.style.setProperty('--app-height', h + 'px');
+            }
+            setAppHeight();
+            window.addEventListener('resize', setAppHeight);
+            window.addEventListener('orientationchange', function () {
+                setTimeout(setAppHeight, 150);
+            });
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', setAppHeight);
+            }
+        })();
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            query,
+            orderBy,
+            onSnapshot,
+            updateDoc,
+            doc,
+            arrayUnion,
+            deleteDoc,
+            where,
+            getDocs,
+            getDoc,
+            addDoc,
+            setDoc,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import {
+            getStorage,
+            ref,
+            uploadBytes,
+            getDownloadURL
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        let currentChatUid = null;
+        let currentChatData = null;
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let chats = new Map();
+        let users = new Map();
+        let withdrawals = [];
+        let deposits = [];
+        let isAuthChecked = false;
+        let currentTab = 'messages';
+        let lastChatCount = 0;
+        let editingWithdrawalId = null;
+        let editingDepositId = null;
+        let currentDbDoc = null; // { collection, id }
+
+        function isMobileWidth() {
+            return window.innerWidth <= 768;
+        }
+
+        // ====== UTILITY FUNCTIONS ======
+        window.toggleSidebar = function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('sidebar-closed');
+            overlay.classList.toggle('active');
+        };
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 bg-blue-600 text-white px-6 py-3 rounded shadow-lg toast-animation z-40 text-sm md:text-base';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        function formatCurrency(value) {
+            return Number(value).toLocaleString('pt-AO');
+        }
+
+        function formatDateTime(dateObj) {
+            if (!dateObj) return '—';
+            const date = dateObj.toDate ? dateObj.toDate() : new Date(dateObj);
+            return date.toLocaleString('pt-AO', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function playNotificationSound() {
+            try {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                gainNode.gain.setValueAtTime(0.3, context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.2);
+                oscillator.start(context.currentTime);
+                oscillator.stop(context.currentTime + 0.2);
+            } catch (e) {
+                console.log('Som não disponível');
+            }
+        }
+
+        // ====== TAB SWITCHING ======
+        window.switchTab = function(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('tab-active');
+
+            document.getElementById('pageTitle').textContent = document.querySelector(`[data-tab="${tabName}"]`).textContent;
+
+            if (tabName === 'users') {
+                loadUsers();
+            } else if (tabName === 'financial') {
+                loadFinancialData();
+            } else if (tabName === 'dashboard') {
+                loadDashboardData();
+            } else if (tabName === 'moderation') {
+                loadModerationData();
+            }
+
+            // Ao trocar de aba, garante que não fica preso no modo "chat aberto"
+            if (tabName !== 'messages') {
+                document.body.classList.remove('chat-open-mobile');
+            }
+
+            // Fecha a sidebar automaticamente em telas pequenas após escolher uma opção
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && !sidebar.classList.contains('sidebar-closed')) {
+                window.toggleSidebar();
+            }
+        };
+
+        window.openImageModal = function(imageSrc) {
+            document.getElementById('imageModal').classList.add('active');
+            document.getElementById('modalImage').src = imageSrc;
+        };
+
+        window.closeImageModal = function() {
+            document.getElementById('imageModal').classList.remove('active');
+        };
+
+        window.closeChat = function() {
+            currentChatUid = null;
+            currentChatData = null;
+            document.getElementById('chatView').classList.add('hidden');
+            document.getElementById('emptyChat').classList.remove('hidden');
+            document.getElementById('adminReply').value = '';
+            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+            // Mobile: volta a mostrar a lista de conversas em vez do chat
+            document.getElementById('messagesContainer').classList.remove('chat-active');
+            document.body.classList.remove('chat-open-mobile');
+        };
+
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                showToast('✅ Desconectado!');
+                setTimeout(() => { window.location.href = '/'; }, 1000);
+            } catch (e) {
+                showToast('❌ Erro ao desconectar');
+            }
+        };
+
+        window.deleteCurrentChat = async function() {
+            if (!currentChatUid || !currentChatData) {
+                showToast('❌ Nenhum chat selecionado');
+                return;
+            }
+            if (!confirm('⚠️ Deletar TODAS as mensagens deste usuário?')) return;
+            showToast('🗑️ Deletando...');
+            try {
+                for (const message of currentChatData.messages) {
+                    await deleteDoc(doc(db, 'sms', message.id));
+                }
+                showToast('✅ Chat deletado!');
+                window.closeChat();
+            } catch (e) {
+                showToast('❌ Erro ao deletar');
+            }
+        };
+
+        // ====== TIME UPDATE ======
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        // ====== SMS CHAT FUNCTIONS ======
+        function loadChats() {
+            try {
+                const q = query(collection(db, 'sms'), orderBy('createdAt', 'desc'));
+
+                onSnapshot(q, (snapshot) => {
+                    const userChats = new Map();
+                    const newChatCount = snapshot.size;
+
+                    snapshot.forEach(docSnap => {
+                        const data = docSnap.data();
+                        const uid = data.uid;
+
+                        if (!userChats.has(uid)) {
+                            userChats.set(uid, {
+                                uid: uid,
+                                lastMessage: data.content || '[Sem conteúdo]',
+                                lastTime: data.createdAt,
+                                messages: [],
+                                unread: 0
+                            });
+                        }
+
+                        const chatEntry = userChats.get(uid);
+                        chatEntry.messages.push({ ...data, id: docSnap.id });
+
+                        if (!chatEntry.lastTime || new Date(data.createdAt) > new Date(chatEntry.lastTime)) {
+                            chatEntry.lastTime = data.createdAt;
+                            chatEntry.lastMessage = data.content || '[Sem conteúdo]';
+                        }
+
+                        if (!data.responses || data.responses.length === 0) {
+                            chatEntry.unread++;
+                        }
+                    });
+
+                    if (newChatCount > lastChatCount && lastChatCount > 0) {
+                        playNotificationSound();
+                        showToast('📨 Nova mensagem SMS!');
+                    }
+                    lastChatCount = newChatCount;
+
+                    renderChatList(userChats);
+                    chats = userChats;
+
+                    document.getElementById('totalSMS').textContent = snapshot.size;
+                    document.getElementById('uniqueUsers').textContent = userChats.size;
+
+                    let replied = 0, pending = 0;
+                    userChats.forEach(chat => {
+                        replied += Math.max(0, chat.messages.length - chat.unread);
+                        pending += chat.unread;
+                    });
+                    document.getElementById('repliedSMS').textContent = replied;
+                    document.getElementById('pendingSMS').textContent = pending;
+
+                    if (currentChatUid && userChats.has(currentChatUid)) {
+                        const updatedChat = userChats.get(currentChatUid);
+                        currentChatData = updatedChat;
+                        const sorted = updatedChat.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                        renderMessages(sorted);
+                    }
+                });
+            } catch (e) {
+                console.error('Erro ao carregar chats:', e);
+                showToast('❌ Erro ao carregar conversas');
+            }
+        }
+
+        function renderChatList(userChats) {
+            const chatList = document.getElementById('chatList');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            if (userChats.size === 0) {
+                chatList.innerHTML = '<div class="flex items-center justify-center h-32 text-slate-500 text-sm"><p>Nenhuma conversa</p></div>';
+                return;
+            }
+
+            chatList.innerHTML = '';
+            const sorted = Array.from(userChats.values()).sort((a, b) => new Date(b.lastTime) - new Date(a.lastTime));
+
+            sorted.forEach(chatData => {
+                if (searchTerm && !chatData.uid.toLowerCase().includes(searchTerm)) return;
+
+                const item = document.createElement('button');
+                item.className = `chat-item ${currentChatUid === chatData.uid ? 'active' : ''}`;
+
+                const timeStr = new Date(chatData.lastTime).toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' });
+                const preview = chatData.lastMessage.substring(0, 20) + (chatData.lastMessage.length > 20 ? '...' : '');
+
+                item.innerHTML = `
+                    <div class="chat-item-info">
+                        <div class="chat-item-uid">📱 ${chatData.uid.slice(0, 12)}</div>
+                        <div class="chat-item-preview">${preview}</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem;">
+                        <div class="chat-item-time">${timeStr}</div>
+                        ${chatData.unread > 0 ? `<div class="chat-item-badge">${chatData.unread}</div>` : ''}
+                    </div>
+                `;
+
+                item.onclick = () => selectChat(chatData.uid, chatData, item);
+                chatList.appendChild(item);
+            });
+        }
+
+        function selectChat(uid, chatData, item) {
+            currentChatUid = uid;
+            currentChatData = chatData;
+
+            document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+
+            document.getElementById('emptyChat').classList.add('hidden');
+            document.getElementById('chatView').classList.remove('hidden');
+
+            document.getElementById('chatUserName').textContent = `${uid.slice(0, 12)}...`;
+            document.getElementById('chatUserID').textContent = uid;
+
+            const sorted = chatData.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            renderMessages(sorted);
+
+            // Mobile: esconde a lista e mostra o chat em tela cheia (com a área de escrita sempre visível)
+            document.getElementById('messagesContainer').classList.add('chat-active');
+            if (isMobileWidth()) {
+                document.body.classList.add('chat-open-mobile');
+            }
+        }
+
+        function renderMessages(messages) {
+            const area = document.getElementById('messagesArea');
+            area.innerHTML = '';
+
+            messages.forEach(msg => {
+                const group = document.createElement('div');
+                group.className = 'message-group';
+
+                let userContent = '';
+                let messageClass = 'message-user';
+
+                if (msg.type === 'image') {
+                    userContent = `<img src="${msg.content}" onclick="window.openImageModal('${msg.content}')">`;
+                    messageClass += ' image';
+                } else if (msg.type === 'audio') {
+                    userContent = `<audio controls><source src="${msg.content}" type="audio/webm"></audio>`;
+                    messageClass += ' audio';
+                } else {
+                    userContent = `<div class="message-content">${msg.content}</div>`;
+                }
+
+                const userDiv = document.createElement('div');
+                userDiv.className = messageClass;
+                userDiv.innerHTML = `
+                    <div class="message-sender">📱 Usuário</div>
+                    ${userContent}
+                    <div class="message-time">${new Date(msg.createdAt).toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' })}</div>
+                `;
+
+                group.appendChild(userDiv);
+
+                if (msg.responses && msg.responses.length > 0) {
+                    msg.responses.forEach(response => {
+                        let adminContent = '';
+                        let adminClass = 'message-admin';
+
+                        if (response.type === 'image') {
+                            adminContent = `<img src="${response.content}" onclick="window.openImageModal('${response.content}')">`;
+                            adminClass += ' image';
+                        } else if (response.type === 'audio') {
+                            adminContent = `<audio controls><source src="${response.content}" type="audio/webm"></audio>`;
+                            adminClass += ' audio';
+                        } else {
+                            adminContent = `<div class="message-content">${response.content}</div>`;
+                        }
+
+                        const adminDiv = document.createElement('div');
+                        adminDiv.className = adminClass;
+                        adminDiv.innerHTML = `
+                            <div class="message-sender">👨‍💼 Admin</div>
+                            ${adminContent}
+                            <div class="message-time">${response.createdAt ? new Date(response.createdAt).toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' }) : ''}</div>
+                        `;
+                        group.appendChild(adminDiv);
+                    });
+                }
+
+                area.appendChild(group);
+            });
+
+            setTimeout(() => { area.scrollTop = area.scrollHeight; }, 100);
+        }
+
+        window.sendReply = async function() {
+            const reply = document.getElementById('adminReply').value.trim();
+
+            if (!reply) { showToast('⚠️ Digite uma resposta'); return; }
+            if (!currentChatUid || !currentChatData || currentChatData.messages.length === 0) {
+                showToast('❌ Nenhum chat selecionado');
+                return;
+            }
+
+            const lastMessage = currentChatData.messages[currentChatData.messages.length - 1];
+            const messageRef = doc(db, 'sms', lastMessage.id);
+
+            try {
+                await updateDoc(messageRef, {
+                    responses: arrayUnion({ content: reply, type: 'text', createdAt: new Date().toISOString() }),
+                    status: 'read'
+                });
+
+                document.getElementById('adminReply').value = '';
+                document.getElementById('adminReply').style.height = 'auto';
+                showToast('✅ Resposta enviada!');
+            } catch (e) {
+                showToast('❌ Erro ao enviar');
+            }
+        };
+
+        window.toggleRecording = async function() {
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+                    mediaRecorder.onstop = async () => {
+                        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const file = new File([blob], `audio_${Date.now()}.webm`, { type: 'audio/webm' });
+                        await window.sendAudioReply(file);
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    document.getElementById('recordingIndicator').classList.add('active');
+                    showToast('🎙️ Gravando...');
+                } catch (e) {
+                    showToast('❌ Erro ao acessar microfone');
+                }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById('recordingIndicator').classList.remove('active');
+            }
+        };
+
+        window.sendAudioReply = async function(file) {
+            if (!currentChatUid || !currentChatData || currentChatData.messages.length === 0) return;
+            showToast('📤 Enviando áudio...');
+            try {
+                const storageRef = ref(storage, `admin_responses/${currentChatUid}/${Date.now()}_${file.name}`);
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+
+                const lastMessage = currentChatData.messages[currentChatData.messages.length - 1];
+                await updateDoc(doc(db, 'sms', lastMessage.id), {
+                    responses: arrayUnion({ content: url, type: 'audio', createdAt: new Date().toISOString() })
+                });
+
+                showToast('✅ Áudio enviado!');
+            } catch (e) {
+                showToast('❌ Erro ao enviar áudio');
+            }
+        };
+
+        document.getElementById('imageInputAdmin').addEventListener('change', async (e) => {
+            if (!e.target.files[0] || !currentChatUid || !currentChatData) return;
+            const file = e.target.files[0];
+            showToast('📤 Enviando imagem...');
+            try {
+                const storageRef = ref(storage, `admin_responses/${currentChatUid}/${Date.now()}_${file.name}`);
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+
+                const lastMessage = currentChatData.messages[currentChatData.messages.length - 1];
+                await updateDoc(doc(db, 'sms', lastMessage.id), {
+                    responses: arrayUnion({ content: url, type: 'image', createdAt: new Date().toISOString() })
+                });
+
+                showToast('✅ Imagem enviada!');
+                e.target.value = '';
+            } catch (e) {
+                showToast('❌ Erro ao enviar imagem');
+            }
+        });
+
+        document.getElementById('adminReply').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+        });
+
+        document.getElementById('adminReply').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                window.sendReply();
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            renderChatList(chats);
+        });
+
+        // ====== USERS FUNCTIONS ======
+        async function loadUsers() {
+            try {
+                const snapshot = await getDocs(collection(db, 'users'));
+                const usersTable = document.getElementById('usersTable');
+                usersTable.innerHTML = '';
+
+                if (snapshot.empty) {
+                    usersTable.innerHTML = '<tr class="border-b border-slate-700"><td colspan="6" class="px-4 py-4 text-center text-slate-500">Nenhum usuário</td></tr>';
+                    return;
+                }
+
+                users.clear();
+                snapshot.forEach(docSnap => { users.set(docSnap.id, docSnap.data()); });
+
+                renderUsersTable();
+            } catch (e) {
+                console.error('Erro ao carregar usuários:', e);
+                showToast('❌ Erro ao carregar usuários');
+            }
+        }
+
+        function renderUsersTable() {
+            const usersTable = document.getElementById('usersTable');
+            const searchTerm = document.getElementById('userSearchInput').value.toLowerCase();
+            usersTable.innerHTML = '';
+
+            if (users.size === 0) {
+                usersTable.innerHTML = '<tr class="border-b border-slate-700"><td colspan="6" class="px-4 py-4 text-center text-slate-500">Nenhum usuário</td></tr>';
+                return;
+            }
+
+            const userArray = Array.from(users.entries());
+            let count = 0;
+
+            userArray.forEach(([uid, userData]) => {
+                if (searchTerm && !uid.toLowerCase().includes(searchTerm) && !userData.email?.toLowerCase().includes(searchTerm)) return;
+
+                count++;
+                const phone = userData.phone || '—';
+                const email = userData.email || '—';
+                const balance = userData.balance || 0;
+                const banned = userData.banned ? '🚫 Banido' : '✅ Ativo';
+                const statusClass = userData.banned ? 'badge-banned' : 'badge-active';
+
+                const row = document.createElement('tr');
+                row.className = 'border-b border-slate-700 hover:bg-slate-700/30 transition';
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-mono text-xs">${uid.slice(0, 10)}...</td>
+                    <td class="px-4 py-3">${phone}</td>
+                    <td class="px-4 py-3">${email}</td>
+                    <td class="px-4 py-3 text-right font-semibold">${formatCurrency(balance)} MT</td>
+                    <td class="px-4 py-3 text-center"><span class="${statusClass}">${banned}</span></td>
+                    <td class="px-4 py-3">
+                        <div class="flex gap-2">
+                            <button onclick="window.viewUserDetails('${uid}')" class="text-blue-400 hover:text-blue-300 text-xs">👁️</button>
+                            <button onclick="window.editUserInDatabase('${uid}')" class="text-purple-400 hover:text-purple-300 text-xs">📝</button>
+                            ${userData.banned ? `<button onclick="window.unbanUser('${uid}')" class="text-green-400 hover:text-green-300 text-xs">✓</button>` : `<button onclick="window.banUserDirect('${uid}')" class="text-red-400 hover:text-red-300 text-xs">🚫</button>`}
+                        </div>
+                    </td>
+                `;
+                usersTable.appendChild(row);
+            });
+
+            if (count === 0) {
+                usersTable.innerHTML = '<tr class="border-b border-slate-700"><td colspan="6" class="px-4 py-3 text-center text-slate-500">Nenhum usuário encontrado</td></tr>';
+            }
+        }
+
+        window.viewUserDetails = async function(uid) {
+            const user = users.get(uid);
+            if (!user) { showToast('❌ Usuário não encontrado'); return; }
+
+            alert(`
+📊 Detalhes do Usuário
+━━━━━━━━━━━━━━━━━━
+UID: ${uid}
+Telefone: ${user.phone || '—'}
+Email: ${user.email || '—'}
+Saldo: ${formatCurrency(user.balance || 0)} MT
+Investido: ${formatCurrency(user.invested ? user.investedAmount || 0 : 0)} MT
+Nível: ${user.level || '—'}
+Referidos por: ${user.referredBy || '—'}
+Contagem de Referidos: ${user.referralCount || 0}
+Comissão Auferida: ${formatCurrency(user.referralEarned || 0)} MT
+Status: ${user.banned ? '🚫 BANIDO' : '✅ ATIVO'}
+Criado em: ${user.createdAt ? new Date(user.createdAt).toLocaleString('pt-AO') : '—'}
+            `);
+        };
+
+        window.banUserDirect = async function(uid) {
+            if (!confirm('⚠️ Banir este usuário?')) return;
+            try {
+                await updateDoc(doc(db, 'users', uid), { banned: true, bannedAt: new Date().toISOString() });
+                showToast('✅ Usuário banido!');
+                loadUsers();
+            } catch (e) {
+                showToast('❌ Erro ao banir');
+            }
+        };
+
+        window.unbanUser = async function(uid) {
+            if (!confirm('⚠️ Desbanir este usuário?')) return;
+            try {
+                await updateDoc(doc(db, 'users', uid), { banned: false });
+                showToast('✅ Usuário desbanido!');
+                loadUsers();
+                loadModerationData();
+            } catch (e) {
+                showToast('❌ Erro ao desbanir');
+            }
+        };
+
+        document.getElementById('userSearchInput').addEventListener('input', function() {
+            renderUsersTable();
+        });
+
+        // ====== WITHDRAWALS FUNCTIONS ======
+        async function loadWithdrawals() {
+            try {
+                const snapshot = await getDocs(collection(db, 'withdrawals'));
+                withdrawals = [];
+                snapshot.forEach(docSnap => { withdrawals.push({ id: docSnap.id, ...docSnap.data() }); });
+                withdrawals.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                renderWithdrawalsList();
+            } catch (e) {
+                console.error('Erro ao carregar saques:', e);
+                showToast('❌ Erro ao carregar saques');
+            }
+        }
+
+        function renderWithdrawalsList() {
+            const container = document.getElementById('withdrawalsContainer');
+            const searchTerm = document.getElementById('withdrawalSearchUID').value.toLowerCase();
+            container.innerHTML = '';
+
+            const filtered = withdrawals.filter(w => !searchTerm || w.uid?.toLowerCase().includes(searchTerm));
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="text-slate-500">Nenhum saque encontrado</p>';
+                return;
+            }
+
+            filtered.forEach(w => {
+                const amount = w.amount || 0;
+                const fee = w.fee || 0;
+                const net = w.netAmount || (amount - fee);
+                const datetime = formatDateTime(w.createdAt);
+                const statusColor = w.status === 'approved' ? 'text-green-400' : w.status === 'rejected' ? 'text-red-400' : 'text-yellow-400';
+
+                const div = document.createElement('div');
+                div.className = 'bg-slate-700/50 p-4 rounded border border-slate-600';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-3 flex-wrap gap-2">
+                        <div>
+                            <div class="font-semibold text-white">${formatCurrency(amount)} MT</div>
+                            <div class="text-xs text-slate-400">UID: ${w.uid?.slice(0, 10) || '—'}...</div>
+                            <div class="text-xs text-slate-400">${datetime}</div>
+                            <div class="text-xs text-slate-400">Endereço: ${w.address || '—'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-red-400">Taxa: ${formatCurrency(fee)} MT</div>
+                            <div class="text-xs text-green-400">Líquido: ${formatCurrency(net)} MT</div>
+                            <div class="text-xs ${statusColor} font-semibold mt-2">${w.status || 'pending'}</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="window.editWithdrawal('${w.id}')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded">✏️ Editar</button>
+                        ${w.status === 'pending' ? `
+                            <button onclick="window.approveWithdrawal('${w.id}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded">✓ Aprovar</button>
+                            <button onclick="window.rejectWithdrawal('${w.id}')" class="text-xs bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded">✕ Rejeitar (devolve saldo)</button>
+                        ` : ''}
+                        <button onclick="window.deleteWithdrawal('${w.id}')" class="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">🗑️</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.openWithdrawalModal = function() {
+            editingWithdrawalId = null;
+            document.getElementById('withdrawalModalTitle').textContent = 'Novo Saque';
+            document.getElementById('withdrawalUID').value = '';
+            document.getElementById('withdrawalAmount').value = '';
+            document.getElementById('withdrawalAddress').value = '';
+            document.getElementById('withdrawalFee').value = '15';
+            document.getElementById('withdrawalDate').value = new Date().toISOString().slice(0, 16);
+            document.getElementById('withdrawalStatus').value = 'pending';
+            document.getElementById('withdrawalModal').classList.add('active');
+        };
+
+        window.closeWithdrawalModal = function() {
+            document.getElementById('withdrawalModal').classList.remove('active');
+        };
+
+        window.editWithdrawal = function(withdrawalId) {
+            const withdrawal = withdrawals.find(w => w.id === withdrawalId);
+            if (!withdrawal) return;
+
+            editingWithdrawalId = withdrawalId;
+            document.getElementById('withdrawalModalTitle').textContent = 'Editar Saque';
+            document.getElementById('withdrawalUID').value = withdrawal.uid;
+            document.getElementById('withdrawalAmount').value = withdrawal.amount;
+            document.getElementById('withdrawalAddress').value = withdrawal.address || '';
+            document.getElementById('withdrawalFee').value = withdrawal.fee || 0;
+            document.getElementById('withdrawalStatus').value = withdrawal.status || 'pending';
+
+            const date = withdrawal.createdAt?.toDate?.() || new Date(withdrawal.createdAt);
+            document.getElementById('withdrawalDate').value = date.toISOString().slice(0, 16);
+            document.getElementById('withdrawalModal').classList.add('active');
+        };
+
+        window.saveWithdrawal = async function(e) {
+            e.preventDefault();
+
+            const uid = document.getElementById('withdrawalUID').value.trim();
+            const amount = parseFloat(document.getElementById('withdrawalAmount').value);
+            const address = document.getElementById('withdrawalAddress').value.trim();
+            const fee = parseFloat(document.getElementById('withdrawalFee').value);
+            const datetime = document.getElementById('withdrawalDate').value;
+            const status = document.getElementById('withdrawalStatus').value;
+
+            if (!uid || !amount || !address || !datetime) { showToast('⚠️ Preencha todos os campos'); return; }
+
+            try {
+                const data = {
+                    uid, amount, address, fee, status,
+                    netAmount: amount - fee,
+                    createdAt: new Date(datetime).toISOString(),
+                    updatedAt: serverTimestamp()
+                };
+
+                if (editingWithdrawalId) {
+                    await updateDoc(doc(db, 'withdrawals', editingWithdrawalId), data);
+                    showToast('✅ Saque atualizado!');
+                } else {
+                    await addDoc(collection(db, 'withdrawals'), data);
+                    showToast('✅ Saque registrado!');
+                }
+
+                window.closeWithdrawalModal();
+                loadWithdrawals();
+            } catch (e) {
+                showToast('❌ Erro ao salvar saque');
+                console.error(e);
+            }
+        };
+
+        window.approveWithdrawal = async function(withdrawalId) {
+            try {
+                await updateDoc(doc(db, 'withdrawals', withdrawalId), { status: 'approved', approvedAt: new Date().toISOString() });
+                showToast('✅ Saque aprovado!');
+                loadWithdrawals();
+            } catch (e) {
+                showToast('❌ Erro ao aprovar');
+            }
+        };
+
+        window.rejectWithdrawal = async function(withdrawalId) {
+            try {
+                const withdrawal = withdrawals.find(w => w.id === withdrawalId);
+                if (!withdrawal) return;
+
+                await updateDoc(doc(db, 'withdrawals', withdrawalId), { status: 'rejected', rejectedAt: new Date().toISOString() });
+
+                const userRef = doc(db, 'users', withdrawal.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const currentBalance = userSnap.data().balance || 0;
+                    await updateDoc(userRef, { balance: currentBalance + withdrawal.amount });
+                }
+
+                showToast('✅ Saque rejeitado e saldo revertido!');
+                loadWithdrawals();
+            } catch (e) {
+                showToast('❌ Erro ao rejeitar');
+            }
+        };
+
+        window.deleteWithdrawal = async function(withdrawalId) {
+            if (!confirm('⚠️ Deletar este saque?')) return;
+            try {
+                await deleteDoc(doc(db, 'withdrawals', withdrawalId));
+                showToast('✅ Saque deletado!');
+                loadWithdrawals();
+            } catch (e) {
+                showToast('❌ Erro ao deletar');
+            }
+        };
+
+        document.getElementById('withdrawalSearchUID').addEventListener('input', function() {
+            renderWithdrawalsList();
+        });
+
+        // ====== DEPOSITS FUNCTIONS ======
+        async function loadDeposits() {
+            try {
+                const snapshot = await getDocs(collection(db, 'deposits'));
+                deposits = [];
+                snapshot.forEach(docSnap => { deposits.push({ id: docSnap.id, ...docSnap.data() }); });
+                deposits.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                renderDepositsList();
+            } catch (e) {
+                console.error('Erro ao carregar depósitos:', e);
+                showToast('❌ Erro ao carregar depósitos');
+            }
+        }
+
+        function renderDepositsList() {
+            const container = document.getElementById('depositsContainer');
+            const searchTerm = document.getElementById('depositSearchUID').value.toLowerCase();
+            container.innerHTML = '';
+
+            const filtered = deposits.filter(d => !searchTerm || d.uid?.toLowerCase().includes(searchTerm));
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="text-slate-500">Nenhum depósito encontrado</p>';
+                return;
+            }
+
+            filtered.forEach(d => {
+                const amount = d.amount || 0;
+                const datetime = formatDateTime(d.createdAt);
+                const statusColor = d.status === 'approved' ? 'text-green-400' : d.status === 'rejected' ? 'text-red-400' : 'text-yellow-400';
+
+                const div = document.createElement('div');
+                div.className = 'bg-slate-700/50 p-4 rounded border border-slate-600';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-3 flex-wrap gap-2">
+                        <div>
+                            <div class="font-semibold text-white">${formatCurrency(amount)} MT</div>
+                            <div class="text-xs text-slate-400">UID: ${d.uid?.slice(0, 10) || '—'}...</div>
+                            <div class="text-xs text-slate-400">${datetime}</div>
+                            <div class="text-xs text-slate-400">Endereço: ${d.address || '—'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs ${statusColor} font-semibold">${d.status || 'pending'}</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="window.editDeposit('${d.id}')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded">✏️ Editar</button>
+                        ${d.status === 'pending' ? `
+                            <button onclick="window.approveDeposit('${d.id}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded">✓ Aprovar (soma saldo)</button>
+                            <button onclick="window.rejectDeposit('${d.id}')" class="text-xs bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded">✕ Rejeitar</button>
+                        ` : ''}
+                        <button onclick="window.deleteDeposit('${d.id}')" class="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">🗑️</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.openDepositModal = function() {
+            editingDepositId = null;
+            document.getElementById('depositModalTitle').textContent = 'Novo Depósito';
+            document.getElementById('depositUID').value = '';
+            document.getElementById('depositAmount').value = '';
+            document.getElementById('depositAddress').value = '';
+            document.getElementById('depositDate').value = new Date().toISOString().slice(0, 16);
+            document.getElementById('depositStatus').value = 'pending';
+            document.getElementById('depositModal').classList.add('active');
+        };
+
+        window.closeDepositModal = function() {
+            document.getElementById('depositModal').classList.remove('active');
+        };
+
+        window.editDeposit = function(depositId) {
+            const deposit = deposits.find(d => d.id === depositId);
+            if (!deposit) return;
+
+            editingDepositId = depositId;
+            document.getElementById('depositModalTitle').textContent = 'Editar Depósito';
+            document.getElementById('depositUID').value = deposit.uid;
+            document.getElementById('depositAmount').value = deposit.amount;
+            document.getElementById('depositAddress').value = deposit.address || '';
+
+            const date = deposit.createdAt?.toDate?.() || new Date(deposit.createdAt);
+            document.getElementById('depositDate').value = date.toISOString().slice(0, 16);
+            document.getElementById('depositStatus').value = deposit.status || 'pending';
+            document.getElementById('depositModal').classList.add('active');
+        };
+
+        window.saveDeposit = async function(e) {
+            e.preventDefault();
+
+            const uid = document.getElementById('depositUID').value.trim();
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const address = document.getElementById('depositAddress').value.trim();
+            const datetime = document.getElementById('depositDate').value;
+            const status = document.getElementById('depositStatus').value;
+
+            if (!uid || !amount || !address || !datetime) { showToast('⚠️ Preencha todos os campos'); return; }
+
+            try {
+                const data = {
+                    uid, amount, address, status,
+                    createdAt: new Date(datetime).toISOString(),
+                    updatedAt: serverTimestamp()
+                };
+
+                if (editingDepositId) {
+                    await updateDoc(doc(db, 'deposits', editingDepositId), data);
+                    showToast('✅ Depósito atualizado!');
+                } else {
+                    await addDoc(collection(db, 'deposits'), data);
+                    showToast('✅ Depósito registrado!');
+                }
+
+                window.closeDepositModal();
+                loadDeposits();
+            } catch (e) {
+                showToast('❌ Erro ao salvar depósito');
+                console.error(e);
+            }
+        };
+
+        window.approveDeposit = async function(depositId) {
+            try {
+                const deposit = deposits.find(d => d.id === depositId);
+                if (!deposit) return;
+
+                await updateDoc(doc(db, 'deposits', depositId), { status: 'approved', approvedAt: new Date().toISOString() });
+
+                const userRef = doc(db, 'users', deposit.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const currentBalance = userSnap.data().balance || 0;
+                    await updateDoc(userRef, { balance: currentBalance + deposit.amount });
+                }
+
+                showToast('✅ Depósito aprovado e saldo adicionado!');
+                loadDeposits();
+            } catch (e) {
+                showToast('❌ Erro ao aprovar');
+            }
+        };
+
+        window.rejectDeposit = async function(depositId) {
+            try {
+                await updateDoc(doc(db, 'deposits', depositId), { status: 'rejected', rejectedAt: new Date().toISOString() });
+                showToast('✅ Depósito rejeitado!');
+                loadDeposits();
+            } catch (e) {
+                showToast('❌ Erro ao rejeitar');
+            }
+        };
+
+        window.deleteDeposit = async function(depositId) {
+            if (!confirm('⚠️ Deletar este depósito?')) return;
+            try {
+                await deleteDoc(doc(db, 'deposits', depositId));
+                showToast('✅ Depósito deletado!');
+                loadDeposits();
+            } catch (e) {
+                showToast('❌ Erro ao deletar');
+            }
+        };
+
+        document.getElementById('depositSearchUID').addEventListener('input', function() {
+            renderDepositsList();
+        });
+
+        // ====== FINANCIAL FUNCTIONS ======
+        async function loadFinancialData() {
+            await loadWithdrawals();
+            await loadDeposits();
+
+            document.getElementById('pendingWithdrawals').textContent = withdrawals.filter(w => w.status === 'pending').length;
+            document.getElementById('pendingDeposits').textContent = deposits.filter(d => d.status === 'pending').length;
+
+            let totalFlow = withdrawals.reduce((s, w) => s + (w.amount || 0), 0) + deposits.reduce((s, d) => s + (d.amount || 0), 0);
+            document.getElementById('totalFlow').textContent = formatCurrency(totalFlow) + ' MT';
+        }
+
+        // ====== REFERRALS SEARCH ======
+        window.searchReferral = async function() {
+            const searchTerm = document.getElementById('referralSearchInput').value.trim().toUpperCase();
+
+            if (!searchTerm) { showToast('⚠️ Digite um código de referência'); return; }
+
+            try {
+                const q = query(collection(db, 'users'), where('accountId', '==', searchTerm));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    showToast('❌ Código de referência não encontrado');
+                    document.getElementById('referralResults').classList.add('hidden');
+                    return;
+                }
+
+                const sponsor = snapshot.docs[0].data();
+
+                const refQuery = query(collection(db, 'users'), where('referredBy', '==', searchTerm));
+                const refSnapshot = await getDocs(refQuery);
+
+                const resultsContent = document.getElementById('referralResultsContent');
+                resultsContent.innerHTML = '';
+
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'bg-slate-700/50 p-4 rounded border border-slate-600';
+
+                let referredHTML = '<h4 class="font-semibold text-white mb-2">👤 Sponsor</h4>';
+                referredHTML += `<div class="text-sm text-slate-300 mb-4">ID: ${searchTerm}</div>`;
+                referredHTML += `<div class="text-sm text-slate-300 mb-4">Telefone: ${sponsor.phone || '—'}</div>`;
+                referredHTML += `<div class="text-sm text-slate-300 mb-4">Total de Referidos: <span class="text-green-400 font-bold">${refSnapshot.size}</span></div>`;
+                referredHTML += `<div class="text-sm text-slate-300 mb-4">Comissão: ${formatCurrency(sponsor.referralEarned || 0)} MT</div>`;
+                referredHTML += '<hr class="border-slate-600 my-4">';
+                referredHTML += '<h4 class="font-semibold text-white mb-3">📋 Usuários Convidados</h4>';
+
+                if (refSnapshot.size === 0) {
+                    referredHTML += '<p class="text-slate-500">Nenhum usuário convidado</p>';
+                } else {
+                    refSnapshot.forEach((doc, index) => {
+                        const refData = doc.data();
+                        const createdDate = refData.createdAt ? new Date(refData.createdAt).toLocaleDateString('pt-AO') : '—';
+                        referredHTML += `
+                            <div class="text-xs bg-slate-800/50 p-2 rounded mb-2">
+                                <div class="font-semibold text-slate-200">${index + 1}. ${refData.phone || refData.email || '—'}</div>
+                                <div class="text-slate-400">Data: ${createdDate}</div>
+                                <div class="text-slate-400">Saldo: ${formatCurrency(refData.balance || 0)} MT</div>
+                            </div>
+                        `;
+                    });
+                }
+
+                resultDiv.innerHTML = referredHTML;
+                resultsContent.appendChild(resultDiv);
+                document.getElementById('referralResults').classList.remove('hidden');
+
+            } catch (e) {
+                console.error('Erro na pesquisa:', e);
+                showToast('❌ Erro ao pesquisar');
+            }
+        };
+
+        // ====== DATABASE FUNCTIONS ======
+        window.searchDatabase = async function() {
+            const col = document.getElementById('dbCollectionSelect').value;
+            const term = document.getElementById('databaseSearchInput').value.trim();
+
+            if (!term) { showToast('⚠️ Digite um ID, email ou telefone'); return; }
+
+            try {
+                let found = null;
+                let foundId = null;
+
+                const directSnap = await getDoc(doc(db, col, term));
+                if (directSnap.exists()) {
+                    found = directSnap.data();
+                    foundId = directSnap.id;
+                } else if (col === 'users') {
+                    const snapshot = await getDocs(collection(db, 'users'));
+                    snapshot.forEach(d => {
+                        const data = d.data();
+                        if (data.email === term || data.phone === term) {
+                            found = data;
+                            foundId = d.id;
+                        }
+                    });
+                } else {
+                    const q = query(collection(db, col), where('uid', '==', term));
+                    const snap = await getDocs(q);
+                    if (!snap.empty) {
+                        found = snap.docs[0].data();
+                        foundId = snap.docs[0].id;
+                    }
+                }
+
+                if (!found) {
+                    showToast('❌ Documento não encontrado');
+                    document.getElementById('databaseResults').classList.add('hidden');
+                    currentDbDoc = null;
+                    return;
+                }
+
+                currentDbDoc = { collection: col, id: foundId };
+                document.getElementById('dbDocId').textContent = foundId;
+                document.getElementById('dbDocCollection').textContent = col;
+                document.getElementById('jsonDisplay').value = JSON.stringify(found, null, 2);
+                document.getElementById('databaseResults').classList.remove('hidden');
+                showToast('✅ Documento encontrado!');
+
+            } catch (e) {
+                console.error('Erro na pesquisa:', e);
+                showToast('❌ Erro ao pesquisar');
+            }
+        };
+
+        window.saveDocumentChanges = async function() {
+            if (!currentDbDoc) { showToast('❌ Nenhum documento carregado'); return; }
+
+            let parsed;
+            try {
+                parsed = JSON.parse(document.getElementById('jsonDisplay').value);
+            } catch (e) {
+                showToast('❌ JSON inválido, verifique a sintaxe');
+                return;
+            }
+
+            if (!confirm('⚠️ Sobrescrever este documento no banco com o novo JSON?')) return;
+
+            try {
+                await setDoc(doc(db, currentDbDoc.collection, currentDbDoc.id), parsed);
+                showToast('✅ Documento atualizado no banco!');
+
+                if (currentDbDoc.collection === 'users') loadUsers();
+                if (currentDbDoc.collection === 'withdrawals') loadWithdrawals();
+                if (currentDbDoc.collection === 'deposits') loadDeposits();
+            } catch (e) {
+                console.error(e);
+                showToast('❌ Erro ao salvar documento');
+            }
+        };
+
+        window.deleteDocumentFromDb = async function() {
+            if (!currentDbDoc) return;
+            if (!confirm('⚠️ Deletar PERMANENTEMENTE este documento?')) return;
+
+            try {
+                await deleteDoc(doc(db, currentDbDoc.collection, currentDbDoc.id));
+                showToast('✅ Documento deletado!');
+                document.getElementById('databaseResults').classList.add('hidden');
+                currentDbDoc = null;
+            } catch (e) {
+                showToast('❌ Erro ao deletar');
+            }
+        };
+
+        window.copyJsonToClipboard = function() {
+            const jsonDisplay = document.getElementById('jsonDisplay');
+            jsonDisplay.select();
+            document.execCommand('copy');
+            showToast('📋 JSON copiado para clipboard!');
+        };
+
+        window.editUserInDatabase = function(uid) {
+            window.switchTab('database');
+            document.getElementById('dbCollectionSelect').value = 'users';
+            document.getElementById('databaseSearchInput').value = uid;
+            window.searchDatabase();
+        };
+
+        window.exportDatabase = async function() {
+            showToast('📤 Gerando backup...');
+            try {
+                const collections = ['users', 'withdrawals', 'deposits', 'sms'];
+                const backup = {};
+
+                for (const col of collections) {
+                    const snap = await getDocs(collection(db, col));
+                    backup[col] = [];
+                    snap.forEach(d => backup[col].push({ id: d.id, ...d.data() }));
+                }
+                backup.exportedAt = new Date().toISOString();
+
+                const json = JSON.stringify(backup, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `botstrak_backup_${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('✅ Backup exportado!');
+            } catch (e) {
+                console.error(e);
+                showToast('❌ Erro ao exportar');
+            }
+        };
+
+        // ====== DASHBOARD FUNCTIONS ======
+        async function loadDashboardData() {
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                let totalUsers = 0, totalBalance = 0, totalInvested = 0, bannedCount = 0;
+
+                usersSnapshot.forEach(docSnap => {
+                    const userData = docSnap.data();
+                    totalUsers++;
+                    totalBalance += userData.balance || 0;
+                    if (userData.invested) totalInvested += userData.investedAmount || 0;
+                    if (userData.banned) bannedCount++;
+                });
+
+                document.getElementById('dashTotalUsers').textContent = totalUsers;
+                document.getElementById('dashTotalBalance').textContent = formatCurrency(totalBalance) + ' MT';
+                document.getElementById('dashTotalInvested').textContent = formatCurrency(totalInvested) + ' MT';
+                document.getElementById('dashBannedUsers').textContent = bannedCount;
+
+                const activityFeed = document.getElementById('activityFeed');
+                activityFeed.innerHTML = `
+                    <div class="text-slate-400 text-sm">
+                        <p>✅ ${totalUsers} usuários ativos</p>
+                        <p>💰 Total em carteira: ${formatCurrency(totalBalance)} MT</p>
+                        <p>💵 Total investido: ${formatCurrency(totalInvested)} MT</p>
+                        <p>🚫 Usuários banidos: ${bannedCount}</p>
+                        <p>⏰ Atualizado: ${new Date().toLocaleString('pt-AO')}</p>
+                    </div>
+                `;
+            } catch (e) {
+                console.error('Erro ao carregar dashboard:', e);
+            }
+        }
+
+        // ====== MODERATION FUNCTIONS ======
+        async function loadModerationData() {
+            try {
+                const snapshot = await getDocs(collection(db, 'users'));
+                let banned = 0, active = 0;
+                const bannedUsers = [];
+
+                snapshot.forEach(doc => {
+                    const userData = doc.data();
+                    if (userData.banned) {
+                        banned++;
+                        bannedUsers.push({ uid: doc.id, phone: userData.phone, bannedAt: userData.bannedAt });
+                    } else {
+                        active++;
+                    }
+                });
+
+                document.getElementById('modTotalBanned').textContent = banned;
+                document.getElementById('modActivUsers').textContent = active;
+
+                const bannedList = document.getElementById('bannedList');
+                if (bannedUsers.length === 0) {
+                    bannedList.innerHTML = '<p class="text-slate-500">Nenhum usuário banido</p>';
+                } else {
+                    bannedList.innerHTML = '';
+                    bannedUsers.forEach(user => {
+                        const div = document.createElement('div');
+                        div.className = 'bg-slate-700/50 p-2 rounded text-xs flex justify-between items-center';
+                        div.innerHTML = `
+                            <div>
+                                <div class="font-semibold">${user.phone || user.uid.slice(0, 10)}</div>
+                                <div class="text-slate-400">Banido em: ${user.bannedAt ? new Date(user.bannedAt).toLocaleDateString('pt-AO') : '—'}</div>
+                            </div>
+                            <button onclick="window.unbanUser('${user.uid}')" class="text-green-400 hover:text-green-300">✓</button>
+                        `;
+                        bannedList.appendChild(div);
+                    });
+                }
+            } catch (e) {
+                console.error('Erro ao carregar moderação:', e);
+            }
+        }
+
+        window.banUser = async function() {
+            const uid = document.getElementById('banUserInput').value.trim();
+            if (!uid) { showToast('⚠️ Digite um UID'); return; }
+
+            try {
+                await updateDoc(doc(db, 'users', uid), { banned: true, bannedAt: new Date().toISOString() });
+                showToast('✅ Usuário banido!');
+                document.getElementById('banUserInput').value = '';
+                loadModerationData();
+            } catch (e) {
+                showToast('❌ Erro ao banir usuário');
+            }
+        };
+
+        // ====== AUTH CHECK ======
+        onAuthStateChanged(auth, (user) => {
+            const authScreen = document.getElementById('authScreen');
+            const mainContainer = document.getElementById('mainContainer');
+
+            if (user) {
+                document.getElementById('adminEmail').textContent = user.email;
+                document.getElementById('lastAccess').textContent = `Último: ${new Date().toLocaleString('pt-AO', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+                authScreen.classList.add('hidden');
+                mainContainer.classList.remove('hidden');
+                loadChats();
+                loadModerationData();
+                isAuthChecked = true;
+            } else {
+                if (isAuthChecked) window.location.href = '/';
+                setTimeout(() => {
+                    if (!isAuthChecked) window.location.href = '/';
+                }, 3000);
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+:root{
+  --pitch:#0B3D2E; --pitch-dark:#062119; --amber:#FFC93C; --amber-dim:#8a6a1c;
+  --chalk:#F2EFE6; --ticket-red:#C1272D; --win-green:#1e7d3a; --ink:#121210;
+  --line:rgba(242,239,230,.14); --panel:rgba(255,255,255,.04);
+  --mono:'Courier New',Courier,monospace;
+  --display: Impact, Haettenschweiler, 'Arial Narrow Bold','Arial Black',sans-serif;
+  --body:'Segoe UI',system-ui,-apple-system,sans-serif;
+  --pdm-btn-size:56px;
+}
+
+/* ============================================================
+   Tudo fica escopado dentro de #pdmWidget para não vazar estilos
+   (box-sizing, fontes, cores) para o resto do seu site/painel.
+   ============================================================ */
+#pdmWidget, #pdmWidget *{ box-sizing:border-box; }
+#pdmWidget{ font-family:var(--body); color:var(--chalk); }
+
+/* ===== BOTÃO FLUTUANTE ARRASTÁVEL ===== */
+.pdm-fab{
+  position:fixed;
+  width:var(--pdm-btn-size); height:var(--pdm-btn-size);
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--pitch) 0%, var(--pitch-dark) 100%);
+  border:2px solid var(--amber);
+  color:var(--amber);
+  font-size:22px; font-family:var(--display); letter-spacing:.5px;
+  cursor:grab;
+  box-shadow:0 4px 14px rgba(0,0,0,.55);
+  display:flex; align-items:center; justify-content:center;
+  transition:box-shadow .2s ease, transform .15s ease;
+  z-index:2147483000;
+  padding:0; overflow:hidden;
+  touch-action:none; user-select:none; -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.pdm-fab.dragging{
+  cursor:grabbing; transition:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.65);
+  transform:scale(1.06);
+}
+.pdm-fab.hidden{ display:none; }
+.pdm-fab span{ pointer-events:none; }
+
+/* ===== OVERLAY (fundo escurecido atrás do painel) ===== */
+.pdm-overlay{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  z-index:2147482998;
+  animation:pdmFadeIn .2s ease-out;
+}
+.pdm-overlay.active{ display:block; }
+.pdm-overlay.pdm-closing{ animation:pdmFadeIn .15s ease-in reverse; }
+
+/* ===== PAINEL FLUTUANTE (caixa que contém todo o admin) ===== */
+.pdm-panel{
+  position:fixed;
+  width:480px; max-width:95vw;
+  height:640px; max-height:88vh;
+  background:radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255,201,60,.08), transparent 60%), var(--pitch-dark);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+  display:none;
+  flex-direction:column;
+  z-index:2147482999;
+  overflow:hidden;
+  animation:pdmPopIn .2s ease-out;
+}
+.pdm-panel.active{ display:flex; }
+.pdm-panel.pdm-closing{ animation:pdmPopOut .15s ease-in forwards; }
+
+@keyframes pdmPopIn{ from{transform:scale(.94);opacity:0;} to{transform:scale(1);opacity:1;} }
+@keyframes pdmPopOut{ from{transform:scale(1);opacity:1;} to{transform:scale(.94);opacity:0;} }
+@keyframes pdmFadeIn{ from{opacity:0;} to{opacity:1;} }
+
+.pdm-panel-header{
+  background:linear-gradient(135deg, var(--pitch) 0%, var(--pitch-dark) 100%);
+  border-bottom:1px solid var(--line);
+  padding:12px 14px;
+  display:flex; align-items:center; gap:10px;
+  flex-shrink:0;
+}
+.pdm-panel-header .pdm-logo{
+  width:34px; height:34px; background:var(--amber); border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--display); font-weight:700; font-size:14px; color:var(--pitch-dark);
+  flex-shrink:0;
+}
+.pdm-panel-header .pdm-htitle{ flex:1; min-width:0; }
+.pdm-panel-header .pdm-htitle b{
+  font-family:var(--display); letter-spacing:1px; font-size:14px; color:var(--amber); display:block;
+}
+.pdm-panel-header .pdm-htitle small{ font-family:var(--mono); font-size:10px; opacity:.65; }
+.pdm-close-btn{
+  background:rgba(255,255,255,.1); border:1px solid var(--line); color:var(--chalk);
+  width:30px; height:30px; border-radius:8px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+  transition:background .2s, border-color .2s, color .2s;
+  flex-shrink:0;
+}
+.pdm-close-btn:hover{ background:var(--ticket-red); border-color:var(--ticket-red); color:#fff; }
+
+.pdm-panel-body{
+  position:relative;
+  flex:1;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:16px 14px 30px;
+}
+.pdm-panel-body::-webkit-scrollbar{ width:6px; }
+.pdm-panel-body::-webkit-scrollbar-track{ background:transparent; }
+.pdm-panel-body::-webkit-scrollbar-thumb{ background:var(--amber-dim); border-radius:3px; }
+
+/* ================= ESTILOS ORIGINAIS DO PAINEL (inalterados) ================= */
+.pdm-panel-body h1{font-family:var(--display);letter-spacing:1px;color:var(--amber);font-size:22px;margin:0 0 4px;}
+.pdm-panel-body .sub{font-family:var(--mono);font-size:10.5px;opacity:.55;margin-bottom:18px;}
+.pdm-panel-body .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;}
+.pdm-panel-body .card h2{font-family:var(--display);letter-spacing:1px;color:var(--amber);font-size:15px;margin:0 0 12px;text-transform:uppercase;}
+.pdm-panel-body .row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.pdm-panel-body .field{flex:1 1 200px;min-width:160px;display:flex;flex-direction:column;gap:5px;}
+.pdm-panel-body .field.full{flex-basis:100%;}
+.pdm-panel-body label{font-family:var(--mono);font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;opacity:.65;}
+.pdm-panel-body input[type=text], .pdm-panel-body input[type=number], .pdm-panel-body input[type=password],
+.pdm-panel-body input[type=datetime-local], .pdm-panel-body textarea, .pdm-panel-body select{
+  background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;
+  color:var(--chalk);padding:9px 10px;font-family:var(--body);font-size:13.5px;width:100%;
+}
+.pdm-panel-body textarea{min-height:64px;resize:vertical;font-family:var(--body);}
+.pdm-panel-body select{cursor:pointer;}
+.pdm-panel-body input:focus, .pdm-panel-body textarea:focus, .pdm-panel-body select:focus{outline:none;border-color:var(--amber);}
+.pdm-panel-body .hint{font-family:var(--mono);font-size:10px;opacity:.45;margin-top:2px;}
+.pdm-panel-body .list-input-row{display:flex;gap:8px;margin-bottom:6px;}
+.pdm-panel-body .list-input-row input{flex:1;}
+.pdm-panel-body .icon-btn{
+  background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--chalk);
+  border-radius:6px;width:34px;height:34px;flex-shrink:0;cursor:pointer;font-size:15px;
+}
+.pdm-panel-body .icon-btn:hover{border-color:var(--amber);color:var(--amber);}
+.pdm-panel-body .add-btn{
+  background:none;border:1px dashed var(--line);color:var(--chalk);opacity:.7;
+  border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:11px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.pdm-panel-body .add-btn:hover{opacity:1;border-color:var(--amber);color:var(--amber);}
+.pdm-panel-body .result-block{display:none;}
+.pdm-panel-body .result-block.show{display:flex;}
+.pdm-panel-body .btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.pdm-panel-body .btn{
+  border:none;border-radius:8px;padding:11px 16px;font-family:var(--display);letter-spacing:1px;
+  font-size:12.5px;cursor:pointer;text-transform:uppercase;
+}
+.pdm-panel-body .btn.primary{background:var(--ticket-red);color:#fff;}
+.pdm-panel-body .btn.secondary{background:rgba(255,255,255,.1);color:var(--chalk);}
+.pdm-panel-body .btn.ghost{background:none;border:1px solid var(--line);color:var(--chalk);}
+.pdm-panel-body .btn:hover{filter:brightness(1.1);}
+.pdm-panel-body .msg{font-family:var(--mono);font-size:12px;margin-top:10px;min-height:16px;}
+.pdm-panel-body .msg.ok{color:var(--win-green);}
+.pdm-panel-body .msg.err{color:var(--ticket-red);}
+.pdm-panel-body .msg.warn{color:var(--amber);}
+
+.pdm-panel-body .game-row{
+  display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);
+  border-radius:8px;padding:10px 12px;margin-bottom:8px;flex-wrap:wrap;
+}
+.pdm-panel-body .game-row .gi{flex:1;min-width:180px;}
+.pdm-panel-body .game-row .gi .t{font-family:var(--display);font-size:13.5px;letter-spacing:.3px;}
+.pdm-panel-body .game-row .gi .s{font-family:var(--mono);font-size:10px;opacity:.6;margin-top:2px;}
+.pdm-panel-body .game-row .gi .r{font-family:var(--mono);font-size:10px;color:var(--amber);margin-top:2px;}
+.pdm-panel-body .badge{font-family:var(--mono);font-size:9.5px;padding:3px 8px;border-radius:10px;text-transform:uppercase;flex-shrink:0;}
+.pdm-panel-body .badge.featured{background:var(--ticket-red);color:#fff;}
+.pdm-panel-body .badge.upcoming{background:var(--amber-dim);color:var(--chalk);}
+.pdm-panel-body .badge.finished{background:var(--chalk);color:var(--ink);}
+.pdm-panel-body .game-row .actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;}
+.pdm-panel-body .game-row .actions button{
+  background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--chalk);
+  border-radius:6px;padding:7px 9px;font-family:var(--mono);font-size:10px;cursor:pointer;
+}
+.pdm-panel-body .game-row .actions button:hover{border-color:var(--amber);color:var(--amber);}
+.pdm-panel-body .game-row .actions button.del:hover{border-color:var(--ticket-red);color:var(--ticket-red);}
+.pdm-panel-body .game-row .actions button.result{border-color:var(--win-green);color:var(--win-green);}
+.pdm-panel-body .game-row .actions button.result:hover{background:var(--win-green);color:#fff;}
+.pdm-panel-body .empty{font-size:12px;opacity:.5;font-family:var(--mono);padding:10px 4px;}
+
+/* ---------- LOGIN (agora preenche a área do painel, não a tela toda) ---------- */
+#loginOverlay{
+  position:absolute; inset:0; z-index:20;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255,201,60,.08), transparent 60%), var(--pitch-dark);
+  padding:16px;
+}
+#loginOverlay.hidden{ display:none; }
+.pdm-panel-body .login-card{
+  width:100%; max-width:360px; background:var(--panel); border:1px solid var(--line);
+  border-radius:14px; padding:22px 18px;
+}
+.pdm-panel-body .login-card h1{font-size:22px;margin-bottom:4px;}
+.pdm-panel-body .login-card .sub{margin-bottom:18px;}
+.pdm-panel-body .phone-row{display:flex;gap:8px;}
+.pdm-panel-body .phone-row select{flex:0 0 112px;}
+.pdm-panel-body .phone-row input{flex:1;}
+#appShell.hidden{ display:none; }
+#appShell{ position:relative; z-index:1; }
+.pdm-panel-body .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:8px;}
+.pdm-panel-body .logout-btn{
+  background:none;border:1px solid var(--line);color:var(--chalk);opacity:.75;
+  border-radius:8px;padding:7px 10px;font-family:var(--mono);font-size:10.5px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:.5px; white-space:nowrap;
+}
+.pdm-panel-body .logout-btn:hover{opacity:1;border-color:var(--ticket-red);color:var(--ticket-red);}
+.pdm-panel-body .whoami{font-family:var(--mono);font-size:10px;opacity:.55;}
+
+/* ---------- RESULT MODAL (dentro do próprio widget, sempre por cima) ---------- */
+.pdm-panel-body .overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.65); display:none;
+  align-items:flex-start; justify-content:center;
+  z-index:2147483001; padding:24px 12px; overflow:auto;
+}
+.pdm-panel-body .overlay.show{display:flex;}
+.pdm-panel-body .modal{
+  background:var(--pitch-dark);border:1px solid var(--line);border-radius:12px;
+  max-width:400px;width:100%;padding:20px;margin-top:6vh;
+}
+.pdm-panel-body .modal h3{font-family:var(--display);color:var(--amber);letter-spacing:1px;margin:0 0 4px;}
+.pdm-panel-body .modal-close{float:right;background:none;border:none;color:var(--chalk);opacity:.6;font-size:18px;cursor:pointer;}
+.pdm-panel-body .result-modal-teams{font-family:var(--mono);font-size:11px;opacity:.65;margin-top:2px;}
+.pdm-panel-body .result-modal-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:20px 0 6px;}
+.pdm-panel-body .result-modal-row input[type=number]{
+  width:76px;text-align:center;font-family:var(--display);font-size:22px;padding:10px 6px;
+}
+.pdm-panel-body .result-modal-row .x{font-family:var(--display);font-size:18px;opacity:.5;}
+.pdm-panel-body .result-warn{font-family:var(--mono);font-size:10px;opacity:.55;margin-top:12px;line-height:1.6;}
+
+@media (max-width:380px){
+  .pdm-fab{ width:50px; height:50px; }
+}
+</style>
+
+<!--
+  Para abrir este painel a partir de um botão/link do seu site, use:
+  <a href="#pdmAdminWidget">Abrir painel admin</a>
+  (o id da âncora precisa bater com o id da div abaixo)
+-->
+<div id="pdmAdminWidget">
+
+  <div class="pdm-overlay" id="pdmOverlay"></div>
+
+  <!-- Botão flutuante arrastável -->
+  <button class="pdm-fab" id="pdmFab" title="Arraste para mover · toque para abrir o painel admin">
+    <span>⚽</span>
+  </button>
+
+  <!-- Painel flutuante -->
+  <div class="pdm-panel" id="pdmPanel">
+    <div class="pdm-panel-header">
+      <div class="pdm-logo">PA</div>
+      <div class="pdm-htitle">
+        <b>PALPITÃO — ADMIN</b>
+        <small>painel de gestão de jogos</small>
+      </div>
+      <button class="pdm-close-btn" id="pdmCloseBtn" title="Fechar painel (sua sessão continua ativa)">✕</button>
+    </div>
+
+    <div class="pdm-panel-body" id="pdmPanelBody">
+
+      <!-- ===================== TELA DE LOGIN ===================== -->
+      <div id="loginOverlay">
+        <div class="login-card">
+          <h1>PALPITÃO</h1>
+          <div class="sub">Acesso restrito ao painel admin</div>
+          <form id="loginForm">
+            <div class="row">
+              <div class="field full">
+                <label>Telefone</label>
+                <div class="phone-row">
+                  <select id="l_ddi">
+                    <option value="+244">🇦🇴 +244 Angola</option>
+                    <option value="+258">🇲🇿 +258 Moçambique</option>
+                    <option value="+55">🇧🇷 +55 Brasil</option>
+                    <option value="+351">🇵🇹 +351 Portugal</option>
+                    <option value="+238">🇨🇻 +238 Cabo Verde</option>
+                    <option value="+245">🇬🇼 +245 Guiné-Bissau</option>
+                    <option value="+239">🇸🇹 +239 São Tomé e Príncipe</option>
+                    <option value="+27">🇿🇦 +27 África do Sul</option>
+                    <option value="+1">🇺🇸 +1 EUA/Canadá</option>
+                    <option value="+44">🇬🇧 +44 Reino Unido</option>
+                  </select>
+                  <input type="text" id="l_phone" placeholder="841234567" inputmode="numeric">
+                </div>
+                <div class="hint">Escolha o DDI e digite o número sem espaços ou traços.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field full">
+                <label>Senha</label>
+                <input type="password" id="l_password" placeholder="••••••••">
+              </div>
+            </div>
+            <div class="btn-row">
+              <button type="submit" class="btn primary" id="loginBtn">Entrar</button>
+            </div>
+            <div class="msg" id="loginMsg"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ===================== PAINEL (só aparece após login) ===================== -->
+      <div id="appShell" class="hidden">
+        <div class="topbar">
+          <div>
+            <h1>PALPITÃO — Painel Admin</h1>
+            <div class="sub">Gerencia a coleção "games" no Firestore.</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="whoami" id="whoamiLabel"></div>
+            <button class="logout-btn" id="logoutBtn">Sair</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Criar / Editar jogo</h2>
+          <form id="gameForm">
+            <input type="hidden" id="gameId">
+
+            <div class="row">
+              <div class="field full">
+                <label>Título da competição</label>
+                <input type="text" id="f_title" placeholder="ex: FINAL — LIGA DE VERÃO">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label>Time A</label>
+                <input type="text" id="f_teamA" placeholder="ex: Palmeiras">
+              </div>
+              <div class="field">
+                <label>Time B</label>
+                <input type="text" id="f_teamB" placeholder="ex: Flamengo">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label>Início (data e hora)</label>
+                <input type="datetime-local" id="f_startAt">
+              </div>
+              <div class="field">
+                <label>Status</label>
+                <select id="f_status">
+                  <option value="featured">featured (destaque — exclusivo)</option>
+                  <option value="upcoming">upcoming (próximo jogo — lista)</option>
+                  <option value="finished">finished (encerrado)</option>
+                </select>
+                <div class="hint" id="statusHint"></div>
+              </div>
+            </div>
+
+            <div class="row result-block" id="resultBlock">
+              <div class="field">
+                <label>Placar final — Time A</label>
+                <input type="number" id="f_resultA" min="0" value="0">
+              </div>
+              <div class="field">
+                <label>Placar final — Time B</label>
+                <input type="number" id="f_resultB" min="0" value="0">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field full">
+                <label>Descrição do jogo</label>
+                <textarea id="f_desc" placeholder="Descrição que aparece na tela principal"></textarea>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label>Tipo de mídia</label>
+                <select id="f_mediaType">
+                  <option value="youtube">youtube (vídeo)</option>
+                  <option value="photo">photo (galeria de fotos)</option>
+                </select>
+              </div>
+              <div class="field" id="videoIdField">
+                <label>URL ou ID do YouTube</label>
+                <input type="text" id="f_videoId" placeholder="https://youtu.be/xxxxxxxxxxx">
+                <div class="hint">Aceita link completo (youtu.be, watch?v=, embed, shorts) ou só o ID.</div>
+              </div>
+            </div>
+
+            <div class="row" id="photosField" style="display:none;">
+              <div class="field full">
+                <label>Fotos (mínimo 2 URLs)</label>
+                <div id="photosList"></div>
+                <button type="button" class="add-btn" id="addPhotoBtn">+ adicionar foto</button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label>Quantidade de anúncios a exibir (adsCount)</label>
+                <input type="number" id="f_adsCount" min="0" value="0">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field full">
+                <label>Anúncios / patrocinadores (URLs de imagem)</label>
+                <div id="adsList"></div>
+                <button type="button" class="add-btn" id="addAdBtn">+ adicionar anúncio</button>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" class="btn primary" id="saveBtn">Salvar jogo</button>
+              <button type="button" class="btn ghost" id="clearBtn">Limpar formulário / novo jogo</button>
+            </div>
+            <div class="msg" id="formMsg"></div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Jogos cadastrados</h2>
+          <div class="hint" style="margin-bottom:12px;">Use o botão <b style="color:var(--win-green);">Resultado</b> em cada jogo para lançar o placar final rapidamente. Isso marca o jogo como "encerrado" e o resultado aparece na hora para todos os usuários.</div>
+          <div id="gamesList"><div class="empty">Carregando...</div></div>
+        </div>
+      </div>
+
+      <!-- ===================== MODAL: LANÇAR / EDITAR RESULTADO ===================== -->
+      <div class="overlay" id="resultOverlay">
+        <div class="modal">
+          <button class="modal-close" id="resultModalClose">✕</button>
+          <h3>Lançar Resultado</h3>
+          <div class="result-modal-teams" id="resultModalTeams"></div>
+          <div class="result-modal-row">
+            <input type="number" id="rm_scoreA" min="0" value="0">
+            <span class="x">×</span>
+            <input type="number" id="rm_scoreB" min="0" value="0">
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn primary" id="resultModalSave">Salvar resultado</button>
+            <button type="button" class="btn ghost" id="resultModalCancel">Cancelar</button>
+          </div>
+          <div class="msg" id="resultModalMsg"></div>
+          <div class="result-warn">
+            Ao salvar, o jogo é marcado como <b>encerrado</b> e o placar fica visível na hora para todos: ranking, histórico de cada usuário e feed de resultados.<br><br>
+            Se este jogo já tinha sido pontuado antes e você está corrigindo o placar, os pontos já somados no ranking NÃO são removidos automaticamente.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pdmPanelBody -->
+  </div><!-- /pdmPanel -->
+</div><!-- /pdmAdminWidget -->
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, orderBy, query
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import {
+    getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+    authDomain: "proibidoreplica.firebaseapp.com",
+    projectId: "proibidoreplica",
+    storageBucket: "proibidoreplica.firebasestorage.app",
+    messagingSenderId: "794009646952",
+    appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const gamesCol = collection(db, "games");
+
+  const $ = id => document.getElementById(id);
+
+  /* ============================================================
+     BOTÃO FLUTUANTE — ARRASTÁVEL PARA QUALQUER PONTO DA TELA
+     (mesmo padrão robusto do widget de chat: pointer events,
+     distinção arrasto/clique, posição persistida em %, proteção
+     contra clique fantasma, correção de resize)
+     ============================================================ */
+  const FAB_STORAGE_KEY = 'pdmFabPosV1';
+  const fab = $('pdmFab');
+  const panel = $('pdmPanel');
+  const overlay = $('pdmOverlay');
+  const widget = $('pdmAdminWidget');
+
+  let isDragging = false;
+  let didDrag = false;
+  let dragStartX = 0, dragStartY = 0;
+  let fabStartLeft = 0, fabStartTop = 0;
+  const DRAG_THRESHOLD = 6;
+
+  function clamp(value, min, max){ return Math.max(min, Math.min(max, value)); }
+  function getFabSize(){ return fab.getBoundingClientRect().width || 56; }
+
+  function setFabPosition(left, top, persist){
+    const size = getFabSize();
+    left = clamp(left, 6, window.innerWidth - size - 6);
+    top = clamp(top, 6, window.innerHeight - size - 6);
+    fab.style.left = left + 'px';
+    fab.style.top = top + 'px';
+    fab.style.right = 'auto';
+    fab.style.bottom = 'auto';
+    if(persist){
+      try{
+        localStorage.setItem(FAB_STORAGE_KEY, JSON.stringify({
+          xPercent: left / window.innerWidth,
+          yPercent: top / window.innerHeight
+        }));
+      }catch(e){ /* ignora erros de storage */ }
+    }
+  }
+
+  function loadFabPosition(){
+    const size = getFabSize();
+    let left = window.innerWidth - size - 20;
+    let top = window.innerHeight - size - 90;
+    try{
+      const saved = localStorage.getItem(FAB_STORAGE_KEY);
+      if(saved){
+        const { xPercent, yPercent } = JSON.parse(saved);
+        left = xPercent * window.innerWidth;
+        top = yPercent * window.innerHeight;
+      }
+    }catch(e){ /* usa posição padrão */ }
+    setFabPosition(left, top, false);
+  }
+
+  function dragStart(e){
+    e.preventDefault();
+    isDragging = true;
+    didDrag = false;
+    fab.classList.add('dragging');
+    const rect = fab.getBoundingClientRect();
+    fabStartLeft = rect.left;
+    fabStartTop = rect.top;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    try{ fab.setPointerCapture(e.pointerId); }catch(err){ /* fallback abaixo cobre isso */ }
+  }
+
+  function dragMove(e){
+    if(!isDragging) return;
+    e.preventDefault();
+    const dx = e.clientX - dragStartX;
+    const dy = e.clientY - dragStartY;
+    if(Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) didDrag = true;
+    setFabPosition(fabStartLeft + dx, fabStartTop + dy, false);
+  }
+
+  function dragEnd(e){
+    if(!isDragging) return;
+    if(e && e.cancelable) e.preventDefault();
+    isDragging = false;
+    fab.classList.remove('dragging');
+    const rect = fab.getBoundingClientRect();
+    setFabPosition(rect.left, rect.top, true);
+    if(!didDrag){
+      window.pdmToggle();
+    }
+  }
+
+  fab.addEventListener('pointerdown', dragStart);
+  fab.addEventListener('pointermove', dragMove);
+  fab.addEventListener('pointerup', dragEnd);
+  fab.addEventListener('pointercancel', dragEnd);
+  fab.addEventListener('lostpointercapture', (e) => { if(isDragging) dragEnd(e); });
+  window.addEventListener('pointerup', (e) => { if(isDragging) dragEnd(e); });
+  window.addEventListener('pointercancel', (e) => { if(isDragging) dragEnd(e); });
+  fab.addEventListener('dragstart', (e) => e.preventDefault());
+
+  window.addEventListener('resize', () => {
+    if(!fab.classList.contains('hidden')){
+      const rect = fab.getBoundingClientRect();
+      setFabPosition(rect.left, rect.top, true);
+    }
+    if(panel.classList.contains('active')) positionPanel();
+  });
+
+  /* ============================================================
+     POSICIONAMENTO DO PAINEL — sempre centralizado na área visível
+     (reage ao teclado no celular via visualViewport, como o chat)
+     ============================================================ */
+  function isMobileViewport(){ return window.matchMedia('(max-width: 768px)').matches; }
+
+  function getViewportBox(){
+    if(window.visualViewport){
+      return {
+        width: window.visualViewport.width,
+        height: window.visualViewport.height,
+        offsetLeft: window.visualViewport.offsetLeft || 0,
+        offsetTop: window.visualViewport.offsetTop || 0
+      };
+    }
+    return { width: window.innerWidth, height: window.innerHeight, offsetLeft:0, offsetTop:0 };
+  }
+
+  function positionPanel(){
+    const margin = 10;
+    const vp = getViewportBox();
+    const cw = Math.min(480, vp.width * 0.95);
+    const ch = Math.min(640, Math.max(320, vp.height * 0.88));
+    const left = vp.offsetLeft + (vp.width - cw) / 2;
+    const top = vp.offsetTop + (vp.height - ch) / 2;
+
+    panel.style.width = cw + 'px';
+    panel.style.maxWidth = cw + 'px';
+    panel.style.height = ch + 'px';
+    panel.style.maxHeight = ch + 'px';
+    panel.style.left = Math.max(margin, left) + 'px';
+    panel.style.top = Math.max(margin, top) + 'px';
+    panel.style.right = 'auto';
+    panel.style.bottom = 'auto';
+  }
+
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', () => {
+      if(panel.classList.contains('active')) positionPanel();
+    });
+    window.visualViewport.addEventListener('scroll', () => {
+      if(panel.classList.contains('active') && isMobileViewport()) positionPanel();
+    });
+  }
+
+  /* ============================================================
+     ABRIR / FECHAR PAINEL
+     O X fecha o painel mas NÃO faz logout — a sessão do Firebase
+     continua ativa, então ao reabrir o painel o admin já está logado.
+     ============================================================ */
+  let lastOpenTime = 0;
+  const GHOST_CLICK_GUARD_MS = 400;
+
+  function openPdmPanel(){
+    if(panel.classList.contains('active')) return;
+    panel.classList.remove('pdm-closing');
+    overlay.classList.remove('pdm-closing');
+    positionPanel();
+    panel.classList.add('active');
+    fab.classList.add('hidden');
+    overlay.classList.add('active');
+    lastOpenTime = Date.now();
+    requestAnimationFrame(positionPanel);
+  }
+
+  window.pdmClose = function(){
+    if(!panel.classList.contains('active')) return;
+    panel.classList.add('pdm-closing');
+    overlay.classList.add('pdm-closing');
+    setTimeout(() => {
+      panel.classList.remove('active', 'pdm-closing');
+      overlay.classList.remove('active', 'pdm-closing');
+      fab.classList.remove('hidden');
+    }, 150);
+  };
+
+  window.pdmToggle = function(){
+    if(panel.classList.contains('active')) window.pdmClose();
+    else openPdmPanel();
+  };
+
+  $('pdmCloseBtn').addEventListener('click', function(){
+    if(Date.now() - lastOpenTime < GHOST_CLICK_GUARD_MS) return;
+    window.pdmClose();
+  });
+  overlay.addEventListener('click', function(){
+    if(Date.now() - lastOpenTime < GHOST_CLICK_GUARD_MS) return;
+    window.pdmClose();
+  });
+
+  /* Abrir via link âncora: <a href="#pdmAdminWidget">Abrir painel</a> */
+  function checkHashOpen(){
+    if(window.location.hash && window.location.hash === '#' + widget.id) openPdmPanel();
+  }
+  window.addEventListener('hashchange', checkHashOpen);
+
+  loadFabPosition();
+  checkHashOpen();
+
+  /* ============================================================
+     A PARTIR DAQUI: LÓGICA ORIGINAL DO PAINEL ADMIN, 100% MANTIDA
+     ============================================================ */
+
+  function phoneToPseudoEmail(ddi, phone){
+    const digitsDdi = ddi.replace(/\D/g, "");
+    const digitsPhone = phone.replace(/\D/g, "");
+    return `${digitsDdi}${digitsPhone}@palpitao.app`;
+  }
+
+  const loginOverlay = $("loginOverlay");
+  const appShell = $("appShell");
+  const loginMsg = $("loginMsg");
+
+  $("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    loginMsg.className = "msg";
+    loginMsg.textContent = "";
+
+    const ddi = $("l_ddi").value;
+    const phone = $("l_phone").value.trim();
+    const password = $("l_password").value;
+
+    if(!phone){
+      loginMsg.textContent = "Digite o número de telefone.";
+      loginMsg.classList.add("err");
+      return;
+    }
+    if(!password){
+      loginMsg.textContent = "Digite a senha.";
+      loginMsg.classList.add("err");
+      return;
+    }
+
+    const btn = $("loginBtn");
+    btn.disabled = true;
+    btn.textContent = "Entrando...";
+
+    try{
+      const email = phoneToPseudoEmail(ddi, phone);
+      await signInWithEmailAndPassword(auth, email, password);
+    }catch(err){
+      let friendly = "Telefone ou senha inválidos.";
+      if(err.code === "auth/too-many-requests") friendly = "Muitas tentativas. Tente novamente mais tarde.";
+      if(err.code === "auth/network-request-failed") friendly = "Falha de conexão. Verifique sua internet.";
+      loginMsg.textContent = friendly;
+      loginMsg.classList.add("err");
+    }finally{
+      btn.disabled = false;
+      btn.textContent = "Entrar";
+    }
+  });
+
+  $("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    if(user){
+      loginOverlay.classList.add("hidden");
+      appShell.classList.remove("hidden");
+      $("whoamiLabel").textContent = "logado como: " + (user.email || user.uid);
+      $("l_password").value = "";
+      loginMsg.textContent = "";
+      resetForm();
+      subscribeGames();
+    } else {
+      appShell.classList.add("hidden");
+      loginOverlay.classList.remove("hidden");
+      if(unsubscribeGames){ unsubscribeGames(); unsubscribeGames = null; }
+      closeResultModal();
+    }
+  });
+
+  function makeListRow(container, value, placeholder){
+    const row = document.createElement("div");
+    row.className = "list-input-row";
+    row.innerHTML = `<input type="text" value="${value ? value.replace(/"/g,'&quot;') : ""}" placeholder="${placeholder}">
+      <button type="button" class="icon-btn del-row">✕</button>`;
+    row.querySelector(".del-row").addEventListener("click", () => row.remove());
+    container.appendChild(row);
+  }
+  function getListValues(container){
+    return Array.from(container.querySelectorAll("input"))
+      .map(i => i.value.trim())
+      .filter(v => v.length > 0);
+  }
+
+  $("addPhotoBtn").addEventListener("click", () => makeListRow($("photosList"), "", "https://... (URL da foto)"));
+  $("addAdBtn").addEventListener("click", () => makeListRow($("adsList"), "", "https://... (URL do anúncio)"));
+
+  function syncMediaFields(){
+    const isPhoto = $("f_mediaType").value === "photo";
+    $("videoIdField").style.display = isPhoto ? "none" : "flex";
+    $("photosField").style.display = isPhoto ? "flex" : "none";
+  }
+  $("f_mediaType").addEventListener("change", syncMediaFields);
+
+  function syncStatusFields(){
+    const finished = $("f_status").value === "finished";
+    $("resultBlock").classList.toggle("show", finished);
+
+    const hint = $("statusHint");
+    if($("f_status").value === "featured"){
+      const currentId = $("gameId").value;
+      const otherFeatured = cachedGames.filter(g => g.status === "featured" && g.id !== currentId);
+      hint.textContent = otherFeatured.length
+        ? "Atenção: já existe um jogo em destaque (" + (otherFeatured[0].teamA + " × " + otherFeatured[0].teamB) + "). Ao salvar, ele será movido automaticamente para \"upcoming\"."
+        : "Este será o único jogo em destaque (Agendado) na tela principal.";
+    } else if($("f_status").value === "upcoming"){
+      hint.textContent = "Aparece na lista de Próximos Jogos, com seus próprios dados.";
+    } else {
+      hint.textContent = "";
+    }
+  }
+  $("f_status").addEventListener("change", syncStatusFields);
+
+  function resetForm(){
+    $("gameForm").reset();
+    $("gameId").value = "";
+    $("photosList").innerHTML = "";
+    $("adsList").innerHTML = "";
+    makeListRow($("photosList"), "", "https://... (URL da foto)");
+    makeListRow($("photosList"), "", "https://... (URL da foto)");
+    $("f_mediaType").value = "youtube";
+    $("f_status").value = "upcoming";
+    syncMediaFields();
+    syncStatusFields();
+    $("formMsg").textContent = "";
+    $("formMsg").className = "msg";
+    $("saveBtn").textContent = "Salvar jogo";
+    const d = new Date(Date.now() + 30*60000);
+    d.setSeconds(0,0);
+    const iso = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    $("f_startAt").value = iso;
+  }
+
+  function loadGameIntoForm(g){
+    $("gameId").value = g.id;
+    $("f_title").value = g.title || "";
+    $("f_teamA").value = g.teamA || "";
+    $("f_teamB").value = g.teamB || "";
+    $("f_desc").value = g.desc || "";
+    $("f_mediaType").value = g.mediaType === "photo" ? "photo" : "youtube";
+    $("f_videoId").value = g.videoId || "";
+    $("f_adsCount").value = g.adsCount || 0;
+    $("f_status").value = (g.status === "finished" || g.status === "featured") ? g.status : "upcoming";
+    $("f_resultA").value = g.result ? g.result.a : 0;
+    $("f_resultB").value = g.result ? g.result.b : 0;
+
+    const d = new Date(g.startAt || Date.now());
+    const iso = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    $("f_startAt").value = iso;
+
+    $("photosList").innerHTML = "";
+    const photos = g.photos && g.photos.length ? g.photos : ["",""];
+    photos.forEach(p => makeListRow($("photosList"), p, "https://... (URL da foto)"));
+
+    $("adsList").innerHTML = "";
+    (g.ads || []).forEach(a => makeListRow($("adsList"), a, "https://... (URL do anúncio)"));
+
+    syncMediaFields();
+    syncStatusFields();
+    $("saveBtn").textContent = "Atualizar jogo";
+    $("formMsg").textContent = "Editando: " + (g.title || g.id);
+    $("formMsg").className = "msg ok";
+    $("pdmPanelBody").scrollTo({top:0, behavior:"smooth"});
+  }
+
+  $("gameForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("formMsg");
+    msg.className = "msg";
+
+    const teamA = $("f_teamA").value.trim();
+    const teamB = $("f_teamB").value.trim();
+    if(!teamA || !teamB){
+      msg.textContent = "Preencha os nomes dos dois times.";
+      msg.classList.add("err");
+      return;
+    }
+    const startVal = $("f_startAt").value;
+    if(!startVal){
+      msg.textContent = "Defina a data/hora de início.";
+      msg.classList.add("err");
+      return;
+    }
+
+    const mediaType = $("f_mediaType").value;
+    const status = $("f_status").value;
+
+    const data = {
+      title: $("f_title").value.trim() || "JOGO SEM TÍTULO",
+      teamA, teamB,
+      desc: $("f_desc").value.trim(),
+      mediaType,
+      videoId: mediaType === "youtube" ? $("f_videoId").value.trim() : "",
+      photos: mediaType === "photo" ? getListValues($("photosList")) : [],
+      startAt: new Date(startVal).getTime(),
+      status,
+      adsCount: parseInt($("f_adsCount").value, 10) || 0,
+      ads: getListValues($("adsList"))
+    };
+
+    if(status === "finished"){
+      data.result = {
+        a: parseInt($("f_resultA").value, 10) || 0,
+        b: parseInt($("f_resultB").value, 10) || 0
+      };
+    }
+
+    try{
+      const existingId = $("gameId").value;
+      const ref = existingId ? doc(db, "games", existingId) : doc(gamesCol);
+
+      let demoted = 0;
+      if(status === "featured"){
+        const others = cachedGames.filter(g => g.status === "featured" && g.id !== ref.id);
+        for(const other of others){
+          await updateDoc(doc(db, "games", other.id), { status: "upcoming" });
+          demoted++;
+        }
+      }
+
+      await setDoc(ref, data, { merge: true });
+
+      msg.textContent = "Jogo salvo com sucesso: " + data.title +
+        (demoted ? " (" + demoted + " jogo(s) anterior(es) movido(s) de destaque para próximos jogos)" : "");
+      msg.classList.add("ok");
+      if(!existingId){
+        $("gameId").value = ref.id;
+        $("saveBtn").textContent = "Atualizar jogo";
+      }
+    }catch(err){
+      console.error(err);
+      msg.textContent = "Erro ao salvar no Firestore: " + err.message;
+      msg.classList.add("err");
+    }
+  });
+
+  $("clearBtn").addEventListener("click", resetForm);
+
+  function fmtDate(ms){
+    return new Date(ms).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+
+  const STATUS_LABEL = { featured: "destaque", upcoming: "próximo", finished: "encerrado" };
+
+  let cachedGames = [];
+  let unsubscribeGames = null;
+
+  function renderGamesList(){
+    const el = $("gamesList");
+    if(!cachedGames.length){
+      el.innerHTML = '<div class="empty">Nenhum jogo cadastrado ainda.</div>';
+      return;
+    }
+    const order = { featured: 0, upcoming: 1, finished: 2 };
+    const sorted = [...cachedGames].sort((a,b) => (order[a.status] ?? 1) - (order[b.status] ?? 1) || a.startAt - b.startAt);
+
+    el.innerHTML = sorted.map(g => {
+      const st = (g.status === "finished" || g.status === "featured") ? g.status : "upcoming";
+      const resultLine = g.result ? `<div class="r">Placar: ${g.result.a} x ${g.result.b}</div>` : "";
+      return `
+      <div class="game-row" data-id="${g.id}">
+        <div class="gi">
+          <div class="t">${g.teamA || "TIME A"} × ${g.teamB || "TIME B"}</div>
+          <div class="s">${g.title || "sem título"} · ${fmtDate(g.startAt)} · ${g.mediaType}</div>
+          ${resultLine}
+        </div>
+        <span class="badge ${st}">${STATUS_LABEL[st]}</span>
+        <div class="actions">
+          <button class="result" data-id="${g.id}">${g.result ? "Editar resultado" : "Resultado"}</button>
+          <button class="edit" data-id="${g.id}">Editar</button>
+          <button class="del" data-id="${g.id}">Excluir</button>
+        </div>
+      </div>`;
+    }).join("");
+
+    el.querySelectorAll(".edit").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const g = cachedGames.find(x => x.id === btn.dataset.id);
+        if(g) loadGameIntoForm(g);
+      });
+    });
+    el.querySelectorAll(".result").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const g = cachedGames.find(x => x.id === btn.dataset.id);
+        if(g) openResultModal(g);
+      });
+    });
+    el.querySelectorAll(".del").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const g = cachedGames.find(x => x.id === btn.dataset.id);
+        const label = g ? (g.teamA + " × " + g.teamB) : btn.dataset.id;
+        if(!confirm("Excluir permanentemente o jogo \"" + label + "\"? Isso apaga também os palpites e comentários dele.")) return;
+        try{
+          await deleteDoc(doc(db, "games", btn.dataset.id));
+        }catch(err){
+          alert("Erro ao excluir: " + err.message);
+        }
+      });
+    });
+  }
+
+  function subscribeGames(){
+    const q = query(gamesCol, orderBy("startAt", "asc"));
+    unsubscribeGames = onSnapshot(q, (snap) => {
+      cachedGames = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderGamesList();
+      syncStatusFields();
+    }, (err) => {
+      $("gamesList").innerHTML = '<div class="empty">Erro ao carregar jogos: ' + err.message + '</div>';
+    });
+  }
+
+  let resultModalGameId = null;
+
+  function openResultModal(g){
+    resultModalGameId = g.id;
+    $("resultModalTeams").textContent = (g.teamA || "TIME A") + " × " + (g.teamB || "TIME B") + (g.title ? " — " + g.title : "");
+    $("rm_scoreA").value = g.result ? g.result.a : 0;
+    $("rm_scoreB").value = g.result ? g.result.b : 0;
+    $("resultModalMsg").textContent = "";
+    $("resultModalMsg").className = "msg";
+    $("resultOverlay").classList.add("show");
+    $("rm_scoreA").focus();
+  }
+
+  function closeResultModal(){
+    resultModalGameId = null;
+    $("resultOverlay").classList.remove("show");
+  }
+
+  async function saveResult(){
+    if(!resultModalGameId) return;
+    const msg = $("resultModalMsg");
+    msg.className = "msg";
+
+    const scoreA = parseInt($("rm_scoreA").value, 10);
+    const scoreB = parseInt($("rm_scoreB").value, 10);
+    if(isNaN(scoreA) || isNaN(scoreB) || scoreA < 0 || scoreB < 0){
+      msg.textContent = "Digite valores válidos (números inteiros, 0 ou mais) para os dois placares.";
+      msg.classList.add("err");
+      return;
+    }
+
+    const btn = $("resultModalSave");
+    btn.disabled = true;
+    btn.textContent = "Salvando...";
+
+    try{
+      await updateDoc(doc(db, "games", resultModalGameId), {
+        status: "finished",
+        result: { a: scoreA, b: scoreB },
+        scored: false
+      });
+      msg.textContent = "Resultado salvo! Já está visível para todos os usuários.";
+      msg.classList.add("ok");
+      setTimeout(closeResultModal, 900);
+    }catch(err){
+      console.error(err);
+      msg.textContent = "Erro ao salvar no Firestore: " + err.message;
+      msg.classList.add("err");
+    }finally{
+      btn.disabled = false;
+      btn.textContent = "Salvar resultado";
+    }
+  }
+
+  $("resultModalSave").addEventListener("click", saveResult);
+  $("resultModalCancel").addEventListener("click", closeResultModal);
+  $("resultModalClose").addEventListener("click", closeResultModal);
+  $("resultOverlay").addEventListener("click", (e) => {
+    if(e.target.id === "resultOverlay") closeResultModal();
+  });
+  [$("rm_scoreA"), $("rm_scoreB")].forEach(input => {
+    input.addEventListener("keydown", (e) => { if(e.key === "Enter") saveResult(); });
+  });
+</script>
+
+<style>
+:root{
+  --fsx-blue:#1B3A6B;
+  --fsx-blue-dark:#122748;
+  --fsx-blue-darker:#0b1a30;
+  --fsx-gold:#FFC93C;
+  --fsx-bg:#f5f6f8;
+  --fsx-card:#ffffff;
+  --fsx-line:#e2e5ea;
+  --fsx-text:#1c1f26;
+  --fsx-muted:#6b7280;
+  --fsx-green:#1e7d3a;
+  --fsx-red:#c1272d;
+  --fsx-mono:'Courier New',Courier,monospace;
+  --fsx-btn-size:56px;
+}
+
+#fsxWidget, #fsxWidget *, #fsxImgModal, #fsxImgModal *{ box-sizing:border-box; }
+#fsxWidget{ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:var(--fsx-text); }
+
+/* ===== BOTÃO FLUTUANTE ARRASTÁVEL ===== */
+.fsx-fab{
+  position:fixed;
+  width:var(--fsx-btn-size); height:var(--fsx-btn-size);
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--fsx-blue) 0%, var(--fsx-blue-darker) 100%);
+  border:2px solid var(--fsx-gold);
+  color:var(--fsx-gold);
+  font-size:22px;
+  cursor:grab;
+  box-shadow:0 4px 14px rgba(0,0,0,.45);
+  display:flex; align-items:center; justify-content:center;
+  transition:box-shadow .2s ease, transform .15s ease;
+  z-index:2147483000;
+  padding:0; overflow:hidden;
+  touch-action:none; user-select:none; -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.fsx-fab.dragging{ cursor:grabbing; transition:none; box-shadow:0 8px 24px rgba(0,0,0,.6); transform:scale(1.06); }
+.fsx-fab.hidden{ display:none; }
+.fsx-fab span{ pointer-events:none; }
+
+/* ===== OVERLAY ===== */
+.fsx-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.5);
+  display:none; z-index:2147482998; animation:fsxFadeIn .2s ease-out;
+}
+.fsx-overlay.active{ display:block; }
+.fsx-overlay.fsx-closing{ animation:fsxFadeIn .15s ease-in reverse; }
+
+/* ===== PAINEL ===== */
+.fsx-panel{
+  position:fixed;
+  width:560px; max-width:96vw;
+  height:680px; max-height:90vh;
+  background:var(--fsx-bg);
+  border:1px solid var(--fsx-line);
+  border-radius:16px;
+  box-shadow:0 10px 40px rgba(0,0,0,.45);
+  display:none; flex-direction:column;
+  z-index:2147482999; overflow:hidden;
+  animation:fsxPopIn .2s ease-out;
+}
+.fsx-panel.active{ display:flex; }
+.fsx-panel.fsx-closing{ animation:fsxPopOut .15s ease-in forwards; }
+
+@keyframes fsxPopIn{ from{transform:scale(.94);opacity:0;} to{transform:scale(1);opacity:1;} }
+@keyframes fsxPopOut{ from{transform:scale(1);opacity:1;} to{transform:scale(.94);opacity:0;} }
+@keyframes fsxFadeIn{ from{opacity:0;} to{opacity:1;} }
+
+.fsx-header{
+  background:linear-gradient(135deg, var(--fsx-blue) 0%, var(--fsx-blue-darker) 100%);
+  padding:12px 14px; display:flex; align-items:center; gap:10px; flex-shrink:0;
+}
+.fsx-logo{
+  width:34px; height:34px; background:var(--fsx-gold); border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:12px; color:var(--fsx-blue-darker); flex-shrink:0;
+}
+.fsx-htitle{ flex:1; min-width:0; }
+.fsx-htitle b{ font-size:13.5px; letter-spacing:.5px; color:#fff; display:block; }
+.fsx-htitle small{ font-size:10.5px; color:rgba(255,255,255,.75); display:block; margin-top:1px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fsx-close{
+  background:rgba(255,255,255,.15); border:none; color:#fff; width:30px; height:30px;
+  border-radius:8px; cursor:pointer; font-size:16px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; transition:background .2s;
+}
+.fsx-close:hover{ background:var(--fsx-red); }
+
+/* ===== TABS ===== */
+.fsx-tabs{ display:flex; gap:0; background:#fff; border-bottom:1px solid var(--fsx-line); flex-shrink:0; }
+.fsx-tab-btn{
+  flex:1; padding:11px 8px; background:none; border:none; cursor:pointer;
+  font-size:12.5px; font-weight:600; color:var(--fsx-muted);
+  border-bottom:2px solid transparent; transition:all .15s;
+}
+.fsx-tab-btn:hover{ color:var(--fsx-blue); }
+.fsx-tab-btn.active{ color:var(--fsx-blue); border-bottom-color:var(--fsx-blue); background:rgba(27,58,107,.05); }
+
+.fsx-body{ flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+.fsx-body::-webkit-scrollbar{ width:6px; }
+.fsx-body::-webkit-scrollbar-thumb{ background:#c8ccd4; border-radius:3px; }
+
+.fsx-tabpane{ display:none; padding:14px; }
+.fsx-tabpane.active{ display:block; }
+
+/* ===== AUTH BANNER ===== */
+.fsx-auth-banner{
+  background:#fff3cd; border:1px solid #ffe08a; color:#7a5b00;
+  padding:10px 12px; border-radius:8px; font-size:12px; margin-bottom:12px; display:none;
+}
+.fsx-auth-banner.show{ display:block; }
+
+/* ===== BUSCA RÁPIDA (mantém a lógica original) ===== */
+.fsx-search-row{ display:flex; gap:8px; margin-bottom:14px; }
+.fsx-search-row input{
+  flex:1; padding:9px 10px; border:1px solid var(--fsx-line); border-radius:8px;
+  font-size:13px; background:#fff;
+}
+.fsx-search-row input:focus{ outline:none; border-color:var(--fsx-blue); }
+.fsx-btn{
+  border:none; border-radius:8px; padding:9px 14px; font-size:12.5px; font-weight:700;
+  cursor:pointer; color:#fff; background:var(--fsx-blue); white-space:nowrap;
+}
+.fsx-btn:hover{ background:var(--fsx-blue-dark); }
+.fsx-btn.ghost{ background:#fff; color:var(--fsx-blue); border:1px solid var(--fsx-blue); }
+.fsx-btn.ghost:hover{ background:rgba(27,58,107,.06); }
+.fsx-btn.danger{ background:var(--fsx-red); }
+.fsx-btn.danger:hover{ background:#9c1e23; }
+.fsx-btn.success{ background:var(--fsx-green); }
+.fsx-btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+.fsx-profile{
+  background:var(--fsx-card); border:1px solid var(--fsx-line); border-radius:10px;
+  padding:12px 14px; margin-bottom:14px; font-size:12.5px; line-height:1.7;
+}
+.fsx-profile .p-row b{ color:var(--fsx-blue); }
+
+.fsx-section-title{
+  font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;
+  color:var(--fsx-muted); margin:14px 0 8px;
+}
+
+.fsx-card{
+  background:var(--fsx-card); border:1px solid var(--fsx-line); border-radius:10px;
+  padding:12px 14px; margin-bottom:10px; font-size:12.5px; line-height:1.6;
+}
+.fsx-card .status{ font-weight:700; }
+.fsx-card img{ max-width:180px; border-radius:6px; margin-top:8px; cursor:pointer; display:block; }
+.fsx-empty{ font-size:12.5px; color:var(--fsx-muted); padding:8px 2px; }
+
+/* ===== COLEÇÕES ===== */
+.fsx-crumbs{ font-size:11.5px; color:var(--fsx-muted); margin-bottom:10px; }
+.fsx-crumbs button{ background:none; border:none; color:var(--fsx-blue); cursor:pointer; font-size:11.5px; font-weight:700; padding:0; }
+.fsx-crumbs button:hover{ text-decoration:underline; }
+
+.fsx-col-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; }
+.fsx-col-btn{
+  background:var(--fsx-card); border:1px solid var(--fsx-line); border-radius:10px;
+  padding:12px 10px; cursor:pointer; text-align:left; font-size:12.5px; font-weight:700;
+  color:var(--fsx-text); transition:all .15s;
+}
+.fsx-col-btn:hover{ border-color:var(--fsx-blue); background:rgba(27,58,107,.05); }
+.fsx-col-btn .n{ display:block; font-size:9.5px; font-weight:600; color:var(--fsx-muted); margin-top:4px; text-transform:uppercase; }
+
+.fsx-doclist-header{ display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+.fsx-doclist-header input{ flex:1; min-width:140px; padding:8px 10px; border:1px solid var(--fsx-line); border-radius:8px; font-size:12.5px; }
+
+.fsx-doc-item{
+  background:var(--fsx-card); border:1px solid var(--fsx-line); border-radius:8px;
+  padding:9px 11px; margin-bottom:6px; cursor:pointer; transition:all .15s;
+}
+.fsx-doc-item:hover{ border-color:var(--fsx-blue); background:rgba(27,58,107,.05); }
+.fsx-doc-item .id{ font-family:var(--fsx-mono); font-size:10.5px; color:var(--fsx-blue); font-weight:700; }
+.fsx-doc-item .prev{ font-size:11px; color:var(--fsx-muted); margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.fsx-editor textarea{
+  width:100%; min-height:280px; font-family:var(--fsx-mono); font-size:12px;
+  padding:10px; border:1px solid var(--fsx-line); border-radius:8px; background:#fff;
+  color:var(--fsx-text);
+}
+.fsx-editor textarea:focus{ outline:none; border-color:var(--fsx-blue); }
+.fsx-editor-actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+.fsx-msg{ font-size:11.5px; margin-top:8px; min-height:14px; }
+.fsx-msg.ok{ color:var(--fsx-green); }
+.fsx-msg.err{ color:var(--fsx-red); }
+
+.fsx-hidden{ display:none !important; }
+
+@media (max-width:380px){ .fsx-fab{ width:50px; height:50px; } }
+</style>
+
+<!--
+  Para abrir este painel a partir de um link/botão do seu site, use:
+  <a href="#fsxWidget">Abrir Firestore Explorer</a>
+-->
+<div id="fsxWidget">
+  <div class="fsx-overlay" id="fsxOverlay"></div>
+
+  <button class="fsx-fab" id="fsxFab" title="Arraste para mover · toque para abrir">
+    <span>🗄️</span>
+  </button>
+
+  <div class="fsx-panel" id="fsxPanel">
+    <div class="fsx-header">
+      <div class="fsx-logo">DB</div>
+      <div class="fsx-htitle">
+        <b>FIRESTORE EXPLORER</b>
+        <small id="fsxWhoami">verificando sessão…</small>
+      </div>
+      <button class="fsx-close" id="fsxCloseBtn" title="Fechar (sua sessão continua ativa)">✕</button>
+    </div>
+
+    <div class="fsx-tabs">
+      <button class="fsx-tab-btn active" data-tab="quick">🔎 Busca rápida</button>
+      <button class="fsx-tab-btn" data-tab="collections">🗂️ Coleções</button>
+    </div>
+
+    <div class="fsx-body" id="fsxBody">
+
+      <!-- ===================== ABA: BUSCA RÁPIDA ===================== -->
+      <div class="fsx-tabpane active" id="fsxQuickPane">
+        <div class="fsx-auth-banner" id="fsxAuthBanner1">
+          ⚠️ Você precisa estar autenticado como admin (login feito na página principal deste mesmo site) para consultar dados.
+        </div>
+
+        <div class="fsx-search-row">
+          <input id="fsxSearchInput" placeholder="Digite UID ou Nº de celular">
+          <button class="fsx-btn" id="fsxSearchBtn">Procurar</button>
+        </div>
+
+        <div id="fsxProfileInfo" class="fsx-empty">Digite um UID ou celular para ver o perfil…</div>
+
+        <div class="fsx-section-title">📥 Depósitos</div>
+        <div id="fsxDepositsList" class="fsx-empty">—</div>
+
+        <div class="fsx-section-title">💳 Saques</div>
+        <div id="fsxWithdrawalsList" class="fsx-empty">—</div>
+      </div>
+
+      <!-- ===================== ABA: COLEÇÕES (FIRESTORE COMPLETO) ===================== -->
+      <div class="fsx-tabpane" id="fsxCollectionsPane">
+        <div class="fsx-auth-banner" id="fsxAuthBanner2">
+          ⚠️ Você precisa estar autenticado como admin (login feito na página principal deste mesmo site) para editar dados.
+        </div>
+
+        <div class="fsx-crumbs" id="fsxCrumbs">Coleções</div>
+
+        <!-- Lista de coleções -->
+        <div id="fsxColListView">
+          <div class="fsx-col-grid" id="fsxColGrid"></div>
+        </div>
+
+        <!-- Lista de documentos de uma coleção -->
+        <div id="fsxDocListView" class="fsx-hidden">
+          <div class="fsx-doclist-header">
+            <input id="fsxDocFilter" placeholder="Filtrar por ID ou conteúdo…">
+            <button class="fsx-btn ghost" id="fsxRefreshColBtn">↻ Atualizar</button>
+            <button class="fsx-btn" id="fsxNewDocBtn">+ Novo</button>
+          </div>
+          <div id="fsxDocCount" class="fsx-empty"></div>
+          <div id="fsxDocItems"></div>
+        </div>
+
+        <!-- Editor de documento -->
+        <div id="fsxDocEditorView" class="fsx-hidden fsx-editor">
+          <div class="fsx-doclist-header">
+            <div style="font-family:var(--fsx-mono); font-size:11.5px; color:var(--fsx-blue); font-weight:700;" id="fsxEditorDocId"></div>
+          </div>
+          <textarea id="fsxJsonEditor" spellcheck="false"></textarea>
+          <div class="fsx-editor-actions">
+            <button class="fsx-btn success" id="fsxSaveDocBtn">💾 Salvar</button>
+            <button class="fsx-btn ghost" id="fsxCopyDocBtn">📋 Copiar</button>
+            <button class="fsx-btn danger" id="fsxDeleteDocBtn">🗑️ Excluir</button>
+            <button class="fsx-btn ghost" id="fsxBackDocBtn">← Voltar</button>
+          </div>
+          <div class="fsx-msg" id="fsxEditorMsg"></div>
+        </div>
+      </div>
+
+    </div><!-- /fsxBody -->
+  </div><!-- /fsxPanel -->
+</div><!-- /fsxWidget -->
+
+<!-- Modal de imagem (comprovativos) -->
+<div id="fsxImgModal" style="display:none; position:fixed; z-index:2147483001; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,.85);">
+  <span id="fsxCloseImgModal" style="position:absolute; top:16px; right:24px; color:#fff; font-size:34px; font-weight:bold; cursor:pointer;">&times;</span>
+  <img id="fsxModalImg" src="" style="display:block; margin:50px auto; max-width:90%; max-height:80%; border-radius:8px; box-shadow:0 0 20px rgba(0,0,0,.6);">
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, deleteDoc, addDoc, onSnapshot,
+    collection, collectionGroup, query, where, getDocs
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+    authDomain: "proibidoreplica.firebaseapp.com",
+    projectId: "proibidoreplica",
+    storageBucket: "proibidoreplica.firebasestorage.app",
+    messagingSenderId: "794009646952",
+    appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  const $ = id => document.getElementById(id);
+
+  /* ============================================================
+     BOTÃO FLUTUANTE ARRASTÁVEL — mesmo padrão robusto já usado
+     (pointer events, drag/click, posição persistida, sem tela cheia)
+     ============================================================ */
+  const FAB_STORAGE_KEY = 'fsxFabPosV1';
+  const fab = $('fsxFab');
+  const panel = $('fsxPanel');
+  const overlay = $('fsxOverlay');
+  const widget = $('fsxWidget');
+
+  let isDragging = false, didDrag = false;
+  let dragStartX = 0, dragStartY = 0, fabStartLeft = 0, fabStartTop = 0;
+  const DRAG_THRESHOLD = 6;
+
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+  function getFabSize(){ return fab.getBoundingClientRect().width || 56; }
+
+  function setFabPosition(left, top, persist){
+    const size = getFabSize();
+    left = clamp(left, 6, window.innerWidth - size - 6);
+    top = clamp(top, 6, window.innerHeight - size - 6);
+    fab.style.left = left + 'px';
+    fab.style.top = top + 'px';
+    fab.style.right = 'auto';
+    fab.style.bottom = 'auto';
+    if(persist){
+      try{
+        localStorage.setItem(FAB_STORAGE_KEY, JSON.stringify({
+          xPercent: left / window.innerWidth, yPercent: top / window.innerHeight
+        }));
+      }catch(e){}
+    }
+  }
+
+  function loadFabPosition(){
+    const size = getFabSize();
+    let left = window.innerWidth - size - 20;
+    let top = window.innerHeight - size - 160;
+    try{
+      const saved = localStorage.getItem(FAB_STORAGE_KEY);
+      if(saved){
+        const { xPercent, yPercent } = JSON.parse(saved);
+        left = xPercent * window.innerWidth;
+        top = yPercent * window.innerHeight;
+      }
+    }catch(e){}
+    setFabPosition(left, top, false);
+  }
+
+  function dragStart(e){
+    e.preventDefault();
+    isDragging = true; didDrag = false;
+    fab.classList.add('dragging');
+    const rect = fab.getBoundingClientRect();
+    fabStartLeft = rect.left; fabStartTop = rect.top;
+    dragStartX = e.clientX; dragStartY = e.clientY;
+    try{ fab.setPointerCapture(e.pointerId); }catch(err){}
+  }
+  function dragMove(e){
+    if(!isDragging) return;
+    e.preventDefault();
+    const dx = e.clientX - dragStartX, dy = e.clientY - dragStartY;
+    if(Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) didDrag = true;
+    setFabPosition(fabStartLeft + dx, fabStartTop + dy, false);
+  }
+  function dragEnd(e){
+    if(!isDragging) return;
+    if(e && e.cancelable) e.preventDefault();
+    isDragging = false;
+    fab.classList.remove('dragging');
+    const rect = fab.getBoundingClientRect();
+    setFabPosition(rect.left, rect.top, true);
+    if(!didDrag) window.fsxToggle();
+  }
+  fab.addEventListener('pointerdown', dragStart);
+  fab.addEventListener('pointermove', dragMove);
+  fab.addEventListener('pointerup', dragEnd);
+  fab.addEventListener('pointercancel', dragEnd);
+  fab.addEventListener('lostpointercapture', (e) => { if(isDragging) dragEnd(e); });
+  window.addEventListener('pointerup', (e) => { if(isDragging) dragEnd(e); });
+  window.addEventListener('pointercancel', (e) => { if(isDragging) dragEnd(e); });
+  fab.addEventListener('dragstart', (e) => e.preventDefault());
+
+  window.addEventListener('resize', () => {
+    if(!fab.classList.contains('hidden')){
+      const rect = fab.getBoundingClientRect();
+      setFabPosition(rect.left, rect.top, true);
+    }
+    if(panel.classList.contains('active')) positionPanel();
+  });
+
+  function isMobileViewport(){ return window.matchMedia('(max-width: 768px)').matches; }
+  function getViewportBox(){
+    if(window.visualViewport){
+      return { width:window.visualViewport.width, height:window.visualViewport.height,
+        offsetLeft:window.visualViewport.offsetLeft||0, offsetTop:window.visualViewport.offsetTop||0 };
+    }
+    return { width:window.innerWidth, height:window.innerHeight, offsetLeft:0, offsetTop:0 };
+  }
+  function positionPanel(){
+    const margin = 10;
+    const vp = getViewportBox();
+    const cw = Math.min(560, vp.width * 0.96);
+    const ch = Math.min(680, Math.max(320, vp.height * 0.9));
+    const left = vp.offsetLeft + (vp.width - cw) / 2;
+    const top = vp.offsetTop + (vp.height - ch) / 2;
+    panel.style.width = cw + 'px'; panel.style.maxWidth = cw + 'px';
+    panel.style.height = ch + 'px'; panel.style.maxHeight = ch + 'px';
+    panel.style.left = Math.max(margin, left) + 'px';
+    panel.style.top = Math.max(margin, top) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  }
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', () => { if(panel.classList.contains('active')) positionPanel(); });
+    window.visualViewport.addEventListener('scroll', () => { if(panel.classList.contains('active') && isMobileViewport()) positionPanel(); });
+  }
+
+  let lastOpenTime = 0;
+  const GHOST_CLICK_GUARD_MS = 400;
+
+  function openFsxPanel(){
+    if(panel.classList.contains('active')) return;
+    panel.classList.remove('fsx-closing');
+    overlay.classList.remove('fsx-closing');
+    positionPanel();
+    panel.classList.add('active');
+    fab.classList.add('hidden');
+    overlay.classList.add('active');
+    lastOpenTime = Date.now();
+    requestAnimationFrame(positionPanel);
+  }
+  window.fsxClose = function(){
+    if(!panel.classList.contains('active')) return;
+    panel.classList.add('fsx-closing');
+    overlay.classList.add('fsx-closing');
+    setTimeout(() => {
+      panel.classList.remove('active', 'fsx-closing');
+      overlay.classList.remove('active', 'fsx-closing');
+      fab.classList.remove('hidden');
+    }, 150);
+  };
+  window.fsxToggle = function(){
+    if(panel.classList.contains('active')) window.fsxClose();
+    else openFsxPanel();
+  };
+  $('fsxCloseBtn').addEventListener('click', function(){
+    if(Date.now() - lastOpenTime < GHOST_CLICK_GUARD_MS) return;
+    window.fsxClose();
+  });
+  overlay.addEventListener('click', function(){
+    if(Date.now() - lastOpenTime < GHOST_CLICK_GUARD_MS) return;
+    window.fsxClose();
+  });
+  function checkHashOpen(){
+    if(window.location.hash && window.location.hash === '#' + widget.id) openFsxPanel();
+  }
+  window.addEventListener('hashchange', checkHashOpen);
+  loadFabPosition();
+  checkHashOpen();
+
+  /* ============================================================
+     ABAS
+     ============================================================ */
+  document.querySelectorAll('.fsx-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.fsx-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.fsx-tabpane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      $(btn.dataset.tab === 'quick' ? 'fsxQuickPane' : 'fsxCollectionsPane').classList.add('active');
+    });
+  });
+
+  /* ============================================================
+     SESSÃO ADMIN — detectada automaticamente (login já feito na
+     página principal do mesmo site/domínio; o Firebase Auth mantém
+     a sessão via o mesmo projeto). Este widget não tem tela de
+     login própria: ele só "escuta" se já existe um admin logado.
+     ============================================================ */
+  let isAdminLogged = false;
+
+  onAuthStateChanged(auth, (user) => {
+    isAdminLogged = !!user;
+    const whoami = $('fsxWhoami');
+    const b1 = $('fsxAuthBanner1');
+    const b2 = $('fsxAuthBanner2');
+    if(user){
+      whoami.textContent = 'logado como: ' + (user.email || user.uid);
+      b1.classList.remove('show');
+      b2.classList.remove('show');
+    } else {
+      whoami.textContent = 'sessão não detectada — faça login no painel principal';
+      b1.classList.add('show');
+      b2.classList.add('show');
+    }
+  });
+
+  /* ============================================================
+     ABA: BUSCA RÁPIDA (lógica original de depósitos, agora
+     também com saques, mantendo o mesmo fluxo: tenta como UID
+     direto, senão busca por phoneNumber)
+     ============================================================ */
+  let unsubProfile = null;
+  let unsubDeposits = null;
+  let unsubWithdrawals = null;
+
+  function renderProfile(d){
+    $('fsxProfileInfo').innerHTML = `
+      <div class="fsx-profile">
+        <div class="p-row"><b>👤 Nome:</b> ${d.fullName || d.name || "—"}</div>
+        <div class="p-row"><b>📱 Celular:</b> ${d.phoneNumber || d.phone || "—"}</div>
+        <div class="p-row"><b>🏦 Banco:</b> ${(d.bankName || "—")} · IBAN: ${(d.iban || "—")}</div>
+        <div class="p-row"><b>📍 Local:</b> ${(d.province || "—")} · ${(d.city || "—")}</div>
+        <div class="p-row"><b>💰 Saldo:</b> ${d.balance !== undefined ? Number(d.balance).toLocaleString('pt-AO') + ' MT' : '—'}</div>
+      </div>`;
+  }
+
+  async function loadUserData(identifier){
+    if(unsubProfile) unsubProfile();
+    if(unsubDeposits) unsubDeposits();
+    if(unsubWithdrawals) unsubWithdrawals();
+
+    unsubProfile = onSnapshot(doc(db, "users", identifier), (snap) => {
+      if(snap.exists()){
+        renderProfile(snap.data());
+        listenDeposits(identifier);
+        listenWithdrawals(identifier);
+      } else {
+        const qUser = query(collection(db, "users"), where("phoneNumber", "==", identifier));
+        unsubProfile = onSnapshot(qUser, (snapUsers) => {
+          if(!snapUsers.empty){
+            const userDoc = snapUsers.docs[0];
+            renderProfile(userDoc.data());
+            listenDeposits(userDoc.id);
+            listenWithdrawals(userDoc.id);
+          } else {
+            $('fsxProfileInfo').innerHTML = '<div class="fsx-empty">Perfil não encontrado.</div>';
+            $('fsxDepositsList').innerHTML = '<div class="fsx-empty">—</div>';
+            $('fsxWithdrawalsList').innerHTML = '<div class="fsx-empty">—</div>';
+          }
+        });
+      }
+    });
+  }
+
+  function openImgModal(src){
+    $('fsxModalImg').src = src;
+    $('fsxImgModal').style.display = 'block';
+  }
+  $('fsxCloseImgModal').addEventListener('click', () => { $('fsxImgModal').style.display = 'none'; });
+  $('fsxImgModal').addEventListener('click', (e) => { if(e.target.id === 'fsxImgModal') $('fsxImgModal').style.display = 'none'; });
+
+  function listenDeposits(uid){
+    if(unsubDeposits) unsubDeposits();
+    const q = query(collection(db, "deposits"), where("uid", "==", uid));
+    unsubDeposits = onSnapshot(q, (snap) => {
+      const list = $('fsxDepositsList');
+      list.innerHTML = "";
+      if(snap.empty){ list.innerHTML = '<div class="fsx-empty">Nenhum depósito encontrado.</div>'; return; }
+      snap.forEach(d0 => {
+        const d = d0.data();
+        const card = document.createElement("div");
+        card.className = "fsx-card";
+        card.innerHTML = `
+          <div>💰 Valor: ${d.amount !== undefined ? Number(d.amount).toLocaleString('pt-AO') + ' MT' : '—'}</div>
+          <div>🏦 Conta: ${d.account || d.address || '—'}</div>
+          <div class="status">📌 Status: ${d.status || '—'}</div>
+          <div>📅 Data: ${d.createdAt?.toDate ? d.createdAt.toDate().toLocaleString('pt-AO') : (d.createdAt ? new Date(d.createdAt).toLocaleString('pt-AO') : '—')}</div>
+          ${d.proofBase64 && d.proofBase64 !== 'ficheiro_grande'
+            ? `<img src="${d.proofBase64}" alt="Comprovativo" class="fsxProofImg">`
+            : ``}
+        `;
+        list.appendChild(card);
+      });
+      list.querySelectorAll(".fsxProofImg").forEach(img => img.addEventListener("click", () => openImgModal(img.src)));
+    });
+  }
+
+  function listenWithdrawals(uid){
+    if(unsubWithdrawals) unsubWithdrawals();
+    const q = query(collection(db, "withdrawals"), where("uid", "==", uid));
+    unsubWithdrawals = onSnapshot(q, (snap) => {
+      const list = $('fsxWithdrawalsList');
+      list.innerHTML = "";
+      if(snap.empty){ list.innerHTML = '<div class="fsx-empty">Nenhum saque encontrado.</div>'; return; }
+      snap.forEach(d0 => {
+        const d = d0.data();
+        const card = document.createElement("div");
+        card.className = "fsx-card";
+        card.innerHTML = `
+          <div>💰 Valor: ${d.amount !== undefined ? Number(d.amount).toLocaleString('pt-AO') + ' MT' : '—'}</div>
+          <div>📤 Endereço: ${d.address || '—'}</div>
+          <div>➗ Taxa: ${d.fee !== undefined ? d.fee + '%' : '—'} · Líquido: ${d.netAmount !== undefined ? Number(d.netAmount).toLocaleString('pt-AO') + ' MT' : '—'}</div>
+          <div class="status">📌 Status: ${d.status || '—'}</div>
+          <div>📅 Data: ${d.createdAt?.toDate ? d.createdAt.toDate().toLocaleString('pt-AO') : (d.createdAt ? new Date(d.createdAt).toLocaleString('pt-AO') : '—')}</div>
+        `;
+        list.appendChild(card);
+      });
+    });
+  }
+
+  $('fsxSearchBtn').addEventListener('click', () => {
+    const val = $('fsxSearchInput').value.trim();
+    if(!val){ alert('Digite um UID ou número de celular.'); return; }
+    loadUserData(val);
+  });
+  $('fsxSearchInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') $('fsxSearchBtn').click(); });
+
+  /* ============================================================
+     ABA: COLEÇÕES — navegador/editor completo do Firestore
+     ============================================================ */
+  const COLLECTIONS = [
+    "bankAccounts","deposits","earnings","faiss_meta","games","leaderboard",
+    "products","referral_codes","referrals","refinamentos","resetCodes",
+    "sessoes","sms","test","tickets","training_queue","transactions",
+    "uploads","users","wealth_posts","withdrawals"
+  ];
+
+  let currentCollection = null;
+  let currentDocsCache = [];   // [{id, data}]
+  let currentEditingId = null; // string, ou null se for doc novo
+  let isNewDoc = false;
+
+  function buildColGrid(){
+    const grid = $('fsxColGrid');
+    grid.innerHTML = '';
+    COLLECTIONS.forEach(name => {
+      const btn = document.createElement('button');
+      btn.className = 'fsx-col-btn';
+      btn.innerHTML = `${name}<span class="n">coleção</span>`;
+      btn.addEventListener('click', () => openCollection(name));
+      grid.appendChild(btn);
+    });
+  }
+  buildColGrid();
+
+  function updateCrumbs(){
+    const crumbs = $('fsxCrumbs');
+    if(!currentCollection){
+      crumbs.textContent = 'Coleções';
+    } else if(!currentEditingId && !isNewDoc){
+      crumbs.innerHTML = `<button id="fsxCrumbToRoot">Coleções</button> / ${currentCollection}`;
+      $('fsxCrumbToRoot').addEventListener('click', showColListView);
+    } else {
+      crumbs.innerHTML = `<button id="fsxCrumbToRoot">Coleções</button> / <button id="fsxCrumbToDocs">${currentCollection}</button> / ${isNewDoc ? 'novo documento' : currentEditingId}`;
+      $('fsxCrumbToRoot').addEventListener('click', showColListView);
+      $('fsxCrumbToDocs').addEventListener('click', showDocListView);
+    }
+  }
+
+  function showColListView(){
+    currentCollection = null; currentEditingId = null; isNewDoc = false;
+    $('fsxColListView').classList.remove('fsx-hidden');
+    $('fsxDocListView').classList.add('fsx-hidden');
+    $('fsxDocEditorView').classList.add('fsx-hidden');
+    updateCrumbs();
+  }
+  function showDocListView(){
+    currentEditingId = null; isNewDoc = false;
+    $('fsxColListView').classList.add('fsx-hidden');
+    $('fsxDocListView').classList.remove('fsx-hidden');
+    $('fsxDocEditorView').classList.add('fsx-hidden');
+    updateCrumbs();
+  }
+  function showDocEditorView(){
+    $('fsxColListView').classList.add('fsx-hidden');
+    $('fsxDocListView').classList.add('fsx-hidden');
+    $('fsxDocEditorView').classList.remove('fsx-hidden');
+    updateCrumbs();
+  }
+
+  function buildDocPreview(data){
+    const priority = ['uid','phoneNumber','phone','email','amount','status','title','name','fullName','content','teamA'];
+    let parts = [];
+    for(const k of priority){
+      if(parts.length >= 3) break;
+      if(data[k] !== undefined && typeof data[k] !== 'object'){
+        let v = String(data[k]);
+        if(v.length > 36) v = v.slice(0,36) + '…';
+        parts.push(`${k}: ${v}`);
+      }
+    }
+    if(parts.length === 0){
+      Object.keys(data).slice(0,3).forEach(k => {
+        let v = data[k];
+        if(v && typeof v === 'object') v = Array.isArray(v) ? '[array]' : '{objeto}';
+        v = String(v);
+        if(v.length > 36) v = v.slice(0,36) + '…';
+        parts.push(`${k}: ${v}`);
+      });
+    }
+    return parts.join(' · ');
+  }
+
+  async function openCollection(name){
+    if(!isAdminLogged){ alert('Faça login como admin no painel principal para acessar as coleções.'); return; }
+    currentCollection = name;
+    showDocListView();
+    await refreshCurrentCollection();
+  }
+
+  async function refreshCurrentCollection(){
+    if(!currentCollection) return;
+    $('fsxDocCount').textContent = 'Carregando…';
+    $('fsxDocItems').innerHTML = '';
+    try{
+      const snap = await getDocs(collection(db, currentCollection));
+      currentDocsCache = snap.docs.map(d => ({ id: d.id, data: d.data() }));
+      renderDocItems();
+    }catch(err){
+      $('fsxDocCount').textContent = '';
+      $('fsxDocItems').innerHTML = `<div class="fsx-empty">Erro ao carregar: ${err.message}</div>`;
+    }
+  }
+
+  function renderDocItems(){
+    const filterTerm = $('fsxDocFilter').value.trim().toLowerCase();
+    const container = $('fsxDocItems');
+    container.innerHTML = '';
+
+    let filtered = currentDocsCache;
+    if(filterTerm){
+      filtered = currentDocsCache.filter(({id, data}) => {
+        if(id.toLowerCase().includes(filterTerm)) return true;
+        try{ return JSON.stringify(data).toLowerCase().includes(filterTerm); }
+        catch(e){ return false; }
+      });
+    }
+
+    $('fsxDocCount').textContent = `${filtered.length} de ${currentDocsCache.length} documento(s)`;
+
+    if(filtered.length === 0){
+      container.innerHTML = '<div class="fsx-empty">Nenhum documento encontrado.</div>';
+      return;
+    }
+
+    filtered.forEach(({id, data}) => {
+      const item = document.createElement('div');
+      item.className = 'fsx-doc-item';
+      item.innerHTML = `<div class="id">${id}</div><div class="prev">${buildDocPreview(data)}</div>`;
+      item.addEventListener('click', () => openDocEditor(id, data));
+      container.appendChild(item);
+    });
+  }
+
+  $('fsxDocFilter').addEventListener('input', renderDocItems);
+  $('fsxRefreshColBtn').addEventListener('click', refreshCurrentCollection);
+
+  function openDocEditor(id, data){
+    currentEditingId = id;
+    isNewDoc = false;
+    $('fsxEditorDocId').textContent = `${currentCollection} / ${id}`;
+    $('fsxJsonEditor').value = JSON.stringify(data, null, 2);
+    $('fsxEditorMsg').textContent = '';
+    $('fsxEditorMsg').className = 'fsx-msg';
+    $('fsxDeleteDocBtn').classList.remove('fsx-hidden');
+    showDocEditorView();
+  }
+
+  $('fsxNewDocBtn').addEventListener('click', () => {
+    if(!isAdminLogged){ alert('Faça login como admin no painel principal para criar documentos.'); return; }
+    const customId = prompt('ID do novo documento (deixe vazio para gerar automaticamente):', '');
+    currentEditingId = customId && customId.trim() ? customId.trim() : null;
+    isNewDoc = true;
+    $('fsxEditorDocId').textContent = `${currentCollection} / ${currentEditingId || '(ID automático)'}`;
+    $('fsxJsonEditor').value = '{\n  \n}';
+    $('fsxEditorMsg').textContent = '';
+    $('fsxEditorMsg').className = 'fsx-msg';
+    $('fsxDeleteDocBtn').classList.add('fsx-hidden');
+    showDocEditorView();
+  });
+
+  $('fsxBackDocBtn').addEventListener('click', showDocListView);
+
+  $('fsxSaveDocBtn').addEventListener('click', async () => {
+    if(!isAdminLogged){ alert('Faça login como admin no painel principal para salvar.'); return; }
+    const msg = $('fsxEditorMsg');
+    msg.className = 'fsx-msg';
+
+    let parsed;
+    try{
+      parsed = JSON.parse($('fsxJsonEditor').value);
+    }catch(e){
+      msg.textContent = 'JSON inválido, verifique a sintaxe.';
+      msg.classList.add('err');
+      return;
+    }
+
+    const btn = $('fsxSaveDocBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando…';
+
+    try{
+      if(isNewDoc){
+        if(currentEditingId){
+          await setDoc(doc(db, currentCollection, currentEditingId), parsed);
+        } else {
+          const ref = await addDoc(collection(db, currentCollection), parsed);
+          currentEditingId = ref.id;
+        }
+        isNewDoc = false;
+        $('fsxDeleteDocBtn').classList.remove('fsx-hidden');
+        $('fsxEditorDocId').textContent = `${currentCollection} / ${currentEditingId}`;
+      } else {
+        await setDoc(doc(db, currentCollection, currentEditingId), parsed);
+      }
+      msg.textContent = 'Documento salvo com sucesso!';
+      msg.classList.add('ok');
+      await refreshCurrentCollection();
+    }catch(err){
+      console.error(err);
+      msg.textContent = 'Erro ao salvar: ' + err.message;
+      msg.classList.add('err');
+    }finally{
+      btn.disabled = false;
+      btn.textContent = '💾 Salvar';
+    }
+  });
+
+  $('fsxDeleteDocBtn').addEventListener('click', async () => {
+    if(!isAdminLogged){ alert('Faça login como admin no painel principal para excluir.'); return; }
+    if(!currentEditingId) return;
+    if(!confirm(`Excluir permanentemente o documento "${currentEditingId}" da coleção "${currentCollection}"?`)) return;
+
+    try{
+      await deleteDoc(doc(db, currentCollection, currentEditingId));
+      showDocListView();
+      await refreshCurrentCollection();
+    }catch(err){
+      alert('Erro ao excluir: ' + err.message);
+    }
+  });
+
+  $('fsxCopyDocBtn').addEventListener('click', () => {
+    const ta = $('fsxJsonEditor');
+    ta.select();
+    document.execCommand('copy');
+    const msg = $('fsxEditorMsg');
+    msg.textContent = 'JSON copiado para a área de transferência!';
+    msg.className = 'fsx-msg ok';
+  });
+
+  updateCrumbs();
+</script>
+</body>
+</html>
