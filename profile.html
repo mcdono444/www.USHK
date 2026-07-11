@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #ffffff; min-height: 100vh; }
+        
+        .header-section { position: relative; width: 100%; height: 26vh; min-height: 200px; background: linear-gradient(135deg, #1a5d2a 0%, #0d3e1a 100%); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; border-radius: 0 0 30px 30px; }
+        
+        .user-info-section { display: flex; align-items: center; gap: 15px; margin-top: -10px; width: 100%; }
+        .user-avatar-column { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+        .user-level-badge { display: inline-block; font-size: 11px; font-weight: 600; color: #333; background: rgba(255,255,255,0.9); padding: 3px 10px; border-radius: 10px; }
+        .user-logo { width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .user-logo i { font-size: 35px; color: #22C55E; }
+        .user-details { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .user-id { color: white; font-size: 14px; font-weight: bold; }
+        .user-id-copy { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+        .copy-icon { font-size: 12px; color: rgba(255,255,255,0.7); }
+        .user-phone-wrap { color: rgba(255,255,255,0.8); font-size: 12px; display: flex; align-items: center; gap: 5px; }
+        .phone-toggle { cursor: pointer; }
+        
+        .status-bar-container { display: flex; align-items: center; gap: 8px; margin: 10px 0; width: 100%; }
+        .status-bar { height: 25px; border-radius: 20px; display: flex; align-items: center; padding: 0 10px; flex: 1; text-decoration: none; cursor: pointer; }
+        .status-bar-left { background: #9333EA; justify-content: flex-start; }
+        .status-bar-right { background: #EF4444; justify-content: flex-end; }
+        .status-bar-text { color: white; font-size: 9px; font-weight: 600; }
+        .status-bar-icon { width: 18px; height: 18px; margin: 0 5px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+        
+        .effective-date { color: white; font-size: 10px; text-align: left; width: 100%; margin-top: 5px; }
+        
+        .main-content { background: #ffffff; padding: 15px; }
+        
+        .wallet-section { background: #22C55E; border-radius: 16px; padding: 15px; margin-bottom: 20px; }
+        .income-wallet { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; }
+        .income-wallet-label { color: rgba(255,255,255,0.8); font-size: 13px; margin-bottom: 8px; }
+        .income-wallet-value { color: #FFD700; font-size: 24px; font-weight: bold; }
+        
+        .earnings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+        .earnings-card { background: #ffffff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 10px; position: relative; }
+        .earnings-card-icon { position: absolute; top: 5px; right: 5px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .earnings-label { color: #666; font-size: 10px; margin-bottom: 5px; padding-right: 25px; }
+        .earnings-value { color: #333; font-size: 14px; font-weight: bold; }
+        
+        .features-section { background: #f5f5f5; border-radius: 16px; padding: 15px; margin-bottom: 20px; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .feature-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; color: #333; }
+        .feature-icon-wrapper { width: 45px; height: 45px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .feature-icon-wrapper i { font-size: 20px; color: #22C55E; }
+        .feature-label { font-size: 9px; text-align: center; color: #666; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10001; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-section">
+        <div class="user-info-section">
+            <div class="user-avatar-column">
+                <div class="user-level-badge" id="userLevel">Aprendiz</div>
+                <div class="user-logo"><i class="fas fa-futbol"></i></div>
+            </div>
+            <div class="user-details">
+                <div class="user-id"><span class="user-id-copy" onclick="window.copyUserId()">ID: <span id="userId">---</span> <i class="fas fa-copy copy-icon"></i></span></div>
+                <div class="user-phone-wrap"><i class="fas fa-mobile-alt"></i> <span id="userPhoneText">---</span> <i class="fas fa-eye phone-toggle" id="userPhoneToggle"></i></div>
+            </div>
+        </div>
+        <div class="status-bar-container">
+            <a href="recruit.html" class="status-bar status-bar-left">
+                <i class="fas fa-user-plus status-bar-icon"></i>
+                <span class="status-bar-text">Gerente de Reclutamiento</span>
+            </a>
+            <a href="outstanding.html" class="status-bar status-bar-right">
+                <span class="status-bar-text">Empleados Destacados</span>
+                <i class="fas fa-star status-bar-icon"></i>
+            </a>
+        </div>
+        <div class="effective-date" id="joinDate">Fecha de registro: --</div>
+    </div>
+    
+    <div class="main-content">
+        <div class="wallet-section">
+            <div class="income-wallet"><div class="income-wallet-label">Saldo Total:</div><div class="income-wallet-value" id="userBalance">0.00 kz</div></div>
+        </div>
+        
+        <div class="earnings-grid">
+            <div class="earnings-card"><i class="fas fa-calendar-day earnings-card-icon"></i><div class="earnings-label">Ganancias de hoy:</div><div class="earnings-value" id="todayEarnings">0.00</div></div>
+            <div class="earnings-card"><i class="fas fa-calendar-week earnings-card-icon"></i><div class="earnings-label">Ganancias de ayer:</div><div class="earnings-value" id="yesterdayEarnings">0.00</div></div>
+            <div class="earnings-card"><i class="fas fa-chart-line earnings-card-icon"></i><div class="earnings-label">Ganancias esta semana:</div><div class="earnings-value" id="weeklyEarnings">0.00</div></div>
+            <div class="earnings-card"><i class="fas fa-chart-bar earnings-card-icon"></i><div class="earnings-label">Semana pasada:</div><div class="earnings-value" id="lastWeekEarnings">0.00</div></div>
+            <div class="earnings-card"><i class="fas fa-calendar-alt earnings-card-icon"></i><div class="earnings-label">Ganancias este mes:</div><div class="earnings-value" id="monthlyEarnings">0.00</div></div>
+            <div class="earnings-card"><i class="fas fa-users earnings-card-icon"></i><div class="earnings-label">Comisión de referidos:</div><div class="earnings-value" id="referralCommission">0.00</div></div>
+            <div class="earnings-card"><i class="fas fa-tasks earnings-card-icon"></i><div class="earnings-label">Comisión de tareas:</div><div class="earnings-value" id="taskCommission">0.00</div></div>
+            <div class="earnings-card"><i class="fas fa-chart-pie earnings-card-icon"></i><div class="earnings-label">Ganancias totales:</div><div class="earnings-value" id="totalRevenue">0.00</div></div>
+        </div>
+        
+        <div class="features-section">
+            <div class="features-grid">
+                <div class="feature-item" onclick="location.href='userinfo.html'"><div class="feature-icon-wrapper"><i class="fas fa-user"></i></div><div class="feature-label">Información Personal</div></div>
+                <div class="feature-item" onclick="location.href='earnings.html'"><div class="feature-icon-wrapper"><i class="fas fa-chart-line"></i></div><div class="feature-label">Detalle de Ganancias</div></div>
+                <div class="feature-item" onclick="location.href='record.html'"><div class="feature-icon-wrapper"><i class="fas fa-history"></i></div><div class="feature-label">Historial de Transacciones</div></div>
+                <div class="feature-item" onclick="location.href='messages.html'"><div class="feature-icon-wrapper"><i class="fas fa-envelope"></i></div><div class="feature-label">Notificaciones</div></div>
+                <div class="feature-item" onclick="location.href='service.html'"><div class="feature-icon-wrapper"><i class="fas fa-headset"></i></div><div class="feature-label">Atención al Cliente</div></div>
+                <div class="feature-item" onclick="window.location.href='https://www.webtonative.com/api/v1/demo/download/6a05e5dbcc1fd726ba8d7439/ANDROID'"><div class="feature-icon-wrapper"><i class="fas fa-download"></i></div><div class="feature-label">Descargar App</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    function showMessage(msg, type) {
+        var div = $('<div class="toast ' + type + '">' + msg + '</div>');
+        $('body').append(div);
+        setTimeout(function() { div.fadeOut(300, function() { $(this).remove(); }); }, 2500);
+    }
+
+    window.copyUserId = function() {
+        var userId = $('#userId').text();
+        if (userId && userId !== '---') {
+            navigator.clipboard.writeText(userId);
+            showMessage('✅ ID copiado!', 'success');
+        }
+    }
+
+    window.logout = async function() {
+        try {
+            await signOut(auth);
+            localStorage.clear();
+            window.location.href = 'login.html';
+        } catch(error) {
+            console.error('Error logging out:', error);
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    }
+
+    async function loadUserData() {
+        if (!token || !userId) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        try {
+            const userDocRef = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDocRef);
+            
+            if (userSnapshot.exists()) {
+                const user = userSnapshot.data();
+                const phone = user.phone || 'Sin datos';
+                const maskedPhone = phone.length > 6 ? phone.substring(0, 3) + '***' + phone.substring(phone.length - 3) : phone;
+                
+                $('#userId').text(userId);
+                $('#userPhoneText').text(maskedPhone);
+                $('#userBalance').text((user.balance || 0).toFixed(2) + ' kz');
+                
+                const createdAt = user.createdAt ? new Date(user.createdAt.toDate ? user.createdAt.toDate() : user.createdAt) : new Date();
+                $('#joinDate').text('Fecha de registro: ' + createdAt.toLocaleDateString('es-MZ'));
+                
+                const vipLevel = user.vipLevel || 0;
+                $('#userLevel').text(vipLevel > 0 ? `VIP${vipLevel}` : 'Aprendiz');
+                
+                // Cargar transacciones para calcular ganancias
+                const transactionsRef = collection(db, 'transactions');
+                const q = query(transactionsRef, where('userId', '==', userId));
+                const transSnapshot = await getDocs(q);
+                const transactions = [];
+                
+                transSnapshot.forEach((doc) => {
+                    transactions.push(doc.data());
+                });
+                
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const weekAgo = new Date(today);
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                const lastWeekStart = new Date(weekAgo);
+                lastWeekStart.setDate(lastWeekStart.getDate() - 7);
+                const monthAgo = new Date(today);
+                monthAgo.setMonth(monthAgo.getMonth() - 1);
+                
+                let todayEarnings = 0, yesterdayEarnings = 0, weeklyEarnings = 0, lastWeekEarnings = 0, monthlyEarnings = 0;
+                let referralCommission = 0, taskCommission = 0, totalEarnings = 0;
+                
+                for (let t of transactions) {
+                    const transDate = new Date(t.date || t.createdAt.toDate ? t.createdAt.toDate() : t.createdAt);
+                    const amount = t.amount || 0;
+                    
+                    if (amount > 0) {
+                        totalEarnings += amount;
+                        
+                        if (t.type === 'referral') {
+                            referralCommission += amount;
+                        }
+                        if (t.type === 'daily_income' || t.type === 'bonus' || t.type === 'checkin') {
+                            taskCommission += amount;
+                        }
+                        
+                        if (transDate >= today) {
+                            todayEarnings += amount;
+                        }
+                        if (transDate >= yesterday && transDate < today) {
+                            yesterdayEarnings += amount;
+                        }
+                        if (transDate >= weekAgo) {
+                            weeklyEarnings += amount;
+                        }
+                        if (transDate >= lastWeekStart && transDate < weekAgo) {
+                            lastWeekEarnings += amount;
+                        }
+                        if (transDate >= monthAgo) {
+                            monthlyEarnings += amount;
+                        }
+                    }
+                }
+                
+                $('#todayEarnings').text(todayEarnings.toFixed(2));
+                $('#yesterdayEarnings').text(yesterdayEarnings.toFixed(2));
+                $('#weeklyEarnings').text(weeklyEarnings.toFixed(2));
+                $('#lastWeekEarnings').text(lastWeekEarnings.toFixed(2));
+                $('#monthlyEarnings').text(monthlyEarnings.toFixed(2));
+                $('#referralCommission').text(referralCommission.toFixed(2));
+                $('#taskCommission').text(taskCommission.toFixed(2));
+                $('#totalRevenue').text(totalEarnings.toFixed(2));
+                
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                $('#userPhoneToggle').data('full', phone).data('masked', maskedPhone);
+            } else {
+                console.error('Usuario no encontrado');
+                showMessage('Error al cargar datos del usuario', 'error');
+            }
+        } catch(e) {
+            console.error('Error loading user data:', e);
+            showMessage('Error de conexión al cargar datos', 'error');
+        }
+    }
+
+    // Botón de logout
+    $('<button>', {
+        text: '🚪 Cerrar Sesión',
+        click: window.logout,
+        css: {
+            position: 'fixed',
+            bottom: '70px',
+            right: '15px',
+            background: '#ef4444',
+            color: 'white',
+            border: 'none',
+            padding: '10px 15px',
+            borderRadius: '30px',
+            fontSize: '12px',
+            cursor: 'pointer',
+            zIndex: '1001',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+        }
+    }).appendTo('body');
+
+    $('#userPhoneToggle').on('click', function() {
+        var $el = $(this);
+        var $textEl = $('#userPhoneText');
+        var isShowingFull = $textEl.text() === $el.data('full');
+        $textEl.text(isShowingFull ? $el.data('masked') : $el.data('full'));
+        $el.toggleClass('fa-eye-slash', !isShowingFull).toggleClass('fa-eye', isShowingFull);
+    });
+
+    // Verificar autenticación
+    onAuthStateChanged(auth, (user) => {
+        if (!user || !token || !userId) {
+            window.location.href = 'login.html';
+        } else {
+            loadUserData();
+            setInterval(loadUserData, 30000);
+        }
+    });
+</script>
+
+
+<style>
+    /* WIDGET SMS CHAT - Estilos Flutuantes */
+    .sms-chat-widget {
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        z-index: 9999;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .sms-chat-button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1B3A6B 0%, #1B3A6B 100%);
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(27, 58, 107, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 10001;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .sms-chat-button img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .sms-chat-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(27, 58, 107, 0.6);
+    }
+
+    .sms-chat-button.hidden {
+        display: none;
+    }
+
+    .sms-chat-container {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100vh;
+        background: #fff;
+        border-radius: 0;
+        box-shadow: none;
+        display: none;
+        flex-direction: column;
+        z-index: 10000;
+        animation: slideUp 0.3s ease-out;
+    }
+
+    .sms-chat-container.active {
+        display: flex;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .sms-chat-header {
+        background: linear-gradient(135deg, #1B3A6B 0%, #1B3A6B 100%);
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .sms-logo-box {
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        color: #1B3A6B;
+    }
+
+    .sms-header-info {
+        flex: 1;
+    }
+
+    .sms-header-title {
+        font-size: 16px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #fff;
+    }
+
+    .sms-online-dot {
+        width: 8px;
+        height: 8px;
+        background: #00ff00;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .sms-header-subtitle {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-top: 2px;
+        color: #fff;
+    }
+
+    .sms-close-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: #fff;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        transition: background 0.2s;
+        flex-shrink: 0;
+    }
+
+    .sms-close-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .sms-chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: #f8f9fa;
+    }
+
+    .sms-chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .sms-chat-messages::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .sms-chat-messages::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 3px;
+    }
+
+    .sms-welcome-section {
+        text-align: center;
+        padding: 40px 20px;
+        margin: auto;
+    }
+
+    .sms-welcome-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .sms-welcome-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1B3A6B;
+        margin-bottom: 8px;
+    }
+
+    .sms-welcome-subtitle {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .sms-faq-section {
+        margin-top: 20px;
+    }
+
+    .sms-faq-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: #1B3A6B;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    .sms-message-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .sms-message {
+        display: flex;
+        gap: 8px;
+        position: relative;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .sms-message.user {
+        justify-content: flex-end;
+    }
+
+    .sms-message.admin {
+        justify-content: flex-start;
+    }
+
+    .sms-message-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 85%;
+    }
+
+    .sms-message.user .sms-message-wrapper {
+        align-items: flex-end;
+    }
+
+    .sms-message-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #1B3A6B;
+        margin-bottom: 4px;
+        padding: 0 4px;
+    }
+
+    .sms-message.admin .sms-message-label {
+        color: #333;
+    }
+
+    .sms-message-content {
+        padding: 12px 14px;
+        border-radius: 12px;
+        word-wrap: break-word;
+        font-size: 14px;
+        line-height: 1.4;
+        position: relative;
+        max-width: 100%;
+    }
+
+    .sms-message.user .sms-message-content {
+        background: #1B3A6B;
+        color: #fff;
+        border-radius: 12px 0 12px 12px;
+        font-weight: 500;
+    }
+
+    .sms-message.admin .sms-message-content {
+        background: #000;
+        color: #fff;
+        border-radius: 0 12px 12px 12px;
+        font-weight: 500;
+    }
+
+    .sms-message-time {
+        font-size: 10px;
+        color: #999;
+        margin-top: 4px;
+        padding: 0 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .sms-status-badge {
+        font-size: 9px;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-weight: 600;
+        background: #1B3A6B;
+        color: #fff;
+    }
+
+    .sms-message-image {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s;
+        margin-bottom: 4px;
+    }
+
+    .sms-message-image:hover {
+        transform: scale(1.05);
+    }
+
+    .sms-image-modal {
+        display: none;
+        position: fixed;
+        z-index: 10002;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .sms-image-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sms-image-modal-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+    }
+
+    .sms-image-modal-content img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 8px;
+    }
+
+    .sms-image-modal-close {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: #fff;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
+
+    .sms-chat-input-area {
+        padding: 12px;
+        border-top: 1px solid #e0e0e0;
+        background: #fff;
+        flex-shrink: 0;
+    }
+
+    .sms-input-wrapper {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+    }
+
+    .sms-message-input {
+        flex: 1;
+        padding: 10px 12px;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        color: #333;
+        font-size: 14px;
+        font-family: inherit;
+        resize: none;
+        max-height: 100px;
+    }
+
+    .sms-message-input:focus {
+        outline: none;
+        border-color: #1B3A6B;
+        background: #fff;
+    }
+
+    .sms-message-input::placeholder {
+        color: #999;
+    }
+
+    .sms-input-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .sms-action-btn {
+        width: 36px;
+        height: 36px;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.2s;
+        display: none;
+    }
+
+    .sms-action-btn:hover {
+        background: #e0e0e0;
+        border-color: #1B3A6B;
+        color: #1B3A6B;
+    }
+
+    .sms-send-btn {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #1B3A6B 0%, #0F5C7D 100%);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.2s;
+        flex-shrink: 0;
+    }
+
+    .sms-send-btn:hover:not(:disabled) {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(27, 58, 107, 0.3);
+    }
+
+    .sms-send-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .sms-toast-notification {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        background: #1B3A6B;
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 10001;
+        animation: toastSlide 0.3s ease-out;
+    }
+
+    @keyframes toastSlide {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .sms-faq-questions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .sms-faq-button {
+        background: rgba(27, 58, 107, 0.1);
+        border: 1px solid #1B3A6B;
+        color: #1B3A6B;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.2s;
+        text-align: left;
+        line-height: 1.3;
+    }
+
+    .sms-faq-button:hover {
+        background: #1B3A6B;
+        color: #fff;
+        transform: translateX(4px);
+    }
+
+    .sms-response-notification {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #1B3A6B 0%, #0F5C7D 100%);
+        color: #fff;
+        padding: 14px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        z-index: 10001;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translate(-50%, -100px);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .sms-chat-container {
+            width: 100%;
+            height: 100vh;
+            bottom: 0;
+            right: 0;
+            border-radius: 0;
+        }
+
+        .sms-message-wrapper {
+            max-width: 90%;
+        }
+
+        .sms-chat-button {
+            width: 50px;
+            height: 50px;
+        }
+
+        .sms-close-btn {
+            display: flex;
+        }
+    }
+</style>
+
+<!-- HTML do Widget -->
+<div class="sms-chat-widget" id="smsChatWidget">
+    <!-- Botão Flutuante -->
+<button class="sms-chat-button" id="smsChatButton" onclick="window.toggleSmsChat()">
+    <img src="suporte.png" alt="Chat" class="sms-button-icon">
+</button>
+
+    <!-- Container do Chat -->
+    <div class="sms-chat-container" id="smsChatContainer">
+        <div class="sms-chat-header">
+            <div class="sms-logo-box">SP</div>
+            <div class="sms-header-info">
+                <div class="sms-header-title">
+                    <span>Suporte SMS</span>
+                    <div class="sms-online-dot"></div>
+                </div>
+                <div class="sms-header-subtitle">Atendimento online 24/7</div>
+            </div>
+            <button class="sms-close-btn" onclick="window.closeSmsChat()">✕</button>
+        </div>
+
+        <div class="sms-chat-messages" id="smsChatMessages">
+            <div class="sms-welcome-section" id="smsWelcomeSection">
+                <div class="sms-welcome-icon">💬</div>
+                <div class="sms-welcome-text">Olá! Como posso ajudá-lo?</div>
+                <div class="sms-welcome-subtitle">Faça uma pergunta ou escolha um dos tópicos abaixo</div>
+                
+                <div class="sms-faq-section">
+                    <div class="sms-faq-title">Perguntas Frequentes</div>
+                    <div class="sms-faq-questions">
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Como funciona o sistema de verificação?')">
+                            ❓ Como funciona a verificação?
+                        </button>
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Qual é o tempo de resposta do suporte?')">
+                            ⏱️ Tempo de resposta?
+                        </button>
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Como faço para recuperar minha conta?')">
+                            🔐 Recuperar minha conta?
+                        </button>
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Qual é o mínimo de investimento?')">
+                            💰 Mínimo de investimento?
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sms-chat-input-area">
+            <div class="sms-input-wrapper">
+                <textarea class="sms-message-input" id="smsMessageInput" placeholder="Digite aqui oque queres entender..." rows="1"></textarea>
+                
+                <div class="sms-input-actions">
+                    <button class="sms-action-btn" id="smsImageBtn" title="Enviar imagem">🖼️</button>
+                    <button class="sms-action-btn" id="smsAudioBtn" title="Gravar áudio">🎤</button>
+                </div>
+
+                <button class="sms-send-btn" onclick="window.sendSmsMessage()" id="smsSendBtn">➤</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Imagem -->
+<div class="sms-image-modal" id="smsImageModal">
+    <div class="sms-image-modal-content">
+        <button class="sms-image-modal-close" onclick="window.closeSmsImageModal()">&times;</button>
+        <img id="smsModalImage" src="" alt="Imagem em fullscreen">
+    </div>
+</div>
+
+<!-- Inputs de Arquivo -->
+<input type="file" id="smsImageInput" accept="image/*" style="display: none;">
+<input type="file" id="smsAudioInput" accept="audio/*" style="display: none;">
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, addDoc, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+        authDomain: "proibidoreplica.firebaseapp.com",
+        projectId: "proibidoreplica",
+        storageBucket: "proibidoreplica.firebasestorage.app",
+        messagingSenderId: "794009646952",
+        appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let currentUid = '';
+    let unsubscribe = null;
+    let messageResponseCounts = {};
+    let displayedMessages = new Set();
+
+    function showSmsToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'sms-toast-notification';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'toastSlide 0.3s ease-out reverse';
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }
+
+    function showSmsResponseNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'sms-response-notification';
+        notification.textContent = '✓ Nova mensagem do administrador!';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideDown 0.3s ease-out reverse';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    window.toggleSmsChat = function() {
+        const container = document.getElementById('smsChatContainer');
+        const button = document.getElementById('smsChatButton');
+        
+        if (container.classList.contains('active')) {
+            container.classList.remove('active');
+            button.classList.remove('hidden');
+        } else {
+            container.classList.add('active');
+            button.classList.add('hidden');
+        }
+    };
+
+    window.closeSmsChat = function() {
+        document.getElementById('smsChatContainer').classList.remove('active');
+        document.getElementById('smsChatButton').classList.remove('hidden');
+    };
+
+    function getLocalMessages() {
+        const stored = localStorage.getItem(`sms_${currentUid}`);
+        return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveLocalMessage(msg) {
+        const messages = getLocalMessages();
+        messages.push(msg);
+        localStorage.setItem(`sms_${currentUid}`, JSON.stringify(messages));
+    }
+
+    function updateLocalMessage(docId, updates) {
+        const messages = getLocalMessages();
+        const index = messages.findIndex(m => m.id === docId);
+        if (index !== -1) {
+            messages[index] = { ...messages[index], ...updates };
+            localStorage.setItem(`sms_${currentUid}`, JSON.stringify(messages));
+        }
+    }
+
+    window.displaySmsMessage = function(msg, docId) {
+        const messagesDiv = document.getElementById('smsChatMessages');
+        
+        if (displayedMessages.has(docId)) {
+            return;
+        }
+
+        displayedMessages.add(docId);
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'sms-message-group';
+        messageDiv.id = `sms-msg-${docId}`;
+
+        const msgEl = document.createElement('div');
+        msgEl.className = `sms-message ${msg.sender === 'user' ? 'user' : 'admin'}`;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'sms-message-wrapper';
+
+        const time = msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' }) : '';
+
+        const label = document.createElement('div');
+        label.className = 'sms-message-label';
+        label.textContent = msg.sender === 'user' ? '📱 Você' : '👨‍💼 Administrador';
+        wrapper.appendChild(label);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'sms-message-content';
+        
+        if (msg.type === 'image') {
+            const img = document.createElement('img');
+            img.src = msg.content;
+            img.alt = 'Imagem';
+            img.className = 'sms-message-image';
+            img.style.cursor = 'pointer';
+            img.onclick = function() {
+                window.openSmsImageModal(msg.content);
+            };
+            contentDiv.appendChild(img);
+        } else if (msg.type === 'audio') {
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.style.maxWidth = '250px';
+            const source = document.createElement('source');
+            source.src = msg.content;
+            source.type = 'audio/webm';
+            audio.appendChild(source);
+            contentDiv.appendChild(audio);
+        } else {
+            contentDiv.textContent = msg.content;
+        }
+        
+        wrapper.appendChild(contentDiv);
+
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'sms-message-time';
+        timeDiv.textContent = time;
+        
+        if (msg.sender === 'user') {
+            const badge = document.createElement('span');
+            badge.className = 'sms-status-badge';
+            badge.textContent = msg.status === 'read' ? '✓✓ Lido' : '✓ Enviado';
+            badge.id = `sms-status-${docId}`;
+            timeDiv.appendChild(badge);
+        }
+        wrapper.appendChild(timeDiv);
+
+        msgEl.appendChild(wrapper);
+        messageDiv.appendChild(msgEl);
+        messagesDiv.appendChild(messageDiv);
+
+        messageResponseCounts[docId] = 0;
+
+        if (msg.responses && msg.responses.length > 0) {
+            msg.responses.forEach((response, idx) => {
+                window.displaySmsAdminResponse(docId, response, idx);
+                messageResponseCounts[docId]++;
+            });
+        }
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+
+    window.displaySmsAdminResponse = function(docId, response, idx) {
+        const messagesDiv = document.getElementById('smsChatMessages');
+        const responseId = `sms-msg-response-${docId}-${idx}`;
+        
+        if (document.getElementById(responseId)) {
+            return;
+        }
+
+        const responseDiv = document.createElement('div');
+        responseDiv.className = 'sms-message-group';
+        responseDiv.id = responseId;
+
+        const respMsgEl = document.createElement('div');
+        respMsgEl.className = 'sms-message admin';
+
+        const respWrapper = document.createElement('div');
+        respWrapper.className = 'sms-message-wrapper';
+
+        const respLabel = document.createElement('div');
+        respLabel.className = 'sms-message-label';
+        respLabel.textContent = '👨‍💼 Administrador';
+        respWrapper.appendChild(respLabel);
+
+        const respContent = document.createElement('div');
+        respContent.className = 'sms-message-content';
+        
+        if (response.type === 'image') {
+            const img = document.createElement('img');
+            img.src = response.content;
+            img.alt = 'Imagem';
+            img.className = 'sms-message-image';
+            img.style.cursor = 'pointer';
+            img.onclick = function() {
+                window.openSmsImageModal(response.content);
+            };
+            respContent.appendChild(img);
+        } else if (response.type === 'audio') {
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.style.maxWidth = '250px';
+            const source = document.createElement('source');
+            source.src = response.content;
+            source.type = 'audio/webm';
+            audio.appendChild(source);
+            respContent.appendChild(audio);
+        } else {
+            respContent.textContent = response.content;
+        }
+        
+        respWrapper.appendChild(respContent);
+
+        const respTime = response.createdAt ? new Date(response.createdAt).toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' }) : '';
+        const respTimeDiv = document.createElement('div');
+        respTimeDiv.className = 'sms-message-time';
+        respTimeDiv.textContent = respTime;
+        respWrapper.appendChild(respTimeDiv);
+
+        respMsgEl.appendChild(respWrapper);
+        responseDiv.appendChild(respMsgEl);
+        messagesDiv.appendChild(responseDiv);
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+
+    window.openSmsImageModal = function(imageSrc) {
+        const modal = document.getElementById('smsImageModal');
+        const modalImage = document.getElementById('smsModalImage');
+        modalImage.src = imageSrc;
+        modal.classList.add('active');
+    };
+
+    window.closeSmsImageModal = function() {
+        const modal = document.getElementById('smsImageModal');
+        modal.classList.remove('active');
+    };
+
+    window.sendSmsFAQ = async function(question) {
+        const input = document.getElementById('smsMessageInput');
+        input.value = question;
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+        await window.sendSmsMessage();
+    };
+
+    window.sendSmsMessage = async function(content = null, type = 'text') {
+        const input = document.getElementById('smsMessageInput');
+        const textContent = content || input.value.trim();
+
+        if (!textContent) {
+            showSmsToast('⚠️ Digite uma mensagem');
+            return;
+        }
+
+        if (!currentUid) {
+            showSmsToast('❌ Usuário não autenticado');
+            return;
+        }
+
+        document.getElementById('smsSendBtn').disabled = true;
+
+        try {
+            const welcomeSection = document.getElementById('smsWelcomeSection');
+            if (welcomeSection) {
+                welcomeSection.remove();
+            }
+
+            const msgData = {
+                uid: currentUid,
+                content: textContent,
+                type: type,
+                sender: 'user',
+                status: 'sent',
+                createdAt: new Date().toISOString(),
+                responses: []
+            };
+
+            const docRef = await addDoc(collection(db, 'sms'), msgData);
+
+            msgData.id = docRef.id;
+            saveLocalMessage(msgData);
+
+            window.displaySmsMessage(msgData, docRef.id);
+
+            input.value = '';
+            input.style.height = 'auto';
+            document.getElementById('smsSendBtn').disabled = false;
+            showSmsToast('✅Enviado com sucesso');
+        } catch (e) {
+            console.error('Erro ao enviar mensagem:', e);
+            showSmsToast('❌ Erro ao enviar');
+            document.getElementById('smsSendBtn').disabled = false;
+        }
+    };
+
+    function loadLocalMessages() {
+        const messagesDiv = document.getElementById('smsChatMessages');
+        const welcomeSection = document.getElementById('smsWelcomeSection');
+        const localMessages = getLocalMessages();
+
+        if (localMessages.length > 0) {
+            if (welcomeSection) {
+                welcomeSection.remove();
+            }
+
+            localMessages.forEach(msg => {
+                window.displaySmsMessage(msg, msg.id);
+            });
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    }
+
+    function listenToSmsMessages() {
+        try {
+            const q = query(
+                collection(db, 'sms'),
+                where('uid', '==', currentUid)
+            );
+
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                const allDocs = snapshot.docs.map(doc => ({
+                    ...doc.data(),
+                    id: doc.id
+                }));
+
+                allDocs.sort((a, b) => 
+                    new Date(a.createdAt) - new Date(b.createdAt)
+                );
+
+                allDocs.forEach(msg => {
+                    const docId = msg.id;
+
+                    if (!displayedMessages.has(docId)) {
+                        window.displaySmsMessage(msg, docId);
+                        updateLocalMessage(docId, msg);
+                    } else {
+                        const previousCount = messageResponseCounts[docId] || 0;
+                        const currentCount = msg.responses ? msg.responses.length : 0;
+
+                        if (currentCount > previousCount) {
+                            for (let i = previousCount; i < currentCount; i++) {
+                                window.displaySmsAdminResponse(docId, msg.responses[i], i);
+                                showSmsResponseNotification();
+                            }
+                            messageResponseCounts[docId] = currentCount;
+                        }
+
+                        const statusBadge = document.querySelector(`#sms-status-${docId}`);
+                        if (statusBadge && msg.status) {
+                            statusBadge.textContent = msg.status === 'read' ? '✓✓ Lido' : '✓ Enviado';
+                        }
+
+                        updateLocalMessage(docId, { 
+                            responses: msg.responses || [], 
+                            status: msg.status 
+                        });
+                    }
+                });
+            }, (error) => {
+                console.error('Erro ao escutar:', error);
+            });
+        } catch (e) {
+            console.error('Erro ao configurar listener:', e);
+        }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUid = user.uid;
+            messageResponseCounts = {};
+            displayedMessages.clear();
+            loadLocalMessages();
+            listenToSmsMessages();
+        }
+    });
+
+    document.getElementById('smsMessageInput').addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+
+    document.getElementById('smsMessageInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            window.sendSmsMessage();
+        }
+    });
+
+    document.getElementById('smsImageModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            window.closeSmsImageModal();
+        }
+    });
+</script>
+</body>
+</html>
