@@ -1,0 +1,93 @@
+{
+  "id": "/login.html",
+  "name": "USHK ANGOLA",
+  "short_name": "USHK",
+  "description": "Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário.",
+  "start_url": "/register.html",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait-primary",
+  "dir": "ltr",
+  "lang": "pt-MZ",
+  "theme_color": "#1a5d2a",
+  "background_color": "#0d3e1a",
+  "categories": ["finance", "productivity", "business"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/img/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Registar",
+      "short_name": "Registar",
+      "description": "Registre-se com seu código de referência",
+      "url": "/register.html",
+      "icons": [{ "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Apostar",
+      "short_name": "Apostar",
+      "description": "Aceda aos palpites e apostas",
+      "url": "/index.html",
+      "icons": [{ "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "VIP",
+      "short_name": "VIP",
+      "description": "Programa VIP",
+      "url": "/vip.html",
+      "icons": [{ "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Perfil",
+      "short_name": "Perfil",
+      "description": "Gerencie seu perfil",
+      "url": "/profile.html",
+      "icons": [{ "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/img/screenshot-dashboard-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/img/screenshot-dashboard-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+ushk",
+      "url": "/login.html?data=%s"
+    }
+  ]
+}
