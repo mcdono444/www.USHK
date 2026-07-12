@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding-bottom: 70px; }
+        .app-container { max-width: 430px; margin: 0 auto; background: #f5f5f5; }
+        .header-bar { background: #22C55E; padding: 12px 20px; display: flex; align-items: center; gap: 15px; }
+        .back-btn { color: white; font-size: 18px; cursor: pointer; text-decoration: none; }
+        .header-title { color: white; font-size: 16px; font-weight: 600; text-transform: uppercase; flex: 1; text-align: center; }
+        .balance-card { background: white; border-radius: 12px; padding: 12px 20px; margin: 0 15px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .balance-value { color: #22C55E; font-weight: bold; font-size: 18px; }
+        .current-membership { background: linear-gradient(135deg, #1a5d2a, #22C55E); margin: 15px; border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .current-title { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
+        .current-level { font-size: 24px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .current-stats { display: flex; justify-content: space-between; gap: 15px; }
+        .stat-box { flex: 1; background: rgba(255,255,255,0.15); border-radius: 12px; padding: 10px; text-align: center; }
+        .stat-box-value { font-size: 20px; font-weight: bold; }
+        .stat-box-label { font-size: 10px; opacity: 0.8; margin-top: 5px; }
+        .upgrade-list { padding: 15px; }
+        .upgrade-card { background: white; border: 1px solid #22C55E; border-radius: 12px; padding: 16px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 16px; }
+        .upgrade-card.recommended { border: 2px solid #FFD700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        .upgrade-card-top { display: flex; align-items: center; gap: 16px; }
+        .badge-section { flex-shrink: 0; width: 90px; display: flex; flex-direction: column; align-items: center; }
+        .badge-image { width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 50px; }
+        .badge-level-label { background: #22C55E; border-radius: 6px; padding: 4px 10px; color: white; font-size: 11px; font-weight: bold; }
+        .badge-level-label.recommended { background: #FFD700; color: #333; }
+        .upgrade-content { flex: 1; }
+        .upgrade-detail-item { display: flex; align-items: center; gap: 8px; font-size: 11px; margin-bottom: 4px; }
+        .upgrade-detail-label { color: #333; white-space: nowrap; }
+        .upgrade-detail-value { color: #22C55E; font-weight: 600; }
+        .upgrade-detail-duration { color: #ff9800; font-weight: 600; }
+        .join-btn { background: #22C55E; color: white; border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
+        .join-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .recommended-badge { background: #FFD700; color: #333; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-bottom: 8px; display: inline-block; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 50px; z-index: 10000; font-size: 14px; font-weight: bold; }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #22C55E; display: flex; justify-content: space-around; padding: 8px 0; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: white; flex: 1; }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-bar">
+        <a class='back-btn' href='/'><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">Planos de investimento</div>
+    </div>
+    <div class="balance-card">
+        <span class="balance-label">💰 Tu saldo</span>
+        <span class="balance-value" id="userBalance">Loading...</span>
+    </div>
+    <div class="current-membership" id="currentMembership">
+        <div class="current-title">Tu membresía actual</div>
+        <div class="current-level" id="currentLevel">Loading...</div>
+        <div class="current-stats">
+            <div class="stat-box"><div class="stat-box-value" id="currentDaily">-</div><div class="stat-box-label">Ingreso diario</div></div>
+            <div class="stat-box"><div class="stat-box-value" id="currentReturn">-</div><div class="stat-box-label">Retorno %</div></div>
+        </div>
+    </div>
+    <div class="upgrade-list" id="upgradeList"><div class="loading">Loading...</div></div>
+</div>
+<footer class="bottom-nav">
+    <a class='nav-item' href='/'><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Inicio</div></a>
+    <a class='nav-item' href='/funds'><div class="nav-icon"><i class="fas fa-chart-line"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class='nav-item' href='/income'><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganancias</div></a>
+    <a class='nav-item' href='/mytask'><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tareas</div></a>
+    <a class='nav-item' href='/profile'><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Mi Cuenta</div></a>
+</footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, Timestamp, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+        authDomain: "proibidoreplica.firebaseapp.com",
+        projectId: "proibidoreplica",
+        storageBucket: "proibidoreplica.firebasestorage.app",
+        messagingSenderId: "794009646952",
+        appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    var VIP_LEVELS = {
+        0: { name: "VIP", price: 0, daily: 0, returnRate: 0, status: "free", duration: 0 },
+        1: { name: "VIP1", price: 5000, daily: 500, returnRate: 10, status: "active", duration: 30 },
+        2: { name: "VIP2", price: 10000, daily: 2000, returnRate: 10, status: "active", duration: 7 },
+        3: { name: "VIP3", price: 25000, daily: 2500, returnRate: 10, status: "active", duration: 30 },
+        4: { name: "VIP4", price: 50000, daily: 5000, returnRate: 10, status: "active", duration: 30 },
+        5: { name: "VIP5", price: 100000, daily: 10000, returnRate: 10, status: "active", duration: 30, recommended: true },
+        6: { name: "VIP6", price: 250000, daily: 25000, returnRate: 10, status: "active", duration: 30 },
+        7: { name: "VIP7", price: 500000, daily: 50000, returnRate: 10, status: "active", duration: 30 },
+        8: { name: "VIP8", price: 750000, daily: 75000, returnRate: 10, status: "active", duration: 30 },
+        9: { name: "VIP9", price: 1000000, daily: 100000, returnRate: 10, status: "active", duration: 30 }
+    };
+
+    var userBalance = 0;
+    var currentLevel = 0;
+    var userBalanceLoaded = false;
+
+    function showMessage(msg, type) {
+        var div = document.createElement('div');
+        div.className = 'toast ' + type;
+        div.innerHTML = msg;
+        document.body.appendChild(div);
+        setTimeout(function() { div.remove(); }, 3000);
+    }
+
+    // Inicializar colecciones automáticamente
+    async function initializeCollections() {
+        try {
+            // Crear colección de productos
+            for (var level in VIP_LEVELS) {
+                const levelData = VIP_LEVELS[level];
+                if (levelData.price > 0) {
+                    const productRef = doc(db, 'products', 'vip_' + level);
+                    await setDoc(productRef, {
+                        id: 'vip_' + level,
+                        level: parseInt(level),
+                        name: levelData.name,
+                        price: levelData.price,
+                        dailyIncome: levelData.daily,
+                        returnRate: levelData.returnRate,
+                        duration: levelData.duration,
+                        recommended: levelData.recommended || false,
+                        status: 'active',
+                        createdAt: Timestamp.now()
+                    }, { merge: true });
+                }
+            }
+        } catch(e) {
+            console.log('Colecciones inicializadas:', e);
+        }
+    }
+
+    async function loadUserData() {
+        try {
+            if (!userId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const userDocRef = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDocRef);
+            
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.data();
+                userBalance = userData.balance || 0;
+                userBalanceLoaded = true;
+                document.getElementById('userBalance').innerHTML = userBalance.toFixed(2) + ' kz';
+            }
+        } catch(e) { 
+            console.error('Error loading user data:', e); 
+        }
+    }
+
+    async function loadUserVIP() {
+        try {
+            if (!userId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const userDocRef = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDocRef);
+            
+            if (userSnapshot.exists()) {
+                const userData = userSnapshot.data();
+                currentLevel = userData.vipLevel || 0;
+                const levelData = VIP_LEVELS[currentLevel];
+                
+                document.getElementById('currentLevel').innerHTML = levelData.name + ' <i class="fas fa-crown" style="color:#FFD700;"></i>';
+                document.getElementById('currentDaily').innerHTML = levelData.daily.toFixed(2) + ' kz';
+                
+                const returnRate = levelData.price > 0 ? levelData.returnRate.toFixed(2) : 0;
+                document.getElementById('currentReturn').innerHTML = returnRate + '%';
+                
+                renderLevels();
+            } else {
+                renderLevels();
+            }
+        } catch(e) { 
+            console.error('Error loading VIP data:', e);
+            renderLevels();
+        }
+    }
+
+    function renderLevels() {
+        var higherLevels = [];
+        for (var level in VIP_LEVELS) {
+            if (parseInt(level) > currentLevel) {
+                higherLevels.push({ levelKey: level, ...VIP_LEVELS[level] });
+            }
+        }
+        
+        if (higherLevels.length === 0) {
+            document.getElementById('upgradeList').innerHTML = '<div class="upgrade-card" style="text-align:center; padding:30px;"><i class="fas fa-trophy" style="font-size:48px; color:#FFD700;"></i><h3>🎉 ¡Felicidades! 🎉</h3><p>Has alcanzado el nivel más alto</p></div>';
+            return;
+        }
+        
+        var html = '';
+        for (var i = 0; i < higherLevels.length; i++) {
+            var l = higherLevels[i];
+            var canBuy = userBalanceLoaded && userBalance >= l.price;
+            var isRecommended = l.recommended === true;
+            
+            html += '<div class="upgrade-card' + (isRecommended ? ' recommended' : '') + '">';
+            if (isRecommended) {
+                html += '<div style="text-align:center;"><span class="recommended-badge">⭐ RECOMENDADO</span></div>';
+            }
+            html += '<div class="upgrade-card-top">';
+            html += '<div class="badge-section">';
+            html += '<div class="badge-image"><i class="fas fa-crown" style="font-size:50px; color:' + (isRecommended ? '#FFD700' : '#d4af37') + ';"></i></div>';
+            html += '<div class="badge-level-label' + (isRecommended ? ' recommended' : '') + '">' + l.name + '</div>';
+            html += '</div>';
+            html += '<div class="upgrade-content">';
+            html += '<div class="upgrade-detail-item"><span class="upgrade-detail-label">Activación:</span><span class="upgrade-detail-value">' + l.price.toLocaleString() + ' kz</span></div>';
+            html += '<div class="upgrade-detail-item"><span class="upgrade-detail-label">Ingreso diario:</span><span class="upgrade-detail-value">' + l.daily.toFixed(2) + ' kz</span></div>';
+            html += '<div class="upgrade-detail-item"><span class="upgrade-detail-label">Retorno:</span><span class="upgrade-detail-value">' + l.returnRate.toFixed(2) + '%</span></div>';
+            if (l.duration > 0) {
+                html += '<div class="upgrade-detail-item"><span class="upgrade-detail-label">Duración:</span><span class="upgrade-detail-duration">' + l.duration + ' días</span></div>';
+            }
+            html += '</div></div>';
+            html += '<button class="join-btn" onclick="window.upgradeLevel(\'' + l.name + '\', ' + l.price + ', ' + l.daily + ', ' + l.duration + ')" ' + (!canBuy ? 'disabled' : '') + '>' + (canBuy ? 'Actualizar' : 'Saldo insuficiente') + '</button>';
+            html += '</div>';
+        }
+        document.getElementById('upgradeList').innerHTML = html;
+    }
+
+    window.upgradeLevel = async function(name, price, dailyIncome, duration) {
+        if (userBalance < price) {
+            showMessage('¡Saldo insuficiente! Necesitas ' + price.toLocaleString() + ' kz', 'error');
+            return;
+        }
+        
+        if (confirm('¿Confirma sua compra ' + name + ' por ' + price.toLocaleString() + ' kz?')) {
+            try {
+                if (!userId) {
+                    showMessage('Usuario no válido', 'error');
+                    return;
+                }
+
+                // Obtener nivel del nuevo VIP
+                let newLevel = currentLevel;
+                for (var level in VIP_LEVELS) {
+                    if (VIP_LEVELS[level].name === name && VIP_LEVELS[level].price === price) {
+                        newLevel = parseInt(level);
+                        break;
+                    }
+                }
+
+                const userDocRef = doc(db, 'users', userId);
+                const userSnap = await getDoc(userDocRef);
+                const userData = userSnap.data();
+
+                // Calcular fecha de expiración si tiene duración
+                let expirationDate = null;
+                if (duration > 0) {
+                    const date = new Date();
+                    date.setDate(date.getDate() + duration);
+                    expirationDate = date.toISOString();
+                }
+
+                // Crear nuevo producto para purchases
+                const newProduct = {
+                    id: 'prod_' + Date.now(),
+                    productName: name,
+                    price: price,
+                    dailyIncome: dailyIncome,
+                    duration: duration,
+                    status: 'active',
+                    purchaseDate: new Date().toISOString(),
+                    expirationDate: expirationDate,
+                    lastClaimDate: null
+                };
+                
+                // Actualizar datos del usuario
+                await updateDoc(userDocRef, {
+                    balance: increment(-price),
+                    vipLevel: newLevel,
+                    purchases: arrayUnion(newProduct),
+                    updatedAt: new Date().toISOString()
+                });
+
+                // Registrar transacción en tiempo real
+                const transactionsRef = collection(db, 'transactions');
+                await addDoc(transactionsRef, {
+                    userId: userId,
+                    amount: -price,
+                    type: 'purchase',
+                    details: 'Compra de membresía ' + name,
+                    date: new Date().toISOString(),
+                    dateISO: new Date().toISOString(),
+                    status: 'completed',
+                    createdAt: Timestamp.now()
+                });
+
+                showMessage('✅ ¡Actualización a ' + name + ' exitosa!', 'success');
+                setTimeout(function() { location.reload(); }, 1500);
+
+            } catch(error) {
+                console.error('Error upgrading VIP:', error);
+                showMessage('Error en la actualización: ' + error.message, 'error');
+            }
+        }
+    }
+
+    // Verificar autenticación
+    onAuthStateChanged(auth, async (user) => {
+        if (!user || !token || !userId) {
+            window.location.href = 'login.html';
+        } else {
+            await initializeCollections();
+            await loadUserData();
+            await loadUserVIP();
+            setInterval(loadUserData, 5000);
+        }
+    });
+</script>
+</body>
+</html>
