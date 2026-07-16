@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="es-MZ" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>USHK Angola</title>
+<link rel="canonical" href="https://www-ushk.onrender.com/">
+
+<!-- Favicons (relativos se os ficheiros estiverem no mesmo servidor) -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph (social preview) -->
+<meta property="og:site_name" content="USHK Angola">
+<meta property="og:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta property="og:description" content="Aproveite staking e palpites profissionais no futebol. Plataforma com análises especializadas, sinais e potencial de rendimento diário. Comece hoje — oportunidade única.">
+<meta property="og:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta property="og:image:alt" content="USHK Angola — investimento em futebol">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www-ushk.onrender.com/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="USHK Angola — Futebol, Staking e Renda Diária">
+<meta name="twitter:description" content="Staking + palpites profissionais para transformar o futebol em oportunidades de rendimento diário. Junte-se agora.">
+<meta name="twitter:image" content="https://www-ushk.onrender.com/futebol.jpg">
+<meta name="twitter:image:alt" content="USHK Angola — investimento em futebol">
+
+<!-- Outros -->
+<meta name="theme-color" content="#0d3e1a">
+<meta name="robots" content="index, follow">
+
+<!-- Aviso de risco (correto) -->
+<meta name="risk-disclaimer" content="Investimentos e palpites envolvem risco. Resultados passados  garantem retornos. Invista com responsabilidade e consulte os termos e política de risco.">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header-section {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(135deg, #1a5d2a 0%, #0d3e1a 100%);
+            padding: 20px 20px 50px;
+            border-radius: 0 0 30px 30px;
+        }
+        .support-icon {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .support-icon i { color: white; font-size: 18px; }
+        .logo-center { text-align: center; margin-bottom: 10px; }
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .logo-circle i { font-size: 45px; color: #22C55E; }
+        .main-title { text-align: center; color: white; font-size: 20px; font-weight: bold; }
+        
+        .main-content { padding: 0 15px; margin-top: -25px; }
+        
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .profile-avatar {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+            visibility: hidden;
+        }
+        .profile-avatar-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22C55E, #15803d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile-avatar-circle i { font-size: 28px; color: white; }
+        .profile-online {
+            position: absolute;
+            bottom: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            background: #22C55E;
+            border: 3px solid white;
+            border-radius: 50%;
+        }
+        .profile-info { flex: 1; }
+        .profile-name { font-size: 16px; font-weight: 800; color: #1e293b; }
+        .profile-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+            padding: 4px 10px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #16a34a;
+        }
+        
+        .support-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .support-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e5e5e5;
+        }
+        .support-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #22C55E;
+        }
+        .support-icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #22C55E, #0ea5e9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+        .support-info { flex: 1; }
+        .support-title { font-size: 15px; font-weight: 700; color: #1a2a3a; }
+        .support-desc { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+        .support-arrow { color: #22C55E; font-size: 18px; }
+        
+        .info-box {
+            background: #fef9e6;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-right: 3px solid #f59e0b;
+        }
+        .info-box p {
+            font-size: 12px;
+            color: #b45309;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-box i { width: 20px; }
+        
+        .work-hours {
+            background: linear-gradient(135deg, #1a5d2a, #0d3e1a);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .work-hours-content { color: white; }
+        .work-hours-title { font-size: 14px; font-weight: bold; }
+        .work-hours-time { font-size: 20px; font-weight: bold; color: #FFD700; margin-top: 4px; }
+        .work-hours-icon { font-size: 45px; color: #FFD700; }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: #22C55E;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            text-decoration: none;
+            color: white;
+            flex: 1;
+        }
+        .nav-icon i { font-size: 20px; }
+        .nav-label { font-size: 9px; }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 10001;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .toast.success { background: #dcfce7; color: #166534; }
+        .toast.error { background: #fee2e2; color: #b91c1c; }
+    
+
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-section">
+        <div class="support-icon" onclick="showSupport()"><i class="fas fa-headset"></i></div>
+        <div class="logo-center">
+            <div class="logo-circle"><i class="fas fa-futbol"></i></div>
+            <div class="main-title">Serviço ao Cliente</div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="profile-card">
+            <div class="profile-avatar">
+                <div class="profile-avatar-circle"><i class="fas fa-headset"></i></div>
+                <div class="profile-online"></div>
+            </div>
+            <div class="profile-info">
+                <div class="profile-name">Olá, sou seu assistente</div>
+                <div class="profile-desc">Feliz em ajudar</div>
+                <div class="profile-badge"><i class="fas fa-clock"></i> 09:00 - 21:00</div>
+            </div>
+        </div>
+
+        
+        <div class="support-grid">
+            <a href="https://chat.whatsapp.com/Lpj6wS6s1f6AYLjBuYLATe" target="_blank" class="support-card">
+                <div class="support-icon-box"><i class="fab fa-whatsapp"></i></div>
+                <div class="support-info">
+                    <div class="support-title">Grupo whatsapp</div>
+                    <div class="support-desc">Entra se o link não abrir me puxa no chat interno</div>
+                </div>
+                <div class="support-arrow"><i class="fas fa-chevron-left"></i></div>
+            </a>
+            <a href="https://t.me/UDHKtrt19" target="_blank" class="support-card">
+                <div class="support-icon-box"><i class="fab fa-telegram-plane"></i></div>
+                <div class="support-info">
+                    <div class="support-title">Grupo Oficial</div>
+                    <div class="support-desc">Conecte-se com a comunidade</div>
+                </div>
+                <div class="support-arrow"><i class="fas fa-chevron-left"></i></div>
+            </a>
+        </div>
+        
+        <div class="work-hours">
+            <div class="work-hours-content">
+                <div class="work-hours-title"><i class="fas fa-clock"></i> Horário de atendimento</div>
+                <div class="work-hours-time">09:00 - 21:00</div>
+                <div style="font-size: 11px; opacity: 0.8;">Segunda - Sábado</div>
+            </div>
+            <div class="work-hours-icon"><i class="fas fa-calendar-alt"></i></div>
+        </div>
+        
+        <div class="info-box">
+            <p><i class="fas fa-info-circle"></i> O serviço ao cliente está disponível durante o horário de trabalho</p>
+            <p><i class="fas fa-clock"></i> Tempo de resposta: geralmente 5-15 minutos</p>
+            <p><i class="fas fa-shield-alt"></i> Não compartilhe suas informações pessoais por segurança</p>
+        </div>
+    </div>
+</div>
+
+<footer class="bottom-nav">
+    <a class="nav-item" href="index.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Início</div></a>
+    <a class="nav-item" href="funds.html"><div class="nav-icon"><i class="fas fa-file-alt"></i></div><div class="nav-label">Riqueza</div></a>
+    <a class="nav-item" href="income.html"><div class="nav-icon"><i class="fas fa-gem"></i></div><div class="nav-label">Ganhos</div></a>
+    <a class="nav-item" href="mytask.html"><div class="nav-icon"><i class="fas fa-tasks"></i></div><div class="nav-label">Tarefas</div></a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Minha Conta</div></a>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+            apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+            authDomain: "proibidoreplica.firebaseapp.com",
+            projectId: "proibidoreplica",
+            storageBucket: "proibidoreplica.firebasestorage.app",
+            messagingSenderId: "794009646952",
+            appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = { auth, db };
+
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    window.showSupport = function() {
+        var div = $('<div class="toast success">📞 Suporte: @USHK007</div>');
+        $('body').append(div);
+        setTimeout(function() { div.fadeOut(300, function() { $(this).remove(); }); }, 2500);
+    }
+
+    // Verificar autenticação
+    onAuthStateChanged(auth, (user) => {
+        if (!user || !token || !userId) {
+            window.location.href = 'login.html';
+        }
+    });
+</script>
+
+
+<style>
+    :root {
+        --sms-primary: #22C55E;
+        --sms-primary-dark: #1a5d2a;
+        --sms-primary-darker: #0d3e1a;
+        --sms-btn-size: 56px;
+    }
+
+    .sms-chat-widget {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* ===== BOTÃO FLUTUANTE ARRASTÁVEL ===== */
+    .sms-chat-button {
+        position: fixed;
+        width: var(--sms-btn-size);
+        height: var(--sms-btn-size);
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--sms-primary-dark) 0%, var(--sms-primary-darker) 100%);
+        border: none;
+        color: white;
+        font-size: 22px;
+        cursor: grab;
+        box-shadow: 0 4px 14px rgba(13, 62, 26, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: box-shadow 0.2s ease, transform 0.15s ease;
+        z-index: 10001;
+        padding: 0;
+        overflow: hidden;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .sms-chat-button.dragging {
+        cursor: grabbing;
+        transition: none;
+        box-shadow: 0 8px 24px rgba(13, 62, 26, 0.6);
+        transform: scale(1.06);
+    }
+
+    .sms-chat-button img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        pointer-events: none;
+    }
+
+    .sms-chat-button.hidden {
+        display: none;
+    }
+
+    .sms-chat-button .sms-btn-fallback-icon {
+        font-size: 26px;
+        pointer-events: none;
+    }
+
+    /* ===== OVERLAY ===== */
+    .sms-chat-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.35);
+        display: none;
+        z-index: 9999;
+        animation: smsFadeIn 0.2s ease-out;
+    }
+
+    .sms-chat-overlay.active { display: block; }
+    .sms-chat-overlay.sms-closing { animation: smsFadeIn 0.15s ease-in reverse; }
+
+    /* ===== PAINEL DE CHAT (COMPACTO E RESPONSIVO) ===== */
+    .sms-chat-container {
+        position: fixed;
+        width: 340px;
+        max-width: 92vw;
+        height: 490px;
+        max-height: 78vh;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+        display: none;
+        flex-direction: column;
+        z-index: 10000;
+        overflow: hidden;
+        animation: smsPopIn 0.2s ease-out;
+    }
+
+    .sms-chat-container.active { display: flex; }
+    .sms-chat-container.sms-closing { animation: smsPopOut 0.15s ease-in forwards; }
+
+    @keyframes smsPopIn {
+        from { transform: scale(0.92); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes smsPopOut {
+        from { transform: scale(1); opacity: 1; }
+        to { transform: scale(0.92); opacity: 0; }
+    }
+
+    @keyframes smsFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .sms-chat-header {
+        background: linear-gradient(135deg, var(--sms-primary-dark) 0%, var(--sms-primary-darker) 100%);
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .sms-logo-box {
+        width: 36px;
+        height: 36px;
+        background: #fff;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--sms-primary-dark);
+        flex-shrink: 0;
+    }
+
+    .sms-header-info { flex: 1; min-width: 0; }
+
+    .sms-header-title {
+        font-size: 14px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #fff;
+    }
+
+    .sms-online-dot {
+        width: 7px;
+        height: 7px;
+        background: #4ade80;
+        border-radius: 50%;
+        animation: smsPulse 2s infinite;
+        flex-shrink: 0;
+    }
+
+    @keyframes smsPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+    }
+
+    .sms-header-subtitle {
+        font-size: 11px;
+        opacity: 0.9;
+        margin-top: 1px;
+        color: #fff;
+    }
+
+    .sms-close-btn {
+        background: rgba(255, 255, 255, 0.18);
+        border: none;
+        color: #fff;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: background 0.2s;
+        flex-shrink: 0;
+    }
+
+    .sms-close-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+    .sms-chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: #f6f8f7;
+        overscroll-behavior: contain;
+    }
+
+    .sms-chat-messages::-webkit-scrollbar { width: 5px; }
+    .sms-chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .sms-chat-messages::-webkit-scrollbar-thumb { background: #cfd8d3; border-radius: 3px; }
+
+    .sms-welcome-section {
+        text-align: center;
+        padding: 24px 14px;
+        margin: auto;
+    }
+
+    .sms-welcome-icon {
+        font-size: 38px;
+        margin-bottom: 10px;
+        animation: smsBounce 2s infinite;
+    }
+
+    @keyframes smsBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    .sms-welcome-text {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--sms-primary-dark);
+        margin-bottom: 6px;
+    }
+
+    .sms-welcome-subtitle {
+        font-size: 12px;
+        color: #666;
+        line-height: 1.4;
+        margin-bottom: 16px;
+    }
+
+    .sms-faq-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--sms-primary-dark);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        text-align: center;
+        letter-spacing: 0.3px;
+    }
+
+    .sms-faq-questions {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+
+    .sms-faq-button {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid var(--sms-primary);
+        color: var(--sms-primary-dark);
+        padding: 9px 11px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 11.5px;
+        font-weight: 500;
+        transition: all 0.2s;
+        text-align: left;
+        line-height: 1.3;
+    }
+
+    .sms-faq-button:hover {
+        background: var(--sms-primary);
+        color: #fff;
+        transform: translateX(3px);
+    }
+
+    .sms-message-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        animation: smsFadeIn 0.25s ease-out;
+    }
+
+    .sms-message { display: flex; gap: 8px; width: 100%; }
+    .sms-message.user { justify-content: flex-end; }
+    .sms-message.admin { justify-content: flex-start; }
+
+    .sms-message-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 85%;
+    }
+
+    .sms-message.user .sms-message-wrapper { align-items: flex-end; }
+
+    .sms-message-label {
+        font-size: 9.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--sms-primary-dark);
+        margin-bottom: 3px;
+        padding: 0 4px;
+    }
+
+    .sms-message.admin .sms-message-label { color: #333; }
+
+    .sms-message-content {
+        padding: 10px 12px;
+        border-radius: 12px;
+        word-wrap: break-word;
+        font-size: 13px;
+        line-height: 1.4;
+        max-width: 100%;
+    }
+
+    .sms-message.user .sms-message-content {
+        background: var(--sms-primary-dark);
+        color: #fff;
+        border-radius: 12px 0 12px 12px;
+        font-weight: 500;
+    }
+
+    .sms-message.admin .sms-message-content {
+        background: #1f1f1f;
+        color: #fff;
+        border-radius: 0 12px 12px 12px;
+        font-weight: 500;
+    }
+
+    .sms-message-time {
+        font-size: 9.5px;
+        color: #999;
+        margin-top: 3px;
+        padding: 0 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .sms-status-badge {
+        font-size: 8.5px;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-weight: 600;
+        background: var(--sms-primary-dark);
+        color: #fff;
+    }
+
+    .sms-message-image {
+        max-width: 100%;
+        max-height: 170px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s;
+        margin-bottom: 4px;
+    }
+
+    .sms-message-image:hover { transform: scale(1.04); }
+
+    .sms-image-modal {
+        display: none;
+        position: fixed;
+        z-index: 10002;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .sms-image-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sms-image-modal-content { position: relative; max-width: 90%; max-height: 90%; }
+    .sms-image-modal-content img { max-width: 100%; max-height: 100%; border-radius: 8px; }
+
+    .sms-image-modal-close {
+        position: absolute;
+        top: -38px;
+        right: 0;
+        color: #fff;
+        font-size: 26px;
+        font-weight: bold;
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
+
+    .sms-chat-input-area {
+        padding: 10px;
+        border-top: 1px solid #e5e7e5;
+        background: #fff;
+        flex-shrink: 0;
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+
+    .sms-input-wrapper { display: flex; gap: 6px; align-items: flex-end; }
+
+    .sms-message-input {
+        flex: 1;
+        padding: 9px 11px;
+        background: #f0f2f0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        color: #333;
+        font-size: 13px;
+        font-family: inherit;
+        resize: none;
+        max-height: 90px;
+    }
+
+    .sms-message-input:focus {
+        outline: none;
+        border-color: var(--sms-primary);
+        background: #fff;
+    }
+
+    .sms-message-input::placeholder { color: #999; }
+
+    .sms-input-actions { display: flex; gap: 5px; }
+
+    /* Botão de imagem e áudio ficam ocultos por padrão... */
+    .sms-action-btn {
+        width: 32px;
+        height: 32px;
+        background: #f0f2f0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        color: #333;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+
+    /* ...mas o botão de ENVIAR FOTO é ativado aqui */
+    #smsImageBtn {
+        display: flex;
+    }
+
+    .sms-action-btn:hover {
+        background: #e2e5e2;
+        border-color: var(--sms-primary);
+        color: var(--sms-primary-dark);
+    }
+
+    .sms-action-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .sms-send-btn {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, var(--sms-primary-dark) 0%, var(--sms-primary-darker) 100%);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.2s;
+        flex-shrink: 0;
+    }
+
+    .sms-send-btn:hover:not(:disabled) {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(13, 62, 26, 0.35);
+    }
+
+    .sms-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .sms-toast-notification {
+        position: fixed;
+        bottom: 90px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--sms-primary-dark);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        z-index: 10003;
+        max-width: 90vw;
+        text-align: center;
+        animation: smsToastSlide 0.25s ease-out;
+    }
+
+    @keyframes smsToastSlide {
+        from { transform: translate(-50%, 20px); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    .sms-response-notification {
+        position: fixed;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, var(--sms-primary-dark) 0%, var(--sms-primary-darker) 100%);
+        color: #fff;
+        padding: 12px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 13px;
+        z-index: 10003;
+        max-width: 90vw;
+        text-align: center;
+        animation: smsSlideDown 0.25s ease-out;
+    }
+
+    @keyframes smsSlideDown {
+        from { transform: translate(-50%, -80px); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    /* Telas muito pequenas: painel ocupa quase tudo, mas continua flutuante (não fullscreen) */
+    @media (max-width: 380px) {
+        .sms-chat-button {
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>
+
+<!--
+  id="smsChatWidget" — este é o "nome" do chat.
+  Para abrir o chat a partir de qualquer link/botão da página, use:
+  <a href="#smsChatWidget">Falar com o Suporte</a>
+  Se quiser trocar o nome, mude o id abaixo E o href do link para o mesmo valor.
+-->
+<div class="sms-chat-widget" id="smsChatWidget">
+    <div class="sms-chat-overlay" id="smsChatOverlay"></div>
+
+    <!-- Botão Flutuante Arrastável -->
+    <button class="sms-chat-button" id="smsChatButton" title="Arraste para mover · toque para abrir">
+        <img src="suporte.png" alt="Chat" class="sms-button-icon"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <span class="sms-btn-fallback-icon" style="display:none;">💬</span>
+    </button>
+
+    <!-- Painel do Chat -->
+    <div class="sms-chat-container" id="smsChatContainer">
+        <div class="sms-chat-header">
+            <div class="sms-logo-box">SP</div>
+            <div class="sms-header-info">
+                <div class="sms-header-title">
+                    <span>Suporte</span>
+                    <div class="sms-online-dot"></div>
+                </div>
+                <div class="sms-header-subtitle">Atendimento online 24/7</div>
+            </div>
+            <button class="sms-close-btn" id="smsCloseBtn">✕</button>
+        </div>
+
+        <div class="sms-chat-messages" id="smsChatMessages">
+            <div class="sms-welcome-section" id="smsWelcomeSection">
+                <div class="sms-welcome-icon">💬</div>
+                <div class="sms-welcome-text">Olá! Como posso ajudá-lo?</div>
+                <div class="sms-welcome-subtitle">Faça uma pergunta ou escolha um dos tópicos abaixo</div>
+
+                <div class="sms-faq-section">
+                    <div class="sms-faq-title">Perguntas Frequentes</div>
+                    <div class="sms-faq-questions">
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Como funciona a plataforma?')">
+                            ❓ Como funciona a plataforma?
+                        </button>
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Qual é o tempo de resposta?')">
+                            ⏱️ Qual é o tempo de resposta?
+                        </button>
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Segurança e assinar anúncio por email?')">
+                            🔐 Segurança e assinar anúncio por email?
+                        </button>
+                        <button class="sms-faq-button" onclick="window.sendSmsFAQ('Qual é o mínimo de investimento?')">
+                            💰 Mínimo de investimento?
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sms-chat-input-area">
+            <div class="sms-input-wrapper">
+                <textarea class="sms-message-input" id="smsMessageInput" placeholder="Digite aqui ou clica no tópico..." rows="1"></textarea>
+                <div class="sms-input-actions">
+                    <button class="sms-action-btn" id="smsImageBtn" title="Enviar foto">🖼️</button>
+                    <button class="sms-action-btn" id="smsAudioBtn" title="Gravar áudio">🎤</button>
+                </div>
+                <button class="sms-send-btn" id="smsSendBtn" onclick="window.sendSmsMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Imagem -->
+<div class="sms-image-modal" id="smsImageModal">
+    <div class="sms-image-modal-content">
+        <button class="sms-image-modal-close" onclick="window.closeSmsImageModal()">&times;</button>
+        <img id="smsModalImage" src="" alt="Imagem em fullscreen">
+    </div>
+</div>
+
+<!-- Inputs de Arquivo -->
+<input type="file" id="smsImageInput" accept="image/*" style="display: none;">
+<input type="file" id="smsAudioInput" accept="audio/*" style="display: none;">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, addDoc, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDiuy0PRKp4b8G9xbpj3ro4LbA_Tybt2W8",
+        authDomain: "proibidoreplica.firebaseapp.com",
+        projectId: "proibidoreplica",
+        storageBucket: "proibidoreplica.firebasestorage.app",
+        messagingSenderId: "794009646952",
+        appId: "1:794009646952:web:dfdde843496e8a160e88dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Tamanho máximo do arquivo de imagem ANTES de virar base64 (aprox. 800KB,
+    // para o documento final no Firestore não passar do limite de 1MB)
+    const MAX_IMAGE_BYTES = 800 * 1024;
+
+    let currentUid = '';
+    let messageResponseCounts = {};
+    let displayedMessages = new Set();
+
+    const BTN_STORAGE_KEY = 'smsChatButtonPosV2';
+    const widget = document.getElementById('smsChatWidget');
+    const btn = document.getElementById('smsChatButton');
+    const container = document.getElementById('smsChatContainer');
+    const overlay = document.getElementById('smsChatOverlay');
+
+    /* ============================================================
+       BOTÃO FLUTUANTE — ARRASTÁVEL PARA QUALQUER PONTO DA TELA
+       Funciona com mouse e toque (Pointer Events).
+       ============================================================ */
+    let isDragging = false;
+    let didDrag = false;
+    let dragStartX = 0, dragStartY = 0;
+    let btnStartLeft = 0, btnStartTop = 0;
+    const DRAG_THRESHOLD = 6; // px — abaixo disso conta como "toque/clique"
+
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    function getBtnSize() {
+        return btn.getBoundingClientRect().width || 56;
+    }
+
+    function setButtonPosition(left, top, persist) {
+        const size = getBtnSize();
+        left = clamp(left, 6, window.innerWidth - size - 6);
+        top = clamp(top, 6, window.innerHeight - size - 6);
+        btn.style.left = left + 'px';
+        btn.style.top = top + 'px';
+        btn.style.right = 'auto';
+        btn.style.bottom = 'auto';
+        if (persist) {
+            try {
+                localStorage.setItem(BTN_STORAGE_KEY, JSON.stringify({
+                    xPercent: left / window.innerWidth,
+                    yPercent: top / window.innerHeight
+                }));
+            } catch (e) { /* ignora erros de storage */ }
+        }
+    }
+
+    function loadButtonPosition() {
+        const size = getBtnSize();
+        let left = window.innerWidth - size - 20;
+        let top = window.innerHeight - size - 90;
+
+        try {
+            const saved = localStorage.getItem(BTN_STORAGE_KEY);
+            if (saved) {
+                const { xPercent, yPercent } = JSON.parse(saved);
+                left = xPercent * window.innerWidth;
+                top = yPercent * window.innerHeight;
+            }
+        } catch (e) { /* usa posição padrão */ }
+
+        setButtonPosition(left, top, false);
+    }
+
+    // ------------------------------------------------------------
+    // O clique/toque é à prova de falhas: se setPointerCapture falhar,
+    // o listener de segurança no window garante que dragEnd é chamado.
+    // ------------------------------------------------------------
+    function dragStart(e) {
+        // preventDefault evita que o navegador gere, depois do toque, um
+        // "clique fantasma" de compatibilidade (mousedown/mouseup/click)
+        // — é esse clique fantasma que caía sobre o overlay logo após abrir
+        // o chat e fechava tudo sozinho.
+        e.preventDefault();
+        isDragging = true;
+        didDrag = false;
+        btn.classList.add('dragging');
+        const rect = btn.getBoundingClientRect();
+        btnStartLeft = rect.left;
+        btnStartTop = rect.top;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        try {
+            btn.setPointerCapture(e.pointerId);
+        } catch (err) {
+            // Captura falhou (raro) — o listener de segurança no window
+            // garante que o toque/clique ainda será processado.
+        }
+    }
+
+    function dragMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+
+        if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+            didDrag = true;
+        }
+
+        setButtonPosition(btnStartLeft + dx, btnStartTop + dy, false);
+    }
+
+    function dragEnd(e) {
+        if (!isDragging) return;
+        if (e && e.cancelable) e.preventDefault();
+        isDragging = false;
+        btn.classList.remove('dragging');
+
+        const rect = btn.getBoundingClientRect();
+        setButtonPosition(rect.left, rect.top, true);
+
+        if (!didDrag) {
+            // Foi um toque/clique, não um arraste — abre/fecha o chat
+            window.toggleSmsChat();
+        }
+    }
+
+    btn.addEventListener('pointerdown', dragStart);
+    btn.addEventListener('pointermove', dragMove);
+    btn.addEventListener('pointerup', dragEnd);
+    btn.addEventListener('pointercancel', dragEnd);
+    btn.addEventListener('lostpointercapture', (e) => { if (isDragging) dragEnd(e); });
+
+    // Listener de segurança: garante que o clique sempre é finalizado
+    // mesmo se o pointerup não chegar até o botão (captura falhou,
+    // dedo saiu da área do botão antes de soltar, etc).
+    window.addEventListener('pointerup', (e) => { if (isDragging) dragEnd(e); });
+    window.addEventListener('pointercancel', (e) => { if (isDragging) dragEnd(e); });
+
+    // Evita que o navegador tente arrastar a imagem dentro do botão
+    btn.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // ------------------------------------------------------------
+    // CORREÇÃO CRÍTICA: enquanto o chat está aberto, o botão fica
+    // com display:none (.hidden), então getBoundingClientRect()
+    // retorna tudo zerado. Antes, o listener de resize reposicionava
+    // (e SALVAVA) o botão em 0,0 sempre que a tela mudava de tamanho
+    // com o chat aberto — por isso, ao arrastar o botão e depois abrir
+    // o teclado do celular (que dispara resize), o botão "colava" no
+    // canto. Agora só reposicionamos o botão quando ele está visível.
+    // ------------------------------------------------------------
+    window.addEventListener('resize', () => {
+        if (!btn.classList.contains('hidden')) {
+            const rect = btn.getBoundingClientRect();
+            setButtonPosition(rect.left, rect.top, true);
+        }
+        if (container.classList.contains('active')) {
+            positionChatContainer();
+        }
+    });
+
+    /* ============================================================
+       POSICIONAMENTO DO PAINEL DE CHAT
+       - No celular: SEMPRE centralizado na área visível da tela,
+         reagindo à abertura do teclado (visualViewport), para que
+         o campo de digitação nunca fique escondido. O tamanho é
+         sempre o mesmo, independente de onde o botão foi arrastado,
+         e nunca ocupa a tela toda (limite de 94vw x 86vh).
+       - No desktop: ancorado perto do botão, como antes.
+       ============================================================ */
+    function isMobileViewport() {
+        return window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    function getViewportBox() {
+        if (window.visualViewport) {
+            return {
+                width: window.visualViewport.width,
+                height: window.visualViewport.height,
+                offsetLeft: window.visualViewport.offsetLeft || 0,
+                offsetTop: window.visualViewport.offsetTop || 0
+            };
+        }
+        return { width: window.innerWidth, height: window.innerHeight, offsetLeft: 0, offsetTop: 0 };
+    }
+
+    function positionChatContainer() {
+        const margin = 10;
+
+        if (isMobileViewport()) {
+            const vp = getViewportBox();
+            const cw = Math.min(340, vp.width * 0.94);
+            // altura máxima respeita a área visível real (encolhe se o teclado abrir)
+            // e nunca ultrapassa 86% da tela — o chat nunca ocupa a tela toda.
+            const ch = Math.min(490, Math.max(260, vp.height * 0.86));
+
+            const left = vp.offsetLeft + (vp.width - cw) / 2;
+            const top = vp.offsetTop + (vp.height - ch) / 2;
+
+            container.style.width = cw + 'px';
+            container.style.maxWidth = cw + 'px';
+            container.style.height = ch + 'px';
+            container.style.maxHeight = ch + 'px';
+            container.style.left = Math.max(margin, left) + 'px';
+            container.style.top = Math.max(margin, top) + 'px';
+            container.style.right = 'auto';
+            container.style.bottom = 'auto';
+            return;
+        }
+
+        // Desktop: ancorado perto do botão flutuante
+        const btnRect = btn.getBoundingClientRect();
+        const cw = Math.min(340, window.innerWidth * 0.92);
+        const ch = Math.min(490, window.innerHeight * 0.78);
+
+        let top = btnRect.top - ch - margin;
+        if (top < margin) {
+            top = btnRect.bottom + margin;
+        }
+        if (top + ch > window.innerHeight - margin) {
+            top = Math.max(margin, window.innerHeight - ch - margin);
+        }
+
+        let left = btnRect.left + (btnRect.width / 2) - (cw / 2);
+        left = clamp(left, margin, window.innerWidth - cw - margin);
+
+        container.style.width = cw + 'px';
+        container.style.maxWidth = cw + 'px';
+        container.style.height = ch + 'px';
+        container.style.maxHeight = ch + 'px';
+        container.style.top = top + 'px';
+        container.style.left = left + 'px';
+        container.style.right = 'auto';
+        container.style.bottom = 'auto';
+    }
+
+    // Reposiciona o painel quando o teclado do celular abre/fecha
+    // (o visualViewport muda de tamanho nesse caso).
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+            if (container.classList.contains('active')) {
+                positionChatContainer();
+            }
+        });
+        window.visualViewport.addEventListener('scroll', () => {
+            if (container.classList.contains('active') && isMobileViewport()) {
+                positionChatContainer();
+            }
+        });
+    }
+
+    /* ============================================================
+       ABRIR / FECHAR CHAT
+       ============================================================ */
+    let lastOpenTime = 0;
+    const GHOST_CLICK_GUARD_MS = 400; // ignora fechamentos por clique fantasma logo após abrir
+
+    function openSmsChat() {
+        if (container.classList.contains('active')) return;
+        container.classList.remove('sms-closing');
+        overlay.classList.remove('sms-closing');
+        positionChatContainer();
+        container.classList.add('active');
+        btn.classList.add('hidden');
+        overlay.classList.add('active');
+        lastOpenTime = Date.now();
+        // Reposiciona de novo no próximo frame só no celular — em alguns
+        // aparelhos a barra de endereço some/aparece depois do primeiro
+        // layout, então isso garante que o painel fique centralizado.
+        // (No desktop isso é evitado, pois o botão já está escondido
+        // nesse ponto e reposicionar usaria coordenadas erradas.)
+        if (isMobileViewport()) {
+            requestAnimationFrame(positionChatContainer);
+        }
+    }
+
+    window.closeSmsChat = function () {
+        if (!container.classList.contains('active')) return;
+        // Fecha com uma pequena animação, deixando o X sempre visível
+        // e pronto para reabrir no próximo clique no ícone.
+        container.classList.add('sms-closing');
+        overlay.classList.add('sms-closing');
+        setTimeout(() => {
+            container.classList.remove('active', 'sms-closing');
+            overlay.classList.remove('active', 'sms-closing');
+            btn.classList.remove('hidden');
+        }, 150);
+    };
+
+    window.toggleSmsChat = function () {
+        if (container.classList.contains('active')) {
+            window.closeSmsChat();
+        } else {
+            openSmsChat();
+        }
+    };
+
+    // O clique fantasma de compatibilidade que o navegador dispara depois
+    // de um toque cai, nesse momento, sobre o overlay (que acabou de cobrir
+    // a tela) ou sobre o X — por isso ignoramos fechamentos que acontecem
+    // nos primeiros instantes após a abertura do chat.
+    document.getElementById('smsCloseBtn').addEventListener('click', function (e) {
+        if (Date.now() - lastOpenTime < GHOST_CLICK_GUARD_MS) return;
+        window.closeSmsChat();
+    });
+    overlay.addEventListener('click', function (e) {
+        if (Date.now() - lastOpenTime < GHOST_CLICK_GUARD_MS) return;
+        window.closeSmsChat();
+    });
+
+    /* ============================================================
+       ABRIR O CHAT VIA LINK ÂNCORA (href="#smsChatWidget")
+       ============================================================ */
+    function checkHashOpen() {
+        if (window.location.hash && window.location.hash === '#' + widget.id) {
+            openSmsChat();
+        }
+    }
+    window.addEventListener('hashchange', checkHashOpen);
+
+    /* ============================================================
+       TOASTS / NOTIFICAÇÕES
+       ============================================================ */
+    function showSmsToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'sms-toast-notification';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'smsToastSlide 0.25s ease-out reverse';
+            setTimeout(() => toast.remove(), 250);
+        }, 2200);
+    }
+
+    function showSmsResponseNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'sms-response-notification';
+        notification.textContent = '✓ Nova mensagem do administrador!';
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.style.animation = 'smsSlideDown 0.25s ease-out reverse';
+            setTimeout(() => notification.remove(), 250);
+        }, 2800);
+    }
+
+    /* ============================================================
+       MENSAGENS — salvas SOMENTE no Firestore (sem cache local)
+       ============================================================ */
+    window.displaySmsMessage = function (msg, docId) {
+        const messagesDiv = document.getElementById('smsChatMessages');
+        if (displayedMessages.has(docId)) return;
+        displayedMessages.add(docId);
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'sms-message-group';
+        messageDiv.id = `sms-msg-${docId}`;
+
+        const msgEl = document.createElement('div');
+        msgEl.className = `sms-message ${msg.sender === 'user' ? 'user' : 'admin'}`;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'sms-message-wrapper';
+
+        const time = msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' }) : '';
+
+        const label = document.createElement('div');
+        label.className = 'sms-message-label';
+        label.textContent = msg.sender === 'user' ? '📱 Você' : '👨‍💼 Administrador';
+        wrapper.appendChild(label);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'sms-message-content';
+
+        if (msg.type === 'image') {
+            const img = document.createElement('img');
+            img.src = msg.content;
+            img.alt = 'Imagem';
+            img.className = 'sms-message-image';
+            img.onclick = () => window.openSmsImageModal(msg.content);
+            contentDiv.appendChild(img);
+        } else if (msg.type === 'audio') {
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.style.maxWidth = '230px';
+            const source = document.createElement('source');
+            source.src = msg.content;
+            source.type = 'audio/webm';
+            audio.appendChild(source);
+            contentDiv.appendChild(audio);
+        } else {
+            contentDiv.textContent = msg.content;
+        }
+
+        wrapper.appendChild(contentDiv);
+
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'sms-message-time';
+        timeDiv.textContent = time;
+
+        if (msg.sender === 'user') {
+            const badge = document.createElement('span');
+            badge.className = 'sms-status-badge';
+            badge.textContent = msg.status === 'read' ? '✓✓ Lido' : '✓ Enviado';
+            badge.id = `sms-status-${docId}`;
+            timeDiv.appendChild(badge);
+        }
+        wrapper.appendChild(timeDiv);
+
+        msgEl.appendChild(wrapper);
+        messageDiv.appendChild(msgEl);
+        messagesDiv.appendChild(messageDiv);
+
+        messageResponseCounts[docId] = 0;
+
+        if (msg.responses && msg.responses.length > 0) {
+            msg.responses.forEach((response, idx) => {
+                window.displaySmsAdminResponse(docId, response, idx);
+                messageResponseCounts[docId]++;
+            });
+        }
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+
+    window.displaySmsAdminResponse = function (docId, response, idx) {
+        const messagesDiv = document.getElementById('smsChatMessages');
+        const responseId = `sms-msg-response-${docId}-${idx}`;
+        if (document.getElementById(responseId)) return;
+
+        const responseDiv = document.createElement('div');
+        responseDiv.className = 'sms-message-group';
+        responseDiv.id = responseId;
+
+        const respMsgEl = document.createElement('div');
+        respMsgEl.className = 'sms-message admin';
+
+        const respWrapper = document.createElement('div');
+        respWrapper.className = 'sms-message-wrapper';
+
+        const respLabel = document.createElement('div');
+        respLabel.className = 'sms-message-label';
+        respLabel.textContent = '👨‍💼 Administrador';
+        respWrapper.appendChild(respLabel);
+
+        const respContent = document.createElement('div');
+        respContent.className = 'sms-message-content';
+
+        if (response.type === 'image') {
+            const img = document.createElement('img');
+            img.src = response.content;
+            img.alt = 'Imagem';
+            img.className = 'sms-message-image';
+            img.onclick = () => window.openSmsImageModal(response.content);
+            respContent.appendChild(img);
+        } else if (response.type === 'audio') {
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.style.maxWidth = '230px';
+            const source = document.createElement('source');
+            source.src = response.content;
+            source.type = 'audio/webm';
+            audio.appendChild(source);
+            respContent.appendChild(audio);
+        } else {
+            respContent.textContent = response.content;
+        }
+
+        respWrapper.appendChild(respContent);
+
+        const respTime = response.createdAt ? new Date(response.createdAt).toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' }) : '';
+        const respTimeDiv = document.createElement('div');
+        respTimeDiv.className = 'sms-message-time';
+        respTimeDiv.textContent = respTime;
+        respWrapper.appendChild(respTimeDiv);
+
+        respMsgEl.appendChild(respWrapper);
+        responseDiv.appendChild(respMsgEl);
+        messagesDiv.appendChild(responseDiv);
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+
+    window.openSmsImageModal = function (imageSrc) {
+        document.getElementById('smsModalImage').src = imageSrc;
+        document.getElementById('smsImageModal').classList.add('active');
+    };
+
+    window.closeSmsImageModal = function () {
+        document.getElementById('smsImageModal').classList.remove('active');
+    };
+
+    window.sendSmsFAQ = async function (question) {
+        const input = document.getElementById('smsMessageInput');
+        input.value = question;
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 90) + 'px';
+        await window.sendSmsMessage();
+    };
+
+    window.sendSmsMessage = async function (content = null, type = 'text') {
+        const input = document.getElementById('smsMessageInput');
+        const textContent = content || input.value.trim();
+
+        if (!textContent) {
+            showSmsToast('⚠️ Digite uma mensagem');
+            return;
+        }
+        if (!currentUid) {
+            showSmsToast('❌ Usuário não autenticado');
+            return;
+        }
+
+        document.getElementById('smsSendBtn').disabled = true;
+
+        try {
+            const welcomeSection = document.getElementById('smsWelcomeSection');
+            if (welcomeSection) welcomeSection.remove();
+
+            const msgData = {
+                uid: currentUid,
+                content: textContent,
+                type: type,
+                sender: 'user',
+                status: 'sent',
+                createdAt: new Date().toISOString(),
+                responses: []
+            };
+
+            // Salva SOMENTE no Firestore — nada é guardado localmente
+            await addDoc(collection(db, 'sms'), msgData);
+
+            input.value = '';
+            input.style.height = 'auto';
+            document.getElementById('smsSendBtn').disabled = false;
+            showSmsToast('✅ Enviado com sucesso');
+        } catch (e) {
+            console.error('Erro ao enviar mensagem:', e);
+            showSmsToast('❌ Erro ao enviar');
+            document.getElementById('smsSendBtn').disabled = false;
+        }
+    };
+
+    /* ============================================================
+       ENVIO DE FOTO — convertida para base64 e salva no Firestore,
+       no mesmo esquema usado no painel de Depósito (proofBase64).
+       ============================================================ */
+    const smsImageBtn = document.getElementById('smsImageBtn');
+    const smsImageInput = document.getElementById('smsImageInput');
+
+    smsImageBtn.addEventListener('click', () => {
+        if (!currentUid) {
+            showSmsToast('❌ Usuário não autenticado');
+            return;
+        }
+        smsImageInput.click();
+    });
+
+    smsImageInput.addEventListener('change', async function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        if (!currentUid) {
+            showSmsToast('❌ Usuário não autenticado');
+            this.value = '';
+            return;
+        }
+
+        if (file.size > MAX_IMAGE_BYTES) {
+            showSmsToast('⚠️ Imagem muito grande (máx. ~800KB). Escolha uma menor.');
+            this.value = '';
+            return;
+        }
+
+        smsImageBtn.disabled = true;
+        document.getElementById('smsSendBtn').disabled = true;
+
+        try {
+            // Converte o ficheiro para base64 (igual ao painel de Depósito)
+            const base64 = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+
+            const welcomeSection = document.getElementById('smsWelcomeSection');
+            if (welcomeSection) welcomeSection.remove();
+
+            const msgData = {
+                uid: currentUid,
+                content: base64,
+                type: 'image',
+                sender: 'user',
+                status: 'sent',
+                createdAt: new Date().toISOString(),
+                responses: []
+            };
+
+            // Salva SOMENTE no Firestore — nada é guardado localmente
+            await addDoc(collection(db, 'sms'), msgData);
+
+            showSmsToast('✅ Foto enviada com sucesso');
+        } catch (e) {
+            console.error('Erro ao enviar foto:', e);
+            showSmsToast('❌ Erro ao enviar foto');
+        } finally {
+            smsImageBtn.disabled = false;
+            document.getElementById('smsSendBtn').disabled = false;
+            this.value = '';
+        }
+    });
+
+    /* ============================================================
+       LISTENER DO FIRESTORE — única fonte das mensagens (sem local)
+       ============================================================ */
+    function listenToSmsMessages() {
+        try {
+            const q = query(collection(db, 'sms'), where('uid', '==', currentUid));
+            onSnapshot(q, (snapshot) => {
+                const allDocs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+                allDocs.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+                allDocs.forEach(msg => {
+                    const docId = msg.id;
+
+                    if (!displayedMessages.has(docId)) {
+                        window.displaySmsMessage(msg, docId);
+                    } else {
+                        const previousCount = messageResponseCounts[docId] || 0;
+                        const currentCount = msg.responses ? msg.responses.length : 0;
+
+                        if (currentCount > previousCount) {
+                            for (let i = previousCount; i < currentCount; i++) {
+                                window.displaySmsAdminResponse(docId, msg.responses[i], i);
+                                showSmsResponseNotification();
+                            }
+                            messageResponseCounts[docId] = currentCount;
+                        }
+
+                        const statusBadge = document.getElementById(`sms-status-${docId}`);
+                        if (statusBadge && msg.status) {
+                            statusBadge.textContent = msg.status === 'read' ? '✓✓ Lido' : '✓ Enviado';
+                        }
+                    }
+                });
+            }, (error) => console.error('Erro ao escutar:', error));
+        } catch (e) {
+            console.error('Erro ao configurar listener:', e);
+        }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUid = user.uid;
+            messageResponseCounts = {};
+            displayedMessages.clear();
+            listenToSmsMessages();
+        }
+    });
+
+    document.getElementById('smsMessageInput').addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 90) + 'px';
+    });
+
+    document.getElementById('smsMessageInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            window.sendSmsMessage();
+        }
+    });
+
+    document.getElementById('smsImageModal').addEventListener('click', function (e) {
+        if (e.target === this) window.closeSmsImageModal();
+    });
+
+    // Posição inicial do botão (canto inferior direito por padrão,
+    // ou a última posição em que o usuário o deixou)
+    loadButtonPosition();
+
+    // Se a página já carregou com o hash certo na URL (ex: veio de um link
+    // de outra página com #smsChatWidget), abre o chat corretamente
+    checkHashOpen();
+</script>
+</body>
+</html>
